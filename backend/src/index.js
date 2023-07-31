@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-// import cors from 'cors';
+import cors from 'cors';
 import fileupload from 'express-fileupload';
 
-// // Routes
+// Routes
 import * as userController from './controllers/user.controller.js';
 import * as itemController from './controllers/item.controller.js';
 
@@ -16,7 +16,7 @@ const app = express();
 const port = process.env.API_PORT || 3001;
 
 app.disable('x-powered-by');
-// app.use(cors());
+app.use(cors());
 app.use(fileupload());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

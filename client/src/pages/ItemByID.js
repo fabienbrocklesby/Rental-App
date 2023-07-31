@@ -7,18 +7,20 @@ function ItemByID() {
   const [item, setItem] = useState({});
   let { id } = useParams();
 
+  console.log(id)
+
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
+    fetch(`http://localhost:3001/api/items/${id}`)
       .then(response => response.json())
-      .then(item => setItem(item));
+      .then(item => setItem(item))
+      .catch(error => console.log(error))
   }, {});
 
   return (
     <div className="itemsPage">
       <Header />
       <h1>Item By ID Page</h1>
-      <h2>{item.title}</h2>
-      <p>{item.body}</p>
+      <h2>{item.name}</h2>
     </div>
   );
 }
