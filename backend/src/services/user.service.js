@@ -1,4 +1,4 @@
-import argon2 from 'argon2';
+import bcrypt from 'bcrypt';
 
 import * as userModel from '../models/user.model.js';
 import * as itemModel from '../models/item.model.js';
@@ -11,7 +11,7 @@ import otpValidator from '../validators/otp.validator.js';
 
 import tokenMiddleware from '../middleware/token.middleware.js';
 
-const saltRounds = Number(process.env.ARGON_SALT_ROUNDS || 12);
+const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 12);
 
 export const indexUsers = async () => (userModel.indexUsers());
 
@@ -35,7 +35,7 @@ export const registerUser = async ({
   const user = await userModel.createUser({
     username,
     email,
-    otp: await argon2.hash(otp, { saltLength: saltRounds }),
+    otp: await bcrypt.hash(otp, saltRounds),
   });
 
   await emailHelper({
@@ -59,7 +59,7 @@ export const loginUser = async ({ email: originalEmail }) => {
 
   const otp = await otpGenerator();
 
-  await userModel.updateOTP({ otp: await argon2.hash(otp, { saltLength: saltRounds }), email });
+  await userModel.updateOTP({ otp: await bcrypt.hash(otp, saltRounds), email });
 
   await emailHelper({
     email: user.email,
@@ -78,11 +78,11 @@ export const verifyOtp = async ({
 
   const userData = await userModel.selectUserByEmail(email);
 
-  if (!userData) {
+  if (!userData || !userData.otp) {
     throw new Error('User not found');
   }
 
-  if (await argon2.verify(userData.otp, otp)) {
+  if (await bcrypt.compare(otp, userData.otp)) {
     await userModel.updateOTP({ otp: null, email });
     return tokenMiddleware(userData);
   }
@@ -122,7 +122,7 @@ export const reqUpdateUser = async (username, newData) => {
     updatedFields.temp_email = email;
 
     await userModel.updateOTP({
-      otp: await argon2.hash(otp, { saltLength: saltRounds }),
+      otp: await bcrypt.hash(otp, saltRounds),
       email: user.email,
     });
 
@@ -150,11 +150,11 @@ export const verifyUpdateOTP = async (username, { otp }) => {
 
   const userData = await userModel.selectUserByUsername(username);
 
-  if (!userData) {
+  if (!userData || !userData.otp) {
     throw new Error('User not found');
   }
 
-  if (await argon2.verify(userData.otp, otp)) {
+  if (await bcrypt.compare(otp, userData.otp)) {
     const updatedUser = {
       id: userData.id,
       username,
@@ -184,7 +184,7 @@ export const reqDeleteUser = async (username) => {
   const otp = await otpGenerator();
 
   await userModel.updateOTP({
-    otp: await argon2.hash(otp, { saltLength: saltRounds }),
+    otp: await bcrypt.hash(otp, saltRounds),
     email: user.email,
   });
 
@@ -201,11 +201,11 @@ export const verifyDeleteOTP = async (username, { otp }) => {
 
   const userData = await userModel.selectUserByUsername(username);
 
-  if (!userData) {
+  if (!userData || !userData.otp) {
     throw new Error('User not found');
   }
 
-  if (await argon2.verify(userData.otp, otp)) {
+  if (await bcrypt.compare(otp, userData.otp)) {
     await itemModel.deleteItemsByUserId(userData.id);
     await userModel.deleteUser(username);
 
