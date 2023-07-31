@@ -19,7 +19,7 @@ export default (() => {
 
   return {
     query: (text, params) => {
-      if (process.env.NODE_ENV === 'development') { console.log(text, params); }
+      console.log(text, params);
       return pool.query(text, params);
     },
     ...pool,

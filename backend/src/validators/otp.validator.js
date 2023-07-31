@@ -4,8 +4,11 @@ export default (data, required = []) => Joi.object().keys({
   email: Joi.string()
     .min(3)
     .max(70)
-    .required()
     .email(),
+  username: Joi.string()
+    .min(2)
+    .max(60)
+    .regex(/^\S*$/),
   otp: Joi.string()
     .min(6)
     .max(6)

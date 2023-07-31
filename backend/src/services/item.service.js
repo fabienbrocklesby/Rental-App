@@ -10,6 +10,8 @@ const uid = new ShortUniqueId({ length: 12 });
 
 export const indexItems = async () => (itemModel.indexItems());
 
+export const getItem = async (itemId) => (itemModel.selectItemById(itemId));
+
 export const createItem = async (email, {
   name,
   description,

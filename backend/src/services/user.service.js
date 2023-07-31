@@ -1,6 +1,7 @@
 import argon2 from 'argon2';
 
 import * as userModel from '../models/user.model.js';
+import * as itemModel from '../models/item.model.js';
 
 import emailHelper from '../commons/email.common.js';
 import otpGenerator from '../commons/otp.common.js';
@@ -37,11 +38,10 @@ export const registerUser = async ({
     otp: await argon2.hash(otp, { saltLength: saltRounds }),
   });
 
-  await emailHelper(
-    user.email,
-    'One Time Password:',
-    `Your Code Is ${otp}`,
-  );
+  await emailHelper({
+    email: user.email,
+    message: `Your Code Is ${otp}`,
+  });
 
   return `OTP has been sent to ${user.email}`;
 };
@@ -61,11 +61,10 @@ export const loginUser = async ({ email: originalEmail }) => {
 
   await userModel.updateOTP({ otp: await argon2.hash(otp, { saltLength: saltRounds }), email });
 
-  await emailHelper(
-    user.email,
-    'One Time Password:',
-    `Your Code Is ${otp}`,
-  );
+  await emailHelper({
+    email: user.email,
+    message: `Your Code Is ${otp}`,
+  });
 
   return 'OTP sent successfully';
 };
@@ -91,10 +90,7 @@ export const verifyOtp = async ({
   throw new Error('Wrong OTP');
 };
 
-// hash
 export const reqUpdateUser = async (username, newData) => {
-  let updatedUsername = null;
-
   const user = await userModel.selectUserByUsername(username);
 
   if (!user) {
@@ -102,6 +98,7 @@ export const reqUpdateUser = async (username, newData) => {
   }
 
   const { email: newEmail, newUsername } = newData;
+  const updatedFields = {};
 
   if (newUsername && newUsername !== user.username) {
     await userValidator({ username: newUsername, email: user.email }, ['username']);
@@ -110,12 +107,7 @@ export const reqUpdateUser = async (username, newData) => {
       throw new Error('Username already exists');
     }
 
-    await userModel.updateUser({
-      ...user,
-      username: newUsername,
-    });
-
-    updatedUsername = newUsername;
+    updatedFields.username = newUsername;
   }
 
   if (newEmail && newEmail.toLowerCase() !== user.email) {
@@ -127,38 +119,32 @@ export const reqUpdateUser = async (username, newData) => {
     }
 
     const otp = await otpGenerator();
-    await userModel.updateUser({
-      ...user,
-      username: newUsername || user.username,
-      temp_email: email,
-    });
+    updatedFields.temp_email = email;
 
     await userModel.updateOTP({
       otp: await argon2.hash(otp, { saltLength: saltRounds }),
-      username,
+      email: user.email,
     });
 
-    await emailHelper(email, 'One Time Password:', `Your Code Is ${otp}`);
+    await emailHelper({ email, message: `Your Code Is ${otp}` });
+  }
 
-    return {
-      message: `OTP has been sent to ${email}`,
-      token: await tokenMiddleware({
-        username: updatedUsername || user.username,
-        email: user.email,
-      }),
-    };
+  if (Object.keys(updatedFields).length > 0) {
+    await userModel.updateUser({
+      ...user,
+      ...updatedFields,
+    });
   }
 
   return {
     message: 'User updated successfully',
     token: await tokenMiddleware({
-      username: updatedUsername || user.username,
+      username: updatedFields.username || user.username,
       email: user.email,
     }),
   };
 };
 
-// unhash
 export const verifyUpdateOTP = async (username, { otp }) => {
   await otpValidator({ username, otp }, ['username', 'otp']);
 
@@ -188,7 +174,6 @@ export const verifyUpdateOTP = async (username, { otp }) => {
   throw new Error('Wrong OTP');
 };
 
-// hash
 export const reqDeleteUser = async (username) => {
   const user = await userModel.selectUserByUsername(username);
 
@@ -198,18 +183,19 @@ export const reqDeleteUser = async (username) => {
 
   const otp = await otpGenerator();
 
-  await userModel.updateOTP({ otp: await argon2.hash(otp, { saltLength: saltRounds }), username });
+  await userModel.updateOTP({
+    otp: await argon2.hash(otp, { saltLength: saltRounds }),
+    email: user.email,
+  });
 
-  await emailHelper(
-    user.email,
-    'One Time Password:',
-    `Your Code Is ${otp}`,
-  );
+  await emailHelper({
+    email: user.email,
+    message: `Your Code Is ${otp}`,
+  });
 
   return `OTP has been sent to ${user.email}`;
 };
 
-// unhash
 export const verifyDeleteOTP = async (username, { otp }) => {
   await otpValidator({ username, otp }, ['username', 'otp']);
 
@@ -220,12 +206,11 @@ export const verifyDeleteOTP = async (username, { otp }) => {
   }
 
   if (await argon2.verify(userData.otp, otp)) {
+    await itemModel.deleteItemsByUserId(userData.id);
     await userModel.deleteUser(username);
 
     return 'User deleted successfully';
   }
-
-  await userModel.deleteItemsByUserId(userData.id);
 
   throw new Error('Wrong OTP');
 };

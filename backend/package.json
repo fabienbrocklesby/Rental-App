@@ -6,7 +6,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "DOTENV_CONFIG_PATH=./.env node --watch ./src/index.js",
+    "start": "DOTENV_CONFIG_PATH=../.env node --watch ./src/index.js",
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix ."
   },

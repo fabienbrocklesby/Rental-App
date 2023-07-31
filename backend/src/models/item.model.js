@@ -1,7 +1,10 @@
 import ShortUniqueId from 'short-unique-id';
 import db from '../commons/database.common.js';
 
-const uid = new ShortUniqueId({ length: 6 });
+const uid = new ShortUniqueId({
+  dictionary: 'alpha_lower',
+  length: 6,
+});
 
 export const indexItems = async () => (await db.query('SELECT * FROM items')).rows;
 

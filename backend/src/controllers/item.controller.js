@@ -2,9 +2,17 @@ import jwt from 'jsonwebtoken';
 
 import * as itemService from '../services/item.service.js';
 
-export const indexItems = async (_request, response, next) => {
+export const indexItems = async (request, response, next) => {
   try {
     response.status(200).json(await itemService.indexItems());
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getItem = async (request, response, next) => {
+  try {
+    response.status(200).json(await itemService.getItem(request.params.itemId));
   } catch (error) {
     next(error);
   }

@@ -37,6 +37,7 @@ app.delete('/api/users/verifydelete', authMiddleware, userController.verifyDelet
 
 // Item Routes
 app.get('/api/items', itemController.indexItems);
+app.get('/api/items/:itemId', itemController.getItem);
 app.post('/api/items/create', authMiddleware, itemController.createItem);
 app.post('/api/items/update', authMiddleware, itemController.updateItem);
 app.post('/api/items/addtocart', authMiddleware, itemController.addItemToCart);
