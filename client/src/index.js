@@ -8,6 +8,7 @@ import Items from './pages/Items';
 import NewItem from './pages/NewItem';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import VerifyOTP from './pages/VerifyOTP';
 import ItemByID from './pages/ItemByID';
 
 
@@ -19,9 +20,10 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="items" element={<Items />} />
           <Route path="items/:id" element={<ItemByID />} />
-          {/* <Route path="newitem" element={<NewItem />} /> */}
+          <Route path="newitem" element={<NewItem />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
+          <Route path="verifyotp" element={<VerifyOTP />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

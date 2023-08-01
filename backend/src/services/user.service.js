@@ -15,7 +15,6 @@ const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 12);
 
 export const indexUsers = async () => (userModel.indexUsers());
 
-// hash
 export const registerUser = async ({
   username,
   email: originalEmail,
@@ -46,7 +45,6 @@ export const registerUser = async ({
   return `OTP has been sent to ${user.email}`;
 };
 
-// hash
 export const loginUser = async ({ email: originalEmail }) => {
   const email = originalEmail.toLowerCase();
   await userValidator({ email }, ['email']);
@@ -69,7 +67,6 @@ export const loginUser = async ({ email: originalEmail }) => {
   return 'OTP sent successfully';
 };
 
-// unhash
 export const verifyOtp = async ({
   email,
   otp,
