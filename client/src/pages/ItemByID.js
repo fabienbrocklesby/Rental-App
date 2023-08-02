@@ -14,7 +14,7 @@ function ItemByID() {
       .then(response => response.json())
       .then(item => setItem(item))
       .catch(error => console.log(error))
-  }, {});
+  }, [id]);
 
   return (
     <div className="itemsPage">
