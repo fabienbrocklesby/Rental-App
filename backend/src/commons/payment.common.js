@@ -20,8 +20,8 @@ const createPaymentSession = async (price, productName, transactionId) => {
         },
       ],
       mode: 'payment',
-      success_url: `http://localhost:3000/payment/success/${transactionId}`,
-      cancel_url: `http://localhost:3000/payment/cancel/${transactionId}`,
+      success_url: `http://localhost:3001/successful/${transactionId}`,
+      cancel_url: `http://localhost:3001/payment/cancel/${transactionId}`,
     });
     return session;
   } catch (error) {

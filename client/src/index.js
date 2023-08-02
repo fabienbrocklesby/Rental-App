@@ -13,6 +13,7 @@ import VerifyOTP from './pages/VerifyOTP';
 import UpdateItem from './pages/UpdateItem';
 import UpdateUser from './pages/UpdateUser';
 import VerifyUserUpdate from './pages/VerifyUserUpdate';
+import SuccessfulPayment from './pages/SuccessfulPayment';
 
 export default function App() {
   return (
@@ -28,7 +29,8 @@ export default function App() {
           <Route path="verifyotp" element={<VerifyOTP />} />
           <Route path="updateitem" element={<UpdateItem />} />
           <Route path="updateuser" element={<UpdateUser />} />
-          <Route path="verifyuserupdate" element={< VerifyUserUpdate/>} />
+          <Route path="verifyuserupdate" element={<VerifyUserUpdate/>} />
+          <Route path="successful/:id" element={<SuccessfulPayment/>} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
