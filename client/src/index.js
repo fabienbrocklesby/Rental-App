@@ -14,6 +14,7 @@ import UpdateItem from './pages/UpdateItem';
 import UpdateUser from './pages/UpdateUser';
 import VerifyUserUpdate from './pages/VerifyUserUpdate';
 import SuccessfulPayment from './pages/SuccessfulPayment';
+import CancelPayment from './pages/CancelPayment'
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="updateuser" element={<UpdateUser />} />
           <Route path="verifyuserupdate" element={<VerifyUserUpdate/>} />
           <Route path="successful/:id" element={<SuccessfulPayment/>} />
+          <Route path="cancel/:id" element={<CancelPayment />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
