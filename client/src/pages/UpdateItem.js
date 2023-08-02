@@ -1,8 +1,8 @@
 import '../css/Home.css';
 import Header from '../components/Header.js';
 
-function NewItem() {
-  async function postNewItem() {
+function UpdateItem() {
+  async function PostUpdateItem() {
     const id = document.getElementById("id").value;
     const name = document.getElementById("input-name").value;
     const description = document.getElementById("input-description").value;
@@ -43,9 +43,9 @@ function NewItem() {
       <label for="input-image">Image:</label>
       <input type="file" id="input-image" name="message" /><br />
 
-      <button onClick={postNewItem}>Update Item</button>
+      <button onClick={PostUpdateItem}>Update Item</button>
     </div>
   );
 }
 
-export default NewItem;
+export default UpdateItem;

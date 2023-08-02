@@ -1,12 +1,12 @@
 import '../css/Home.css';
 import Header from '../components/Header.js';
 
-function ReceiptItem() {
+function DeleteItem() {
   async function postNewItem() {
     const itemId = document.getElementById("input-ID").value;
 
-    const response = await fetch('http://localhost:3001/api/items/receipt', {
-      method: 'POST',
+    const response = await fetch('http://localhost:3001/api/items/delete', {
+      method: 'DELETE',
       body: JSON.stringify({ itemId }),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
@@ -22,13 +22,13 @@ function ReceiptItem() {
   return (
     <div className="newItemPage">
       <Header />
-      <h1>Receipt Item</h1>
+      <h1>Delete Item</h1>
       <label for="input-name">Item ID:</label>
       <input type="text" id="input-ID" name="message" /><br />
 
-      <button onClick={postNewItem}>Receipt Item</button>
+      <button onClick={postNewItem}>Delete Item</button>
     </div>
   );
 }
 
-export default ReceiptItem;
+export default DeleteItem;

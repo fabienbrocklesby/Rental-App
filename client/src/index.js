@@ -16,7 +16,8 @@ import VerifyUserUpdate from './pages/VerifyUserUpdate';
 import SuccessfulPayment from './pages/SuccessfulPayment';
 import CancelPayment from './pages/CancelPayment';
 import ReqItemReturn from './pages/ReqItemReturn';
-import ReqItemReceipt from './pages/ReqItemReceipt'
+import ReqItemReceipt from './pages/ReqItemReceipt';
+import DeleteItem from './pages/DeleteItem';
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="cancel/:id" element={<CancelPayment />} />
           <Route path="return" element={<ReqItemReturn />} />
           <Route path="receipt" element={<ReqItemReceipt />} />
+          <Route path="deleteitem" element={<DeleteItem />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

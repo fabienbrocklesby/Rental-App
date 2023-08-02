@@ -1,7 +1,7 @@
 import '../css/Home.css';
 import Header from '../components/Header.js';
 
-function NewItem() {
+function ReturnItem() {
   async function postNewItem() {
     const itemId = document.getElementById("input-ID").value;
 
@@ -31,4 +31,4 @@ function NewItem() {
   );
 }
 
-export default NewItem;
+export default ReturnItem;

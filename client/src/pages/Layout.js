@@ -16,6 +16,7 @@ const Layout = () => {
           <li><Link to="/verifyuserupdate">Verify Update</Link></li>
           <li><Link to="/return">Req Item Return</Link></li>
           <li><Link to="/receipt">Req Item Receipt</Link></li>
+          <li><Link to="/deleteitem">Delete Item</Link></li>
         </ul>
       </nav>
 
