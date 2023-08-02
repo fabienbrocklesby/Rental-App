@@ -10,7 +10,9 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import VerifyOTP from './pages/VerifyOTP';
 import ItemByID from './pages/ItemByID';
-
+import UpdateItem from './pages/UpdateItem';
+import UpdateUser from './pages/UpdateUser';
+import VerifyUserUpdate from './pages/VerifyUserUpdate';
 
 export default function App() {
   return (
@@ -24,6 +26,9 @@ export default function App() {
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="verifyotp" element={<VerifyOTP />} />
+          <Route path="updateitem" element={<UpdateItem />} />
+          <Route path="updateuser" element={<UpdateUser />} />
+          <Route path="verifyuserupdate" element={< VerifyUserUpdate/>} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

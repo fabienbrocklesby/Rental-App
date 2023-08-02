@@ -11,6 +11,9 @@ const Layout = () => {
           <li><Link to="/register">Register</Link></li>
           <li><Link to="/login">Login</Link></li>
           <li><Link to="/verifyotp">Verify OTP</Link></li>
+          <li><Link to="/updateitem">Update Item</Link></li>
+          <li><Link to="/updateuser">Update User</Link></li>
+          <li><Link to="/verifyuserupdate">Verify Update</Link></li>
         </ul>
       </nav>
 
