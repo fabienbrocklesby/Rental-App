@@ -1,6 +1,5 @@
 import '../css/Home.css';
 import Header from '../components/Header.js';
-import Cookies from 'js-cookie';
 
 function NewItem() {
   async function postNewItem() {

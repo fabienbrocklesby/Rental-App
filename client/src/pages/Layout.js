@@ -14,9 +14,15 @@ const Layout = () => {
           {/* Unlocked Routes */}
           <li><Link to="/">Home</Link></li>
           <li><Link to="/items">Items</Link></li>
-          <li><Link to="/register">Register</Link></li>
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/verifyotp">Verify OTP</Link></li>
+
+          {/* Conditional Routes */}
+          {!isLoggedIn ? (
+            <>
+            <li><Link to="/register">Register</Link></li>
+            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/verifyotp">Verify OTP</Link></li>
+            </>
+          ): null}
 
           {/* Locked Routes */}
           {isLoggedIn ? (

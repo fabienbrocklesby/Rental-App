@@ -21,6 +21,12 @@ import DeleteItem from './pages/DeleteItem';
 import ReqDeleteUser from './pages/ReqDeleteUser';
 import VerifyDeleteUser from './pages/VerifyDeleteUser';
 
+let isLoggedIn = false;
+
+if (document.cookie.includes("access_token")) {
+  isLoggedIn = true;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -28,21 +34,27 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="items" element={<Items />} />
-          <Route path="items/:id" element={<ItemByID />} />
-          <Route path="newitem" element={<NewItem />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="verifyotp" element={<VerifyOTP />} />
-          <Route path="updateitem" element={<UpdateItem />} />
-          <Route path="updateuser" element={<UpdateUser />} />
-          <Route path="verifyuserupdate" element={<VerifyUserUpdate/>} />
-          <Route path="successful/:id" element={<SuccessfulPayment/>} />
-          <Route path="cancel/:id" element={<CancelPayment />} />
-          <Route path="return" element={<ReqItemReturn />} />
-          <Route path="receipt" element={<ReqItemReceipt />} />
-          <Route path="deleteitem" element={<DeleteItem />} />
-          <Route path="reqdeleteuser" element={<ReqDeleteUser />} />
-          <Route path="verifydeleteuser" element={<VerifyDeleteUser />} />
+
+          {isLoggedIn ? (
+            <>
+            <Route path="items/:id" element={<ItemByID />} />
+            <Route path="newitem" element={<NewItem />} />
+            <Route path="updateitem" element={<UpdateItem />} />
+            <Route path="updateuser" element={<UpdateUser />} />
+            <Route path="verifyuserupdate" element={<VerifyUserUpdate/>} />
+            <Route path="successful/:id" element={<SuccessfulPayment/>} />
+            <Route path="cancel/:id" element={<CancelPayment />} />
+            <Route path="return" element={<ReqItemReturn />} />
+            <Route path="receipt" element={<ReqItemReceipt />} />
+            <Route path="deleteitem" element={<DeleteItem />} />
+            <Route path="reqdeleteuser" element={<ReqDeleteUser />} />
+            <Route path="verifydeleteuser" element={<VerifyDeleteUser />} />
+            </>
+          ): null}
+
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
