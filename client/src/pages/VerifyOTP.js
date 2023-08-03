@@ -14,7 +14,7 @@ function register() {
       },
     })
 
-    console.log(await response.json())
+    console.log(await response.json());
   }
 
   return (

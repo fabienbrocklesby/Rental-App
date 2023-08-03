@@ -23,7 +23,6 @@ export const verifyOtp = async (request, response, next) => {
     if (token) {
       return response
         .cookie('access_token', token, {
-          httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
@@ -57,7 +56,6 @@ export const reqUpdateUser = async (request, response, next) => {
     if (updatedRes.token) {
       response
         .cookie('access_token', updatedRes.token, {
-          httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
@@ -82,7 +80,6 @@ export const verifyUpdateOTP = async (request, response, next) => {
     if (updatedRes.token) {
       response
         .cookie('access_token', updatedRes.token, {
-          httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
