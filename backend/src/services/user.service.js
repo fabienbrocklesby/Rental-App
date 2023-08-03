@@ -15,6 +15,8 @@ const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 12);
 
 export const indexUsers = async () => (userModel.indexUsers());
 
+export const getUser = async (id) => (userModel.selectUserById(id));
+
 export const registerUser = async ({
   username,
   email: originalEmail,
@@ -81,7 +83,10 @@ export const verifyOtp = async ({
 
   if (await bcrypt.compare(otp, userData.otp)) {
     await userModel.updateOTP({ otp: null, email });
-    return tokenMiddleware(userData);
+    return ({
+      id: userData.id,
+      token: tokenMiddleware(userData),
+    });
   }
 
   throw new Error('Wrong OTP');

@@ -14,9 +14,13 @@ function register() {
     })
     
     if (response.ok) {
+      const data = await response.json();
+      const userId = data.id;
+
+      localStorage.setItem('userId', userId);
       window.location.href = '/items';
-      console.log(await response.json());
     }
+
   }
 
   return (

@@ -9,6 +9,14 @@ export const indexUsers = async (request, response, next) => {
   }
 };
 
+export const getUser = async (request, response, next) => {
+  try {
+    response.status(200).json(await userService.getUser(request.params.id));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const registerUser = async (request, response, next) => {
   try {
     response.status(201).json(await userService.registerUser(request.body));
@@ -19,14 +27,14 @@ export const registerUser = async (request, response, next) => {
 
 export const verifyOtp = async (request, response, next) => {
   try {
-    const token = await userService.verifyOtp(request.body);
-    if (token) {
+    const data = await userService.verifyOtp(request.body);
+    if (data.token) {
       return response
-        .cookie('access_token', token, {
+        .cookie('access_token', data.token, {
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
-        .json({ message: 'Logged in successfully 😊👌' });
+        .json({ id: data.id, message: 'Logged in successfully 😊👌' });
     }
 
     throw new Error('Failed to generate token');

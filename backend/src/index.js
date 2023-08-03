@@ -27,6 +27,7 @@ app.use(express.static('./src/public'));
 
 // User Routes
 app.get('/api/users', userController.indexUsers);
+app.get('/api/users/:id', userController.getUser);
 app.post('/api/users/register', userController.registerUser);
 app.post('/api/users/login', userController.loginUser);
 app.post('/api/users/verifyotp', userController.verifyOtp);
