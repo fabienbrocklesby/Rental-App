@@ -17,7 +17,7 @@ export const createItem = async (item) => (
     uid(),
     item.name,
     item.description,
-    item.imageDir,
+    item.imageName,
     item.price,
     null,
     item.sellerId,
@@ -28,7 +28,7 @@ export const updateItem = async (item) => (
   await db.query('UPDATE items SET name = $1, description = $2, img_dir = $3, price = $4 WHERE id = $5 RETURNING *', [
     item.name,
     item.description,
-    item.img_dir,
+    item.imgdir,
     item.price,
     item.id,
   ])).rows[0];

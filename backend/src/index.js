@@ -48,6 +48,9 @@ app.post('/api/items/return', authMiddleware, itemController.returnStatus);
 app.post('/api/items/receipt', authMiddleware, itemController.receiptStatus);
 app.delete('/api/items/delete', authMiddleware, itemController.deleteItem);
 
+// Image Routes
+app.use('/uploads', express.static('uploads'));
+
 app.get('*', (req, res) => res.status(200).sendFile('/index.html', { root: './src/public' }));
 
 // // Error Routes

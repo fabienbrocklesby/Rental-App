@@ -13,6 +13,11 @@ function register() {
       }
     })
 
+    if (response.ok) {
+      localStorage.setItem('email', email);
+      window.location.href = '/verifyotp';
+    }
+    
     console.log(await response.json())
   }
 

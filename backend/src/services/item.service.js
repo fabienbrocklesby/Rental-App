@@ -21,7 +21,8 @@ export const createItem = async (email, {
     throw new Error('No images were uploaded.');
   }
 
-  const imageDir = `./uploads/${uid()}-${image.name}`;
+  const imageName = `${uid()}-${image.name}`;
+  const imageDir = `./uploads/${imageName}`;
 
   image.mv(imageDir, (error) => {
     if (error) {
@@ -32,7 +33,7 @@ export const createItem = async (email, {
   const sellerId = (await userModel.selectUserByEmail(email)).id;
 
   return itemModel.createItem({
-    name, description, imageDir, price, sellerId,
+    name, description, imageName, price, sellerId,
   });
 };
 
@@ -41,7 +42,9 @@ export const updateItem = async (
   newItem,
   image,
 ) => {
+  let imageName;
   let imageDir;
+
   const item = await itemModel.selectItemById(newItem.id);
 
   if (!item) {
@@ -51,7 +54,8 @@ export const updateItem = async (
   }
 
   if (image) {
-    imageDir = `./uploads/${uid()}-${image.name}`;
+    imageName = `${uid()}-${image.name}`;
+    imageDir = `./uploads/${imageName}}`;
 
     image.mv(imageDir, (error) => {
       if (error) {
@@ -66,7 +70,7 @@ export const updateItem = async (
       name: newItem.name || item.name,
       description: newItem.description || item.description,
       price: newItem.price || item.price,
-      img_dir: imageDir || item.img_dir,
+      img_dir: imageName || item.img_dir,
     },
   };
 

@@ -15,9 +15,17 @@ function Items() {
     <div className="itemsPage">
       <Header />
       <h1>Items Page</h1>
-      <ul>
-        {items.map(item => <li><a href={'items/' + item.id}>{item.name}</a></li>)}
-      </ul>
+      {items.length === 0 ? (
+        <p>No items yet</p>
+      ) : (
+        <ul>
+          {items.map(item => (
+            <li key={item.id}>
+              <a href={'items/' + item.id}>{item.name}</a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

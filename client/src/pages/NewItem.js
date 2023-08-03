@@ -21,8 +21,8 @@ function NewItem() {
       credentials: 'include',
     })
 
-    if (response) {
-      console.log(await response.json());
+    if (response.ok) {
+      window.location.href = '/items';
     }
   }
 

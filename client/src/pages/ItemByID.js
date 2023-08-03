@@ -25,6 +25,7 @@ function ItemByID() {
       <h2>Name: {item.name}</h2>
       <h3>Description: {item.description}</h3>
       <h4>Price: ${item.price}</h4>
+      <img src={`/uploads/${item.img_dir}`} alt={item.name} />
     </div>
   );
 }
