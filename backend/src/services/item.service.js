@@ -12,6 +12,16 @@ export const indexItems = async () => (itemModel.indexItems());
 
 export const getItem = async (itemId) => (itemModel.selectItemById(itemId));
 
+export const getItemByEmail = async (email) => {
+  const userId = (await userModel.selectUserByEmail(email)).id;
+
+  if (!userId) {
+    throw new Error('User does not exist');
+  }
+
+  return itemModel.selectItemsByUserId(userId);
+};
+
 export const createItem = async (email, {
   name,
   description,
@@ -55,7 +65,7 @@ export const updateItem = async (
 
   if (image) {
     imageName = `${uid()}-${image.name}`;
-    imageDir = `./uploads/${imageName}}`;
+    imageDir = `./uploads/${imageName}`;
 
     image.mv(imageDir, (error) => {
       if (error) {

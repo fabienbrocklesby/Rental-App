@@ -1,9 +1,11 @@
+import { useParams } from 'react-router-dom';
 import '../css/Home.css';
 import Header from '../components/Header.js';
 
 function UpdateItem() {
+  const { id } = useParams();
+
   async function PostUpdateItem() {
-    const id = document.getElementById("id").value;
     const name = document.getElementById("input-name").value;
     const description = document.getElementById("input-description").value;
     const price = document.getElementById("input-price").value;
@@ -23,8 +25,8 @@ function UpdateItem() {
       credentials: 'include',
     })
 
-    if (response) {
-      console.log(await response.json());
+    if (response.ok) {
+      window.location.href = `/items/${id}`;
     }
   }
 
@@ -32,8 +34,6 @@ function UpdateItem() {
     <div className="newItemPage">
       <Header />
       <h1>Update Item</h1>
-      <label for="id">ID:</label>
-      <input type="text" id="id" name="message" /><br />
       <label for="input-name">Name:</label>
       <input type="text" id="input-name" name="message" /><br />
       <label for="input-description">Description:</label>

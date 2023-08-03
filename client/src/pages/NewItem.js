@@ -22,7 +22,7 @@ function NewItem() {
     })
 
     if (response.ok) {
-      window.location.href = '/items';
+      window.location.href = '/listings';
     }
   }
 

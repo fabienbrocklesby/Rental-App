@@ -14,7 +14,12 @@ function register() {
       }
     })
 
-    console.log(await response.json())
+    if (response.ok && email !== "" && email !== localStorage.getItem('email')) {
+      localStorage.setItem('temp_email', email);
+      window.location.href = `/verifyuserupdate`;
+    } else if (response.ok && email === "" || email === localStorage.getItem('email')) {
+      window.location.href = `/profile`;
+    }
   }
 
   return (

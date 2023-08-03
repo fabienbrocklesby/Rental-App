@@ -28,14 +28,14 @@ const Layout = () => {
           {isLoggedIn ? (
             <>
               <li><Link to="/newitem">New Item</Link></li>
-              <li><Link to="/updateitem">Update Item</Link></li>
               <li><Link to="/updateuser">Update User</Link></li>
               <li><Link to="/verifyuserupdate">Verify Update</Link></li>
               <li><Link to="/return">Req Item Return</Link></li>
               <li><Link to="/receipt">Req Item Receipt</Link></li>
-              <li><Link to="/deleteitem">Delete Item</Link></li>
               <li><Link to="/reqdeleteuser">Req Delete User</Link></li>
               <li><Link to="/verifydeleteuser">Verify Delete User</Link></li>
+              <li><Link to="/listings">Listings</Link></li>
+              <li><Link to="/profile">Profile</Link></li>
             </>
           ): null}
         </ul>

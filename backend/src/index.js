@@ -28,6 +28,7 @@ app.use(express.static('./src/public'));
 // User Routes
 app.get('/api/users', userController.indexUsers);
 app.get('/api/users/:id', userController.getUser);
+app.get('/api/users/get/email', authMiddleware, userController.getUserByEmail);
 app.post('/api/users/register', userController.registerUser);
 app.post('/api/users/login', userController.loginUser);
 app.post('/api/users/verifyotp', userController.verifyOtp);
@@ -39,6 +40,7 @@ app.delete('/api/users/verifydelete', authMiddleware, userController.verifyDelet
 // Item Routes
 app.get('/api/items', itemController.indexItems);
 app.get('/api/items/:itemId', itemController.getItem);
+app.get('/api/items/user/email', authMiddleware, itemController.getItemByEmail);
 app.post('/api/items/create', authMiddleware, itemController.createItem);
 app.post('/api/items/update', authMiddleware, itemController.updateItem);
 app.post('/api/items/addtocart', authMiddleware, itemController.addItemToCart);

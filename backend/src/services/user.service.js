@@ -17,6 +17,8 @@ export const indexUsers = async () => (userModel.indexUsers());
 
 export const getUser = async (id) => (userModel.selectUserById(id));
 
+export const getUserByEmail = async (email) => (userModel.selectUserByEmail(email));
+
 export const registerUser = async ({
   username,
   email: originalEmail,
@@ -85,7 +87,7 @@ export const verifyOtp = async ({
     await userModel.updateOTP({ otp: null, email });
     return ({
       id: userData.id,
-      token: tokenMiddleware(userData),
+      token: await tokenMiddleware(userData),
     });
   }
 

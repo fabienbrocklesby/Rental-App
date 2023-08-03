@@ -20,6 +20,8 @@ import ReqItemReceipt from './pages/ReqItemReceipt';
 import DeleteItem from './pages/DeleteItem';
 import ReqDeleteUser from './pages/ReqDeleteUser';
 import VerifyDeleteUser from './pages/VerifyDeleteUser';
+import Listings from './pages/Listings';
+import Profile from './pages/Profile';
 
 let isLoggedIn = false;
 
@@ -42,16 +44,18 @@ export default function App() {
             <>
             <Route path="items/:id" element={<ItemByID />} />
             <Route path="newitem" element={<NewItem />} />
-            <Route path="updateitem" element={<UpdateItem />} />
+            <Route path="updateitem/:id" element={<UpdateItem />} />
             <Route path="updateuser" element={<UpdateUser />} />
             <Route path="verifyuserupdate" element={<VerifyUserUpdate/>} />
             <Route path="successful/:id" element={<SuccessfulPayment/>} />
             <Route path="cancel/:id" element={<CancelPayment />} />
             <Route path="return" element={<ReqItemReturn />} />
             <Route path="receipt" element={<ReqItemReceipt />} />
-            <Route path="deleteitem" element={<DeleteItem />} />
+            <Route path="deleteitem/:id" element={<DeleteItem />} />
             <Route path="reqdeleteuser" element={<ReqDeleteUser />} />
             <Route path="verifydeleteuser" element={<VerifyDeleteUser />} />
+            <Route path="listings" element={<Listings />} />
+            <Route path="profile" element={<Profile />} />
             </>
           ): null}
 

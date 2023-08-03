@@ -13,7 +13,11 @@ function register() {
       },
     })
 
-    console.log(await response.json())
+    if (response.ok) {
+      localStorage.setItem('email', localStorage.getItem('temp_email'));
+      localStorage.removeItem('temp_email');
+      window.location.href = `/profile`;
+    }
   }
 
   return (

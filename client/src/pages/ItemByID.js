@@ -9,6 +9,8 @@ function ItemByID() {
   const [item, setItem] = useState({});
   let { id } = useParams();
 
+  const loggedInUser = localStorage.getItem('userId');
+
   useEffect(() => {
     fetch(`http://localhost:3001/api/items/${id}`)
       .then(response => response.json())
@@ -20,8 +22,18 @@ function ItemByID() {
     <div className="itemsPage">
       <Header />
       <h1>Item By ID Page</h1>
-      <AddToCart itemId={item.id} />
-      <ReqPurchase itemId={item.id} />
+      {loggedInUser === item.seller_id ? (
+        <>
+          <h2>You are the seller of this item</h2>
+          <button onClick={() => window.location.href = `/deleteitem/${item.id}`} >Delete Item</button>
+          <button onClick={() => window.location.href = `/updateitem/${item.id}`}>Update Item</button>
+        </>
+      ): (
+        <>
+          <AddToCart itemId={item.id} />
+          <ReqPurchase itemId={item.id} />
+        </>
+      )}
       <h2>Name: {item.name}</h2>
       <h3>Description: {item.description}</h3>
       <h4>Price: ${item.price}</h4>

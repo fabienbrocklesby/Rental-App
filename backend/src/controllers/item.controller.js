@@ -18,6 +18,15 @@ export const getItem = async (request, response, next) => {
   }
 };
 
+export const getItemByEmail = async (request, response, next) => {
+  try {
+    const email = await jwt.verify(request.cookies.access_token, process.env.JWT_SECRET).email;
+    response.status(200).json(await itemService.getItemByEmail(email));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createItem = async (request, response, next) => {
   try {
     const email = await jwt.verify(request.cookies.access_token, process.env.JWT_SECRET).email;

@@ -10,6 +10,8 @@ export const indexItems = async () => (await db.query('SELECT * FROM items')).ro
 
 export const selectItemById = async (id) => (await db.query('SELECT * FROM items WHERE id = $1', [id])).rows[0];
 
+export const selectItemsByUserId = async (userId) => (await db.query('SELECT * FROM items WHERE seller_id = $1', [userId])).rows;
+
 export const selectItemByTransactionId = async (transactionId) => (await db.query('SELECT * FROM items WHERE transaction_id = $1', [transactionId])).rows[0];
 
 export const createItem = async (item) => (
@@ -28,7 +30,7 @@ export const updateItem = async (item) => (
   await db.query('UPDATE items SET name = $1, description = $2, img_dir = $3, price = $4 WHERE id = $5 RETURNING *', [
     item.name,
     item.description,
-    item.imgdir,
+    item.img_dir,
     item.price,
     item.id,
   ])).rows[0];
