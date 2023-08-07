@@ -32,6 +32,7 @@ const Layout = () => {
               <li><Link to="/renteditems">Rented Items</Link></li>
               <li><Link to="/listings">Listings</Link></li>
               <li><Link to="/profile">Profile</Link></li>
+              <li><Link to="/searchbar">Search Items</Link></li>
             </>
           ): null}
         </ul>
