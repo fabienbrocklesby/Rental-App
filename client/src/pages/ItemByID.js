@@ -30,8 +30,18 @@ function ItemByID() {
         </>
       ): (
         <>
-          <AddToCart itemId={item.id} />
-          <ReqPurchase itemId={item.id} />
+          {item.available === true ? (
+            <>
+              <h2>Item is available</h2>
+              <AddToCart itemId={item.id} />
+              <ReqPurchase itemId={item.id} />
+            </>
+          ): (
+            <>
+              <h2>Item is not available</h2>
+            </>
+          )}
+          
         </>
       )}
       <h2>Name: {item.name}</h2>

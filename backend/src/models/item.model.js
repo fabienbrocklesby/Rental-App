@@ -14,6 +14,8 @@ export const selectItemsByUserId = async (userId) => (await db.query('SELECT * F
 
 export const selectItemByTransactionId = async (transactionId) => (await db.query('SELECT * FROM items WHERE transaction_id = $1', [transactionId])).rows[0];
 
+export const selectItemsByHolderId = async (holderId) => (await db.query('SELECT * FROM items WHERE holder_id = $1', [holderId])).rows;
+
 export const createItem = async (item) => (
   await db.query('INSERT INTO items (id, name, description, img_dir, price, rating, seller_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *', [
     uid(),

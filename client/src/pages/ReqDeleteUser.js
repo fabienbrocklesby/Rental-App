@@ -13,7 +13,7 @@ function ReqDeleteUser() {
     });
 
     if (response) {
-      console.log(await response.json());
+      window.location.href = `/verifydeleteuser`;
     }
   }
 

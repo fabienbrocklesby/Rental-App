@@ -22,6 +22,7 @@ import ReqDeleteUser from './pages/ReqDeleteUser';
 import VerifyDeleteUser from './pages/VerifyDeleteUser';
 import Listings from './pages/Listings';
 import Profile from './pages/Profile';
+import RentedItems from './pages/RentedItems';
 
 let isLoggedIn = false;
 
@@ -49,13 +50,14 @@ export default function App() {
             <Route path="verifyuserupdate" element={<VerifyUserUpdate/>} />
             <Route path="successful/:id" element={<SuccessfulPayment/>} />
             <Route path="cancel/:id" element={<CancelPayment />} />
-            <Route path="return" element={<ReqItemReturn />} />
+            <Route path="return/:id" element={<ReqItemReturn />} />
             <Route path="receipt" element={<ReqItemReceipt />} />
             <Route path="deleteitem/:id" element={<DeleteItem />} />
             <Route path="reqdeleteuser" element={<ReqDeleteUser />} />
             <Route path="verifydeleteuser" element={<VerifyDeleteUser />} />
             <Route path="listings" element={<Listings />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="renteditems" element={<RentedItems />} />
             </>
           ): null}
 

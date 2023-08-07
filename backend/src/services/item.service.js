@@ -22,6 +22,16 @@ export const getItemByEmail = async (email) => {
   return itemModel.selectItemsByUserId(userId);
 };
 
+export const getItemByHolder = async (email) => {
+  const userId = (await userModel.selectUserByEmail(email)).id;
+
+  if (!userId) {
+    throw new Error('User does not exist');
+  }
+
+  return itemModel.selectItemsByHolderId(userId);
+};
+
 export const createItem = async (email, {
   name,
   description,
