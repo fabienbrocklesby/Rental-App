@@ -27,6 +27,12 @@ function ItemByID() {
           <h2>You are the seller of this item</h2>
           <button onClick={() => window.location.href = `/deleteitem/${item.id}`} >Delete Item</button>
           <button onClick={() => window.location.href = `/updateitem/${item.id}`}>Update Item</button>
+          {item.available === false ? (
+            <>
+              <h2>This item is currently rented</h2>
+              <button onClick={() => window.location.href = `/receipt/${item.id}`}>{item.return_status === 'pending' ? ( 'Accept Return' ) : ( 'Receipt Item' )}</button>
+            </>
+          ): null}
         </>
       ): (
         <>

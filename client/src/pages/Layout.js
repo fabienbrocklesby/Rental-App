@@ -9,38 +9,41 @@ if (document.cookie.includes("access_token")) {
 const Layout = () => {
   return (
     <>
-      <nav>
-        <ul>
-          {/* Unlocked Routes */}
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/items">Items</Link></li>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container">
+          <ul className="navbar-nav mr-auto">
+            {/* Unlocked Routes */}
+            <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/items">Items</Link></li>
 
-          {/* Conditional Routes */}
-          {!isLoggedIn ? (
-            <>
-            <li><Link to="/register">Register</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/verifyotp">Verify OTP</Link></li>
-            </>
-          ): null}
+            {/* Conditional Routes */}
+            {!isLoggedIn ? (
+              <>
+                <li className="nav-item"><Link className="nav-link" to="/register">Register</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/verifyotp">Verify OTP</Link></li>
+              </>
+            ) : null}
 
-          {/* Locked Routes */}
-          {isLoggedIn ? (
-            <>
-              <li><Link to="/newitem">New Item</Link></li>
-              <li><Link to="/receipt">Req Item Receipt</Link></li>
-              <li><Link to="/renteditems">Rented Items</Link></li>
-              <li><Link to="/listings">Listings</Link></li>
-              <li><Link to="/profile">Profile</Link></li>
-              <li><Link to="/searchbar">Search Items</Link></li>
-            </>
-          ): null}
-        </ul>
+            {/* Locked Routes */}
+            {isLoggedIn ? (
+              <>
+                <li className="nav-item"><Link className="nav-link" to="/newitem">New Item</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/renteditems">Rented Items</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/listings">Listings</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/profile">Profile</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/searchbar">Search Items</Link></li>
+              </>
+            ) : null}
+          </ul>
+        </div>
       </nav>
 
-      <Outlet />
+      <div className="container py-4">
+        <Outlet />
+      </div>
     </>
-  )
+  );
 };
 
 export default Layout;

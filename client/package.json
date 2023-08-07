@@ -8,6 +8,7 @@
     "watch-build": "nodemon --watch src --exec \"npm run build\""
   },
   "dependencies": {
+    "bootstrap": "^5.3.1",
     "fuse.js": "^6.6.2",
     "js-cookie": "^3.0.5",
     "nodemon": "^3.0.1",

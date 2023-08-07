@@ -1,13 +1,15 @@
+import { useParams } from 'react-router-dom';
+
 import '../css/Home.css';
 import Header from '../components/Header.js';
 
 function ReceiptItem() {
-  async function postNewItem() {
-    const itemId = document.getElementById("input-ID").value;
+  const { id } = useParams();
 
+  async function postNewItem() {
     const response = await fetch('http://localhost:3001/api/items/receipt', {
       method: 'POST',
-      body: JSON.stringify({ itemId }),
+      body: JSON.stringify({ itemId: id }),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
       },
@@ -15,7 +17,7 @@ function ReceiptItem() {
     });
 
     if (response) {
-      console.log(await response.json());
+      window.location.href = `/items/${id}`;
     }
   }
 
@@ -23,8 +25,6 @@ function ReceiptItem() {
     <div className="newItemPage">
       <Header />
       <h1>Receipt Item</h1>
-      <label for="input-name">Item ID:</label>
-      <input type="text" id="input-ID" name="message" /><br />
 
       <button onClick={postNewItem}>Receipt Item</button>
     </div>

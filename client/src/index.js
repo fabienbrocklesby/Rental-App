@@ -1,6 +1,8 @@
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import PageNotFound from './pages/PageNotFound';
 import Layout from './pages/Layout';
 import Home from './pages/Home';
@@ -52,7 +54,7 @@ export default function App() {
             <Route path="successful/:id" element={<SuccessfulPayment/>} />
             <Route path="cancel/:id" element={<CancelPayment />} />
             <Route path="return/:id" element={<ReqItemReturn />} />
-            <Route path="receipt" element={<ReqItemReceipt />} />
+            <Route path="receipt/:id" element={<ReqItemReceipt />} />
             <Route path="deleteitem/:id" element={<DeleteItem />} />
             <Route path="reqdeleteuser" element={<ReqDeleteUser />} />
             <Route path="verifydeleteuser" element={<VerifyDeleteUser />} />
