@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import PageNotFound from './pages/PageNotFound';
 import Layout from './pages/Layout';
@@ -26,6 +27,7 @@ import Listings from './pages/Listings';
 import Profile from './pages/Profile';
 import RentedItems from './pages/RentedItems';
 import SearchBar from './pages/SearchBar';
+import Logout from './pages/Logout';
 
 let isLoggedIn = false;
 
@@ -62,6 +64,7 @@ export default function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="renteditems" element={<RentedItems />} />
             <Route path="searchbar" element={<SearchBar />} />
+            <Route path="logout" element={<Logout />} />
             </>
           ): null}
 

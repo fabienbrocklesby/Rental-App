@@ -29,26 +29,41 @@ function Items() {
   return (
     <div className="itemsPage">
       <Header />
-      <h1>Items Page</h1>
-      <div className="searchBar">
-        <input
-          type="text"
-          placeholder="Search items by name..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
+      <div className="container">
+        <h1 className="my-4">Items Page</h1>
+        <div className="searchBar mb-4">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search items by name..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+        </div>
+        <div className="row">
+          {filteredItems.length === 0 ? (
+            <p>No items found</p>
+          ) : (
+            filteredItems.map((item) => (
+              <div key={item.id} className="col-md-4 mb-4">
+                <div className="card h-100">
+                  <a href={'items/' + item.id}>
+                    <img
+                      src={`/uploads/${item.img_dir}`}
+                      className="card-img-top item-image"
+                      alt={item.name}
+                    />
+                  </a>
+                  <div className="card-body">
+                    <h5 className="card-title">{item.name}</h5>
+                    <p className="card-text">${item.price}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
-      {filteredItems.length === 0 ? (
-        <p>No items found</p>
-      ) : (
-        <ul>
-          {filteredItems.map((item) => (
-            <li key={item.id}>
-              <a href={'items/' + item.id}>{item.name}</a>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }
