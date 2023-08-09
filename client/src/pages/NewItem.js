@@ -1,5 +1,5 @@
 import '../css/Home.css';
-import Header from '../components/Header.js';
+import { Form, Button, Container } from 'react-bootstrap';
 
 function NewItem() {
   async function postNewItem() {
@@ -27,19 +27,30 @@ function NewItem() {
   }
 
   return (
-    <div className="newItemPage">
-      <Header />
-      <h1>New Item</h1>
-      <label for="input-name">Name:</label>
-      <input type="text" id="input-name" name="message" /><br />
-      <label for="input-description">Description:</label>
-      <input type="text" id="input-description" name="message" /><br />
-      <label for="input-price">Price:</label>
-      <input type="text" id="input-price" name="message" /><br />
-      <label for="input-image">Image:</label>
-      <input type="file" id="input-image" name="message" /><br />
+    <div id="newItemPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
+      <Container className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
+        <h1 className="text-center mb-4">New Item</h1>
 
-      <button onClick={postNewItem}>Post Item</button>
+        <Form>
+          <Form.Group controlId="input-name">
+            <Form.Label>Name:</Form.Label>
+            <Form.Control type="text" name="message" />
+          </Form.Group>
+          <Form.Group controlId="input-description">
+            <Form.Label>Description:</Form.Label>
+            <Form.Control type="text" name="message" />
+          </Form.Group>
+          <Form.Group controlId="input-price">
+            <Form.Label>Price:</Form.Label>
+            <Form.Control type="text" name="message" />
+          </Form.Group>
+          <Form.Group controlId="input-image">
+            <Form.Label>Image:</Form.Label>
+            <Form.Control type="file" name="message" />
+          </Form.Group>
+          <Button variant="primary" className="mt-2" onClick={postNewItem}>Post Item</Button>
+        </Form>
+      </Container>
     </div>
   );
 }

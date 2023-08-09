@@ -37,15 +37,6 @@ export const getItemByHolder = async (request, response, next) => {
   }
 };
 
-export const getItemInCart = async (request, response, next) => {
-  try {
-    const email = await jwt.verify(request.cookies.access_token, process.env.JWT_SECRET).email;
-    response.status(200).json(await itemService.getItemInCart(email, request.params.itemId));
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const createItem = async (request, response, next) => {
   try {
     const email = await jwt.verify(request.cookies.access_token, process.env.JWT_SECRET).email;

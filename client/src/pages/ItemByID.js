@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Container, Row, Col, Card, Badge } from 'react-bootstrap';
+import { Button, Container, Row, Col, Card, Badge, ButtonGroup } from 'react-bootstrap';
 import '../css/Home.css';
-import Header from '../components/Header.js';
 import AddToCart from '../components/AddToCart.js';
 import ReqPurchase from '../components/RequestPurchase.js';
 
 function ItemByID() {
   const [item, setItem] = useState({});
+  const [showSellerOptions, setShowSellerOptions] = useState(false);
   let { id } = useParams();
 
   const loggedInUser = localStorage.getItem('userId');
@@ -19,11 +19,8 @@ function ItemByID() {
       .catch(error => console.log(error))
   }, [id]);
 
-  console.log(loggedInUser, item.cart_id)
-
   return (
     <div className="itemsPage" id="itemsPage">
-      <Header />
       <Container>
         <Row>
           <Col md={6} className="mb-4">
@@ -52,19 +49,46 @@ function ItemByID() {
               </div>
               {loggedInUser === item.seller_id ? (
                 <div>
-                  <h2>You are the seller of this item</h2>
-                  <Button className="mr-2" onClick={() => window.location.href = `/deleteitem/${item.id}`} variant="danger">Delete Item</Button>
-                  <Button onClick={() => window.location.href = `/updateitem/${item.id}`} variant="info">Update Item</Button>
-                  {item.available === false && (
-                    <div>
-                      <h2>This item is currently rented</h2>
-                      <Button onClick={() => window.location.href = `/receipt/${item.id}`} variant="primary">
-                        {item.return_status === 'pending' ? 'Accept Return' : 'Receipt Item'}
-                      </Button>
+                  <Button
+                    variant="secondary"
+                    className="mb-2 mt-4"
+                    onClick={() => setShowSellerOptions(!showSellerOptions)}
+                  >
+                    {showSellerOptions ? 'Hide Seller Options' : 'Show Seller Options'}
+                  </Button>
+                  {showSellerOptions && (
+                    <div className="mt-2">
+                      <div className="mb-2">
+                        <Button
+                          onClick={() => (window.location.href = `/deleteitem/${item.id}`)}
+                          variant="danger"
+                        >
+                          Delete Item
+                        </Button>
+                      </div>
+                      <div className="mb-2">
+                        <Button
+                          onClick={() => (window.location.href = `/updateitem/${item.id}`)}
+                          variant="info"
+                        >
+                          Update Item
+                        </Button>
+                      </div>
+                      {item.available === false && (
+                        <div className="mt-4 border p-3 bg-light rounded">
+                          <h2 className="mb-3">This item is currently rented</h2>
+                          <Button
+                            onClick={() => (window.location.href = `/receipt/${item.id}`)}
+                            variant="primary"
+                          >
+                            {item.return_status === 'pending' ? 'Accept Return' : 'Receipt Item'}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-              ): null}
+              ) : (
                 <div>
                   {item.available === true ? (
                     <>
@@ -76,6 +100,7 @@ function ItemByID() {
                     </>
                   ): null}
                 </div>
+              )}
             </div>
           </Col>
         </Row>

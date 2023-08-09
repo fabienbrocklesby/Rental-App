@@ -94,4 +94,15 @@
   margin-top: 10px;
 }
 
+.button-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.stacked-button {
+  display: block;
+  margin-bottom: 10px; /* Add spacing between vertically stacked buttons */
+}
+
+
 
