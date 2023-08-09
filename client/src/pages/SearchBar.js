@@ -18,7 +18,7 @@ function Items() {
   };
 
   const fuse = new Fuse(items, {
-    keys: ['name'],
+    keys: ['name', 'description'], 
     threshold: 0.3,
   });
 
@@ -35,7 +35,7 @@ function Items() {
           <input
             type="text"
             className="form-control"
-            placeholder="Search items by name..."
+            placeholder="Search items by name or description..."
             value={searchQuery}
             onChange={handleSearchChange}
           />

@@ -23,7 +23,7 @@ function Items() {
           items.map(item => (
             <div key={item.id} className="col-md-4 mb-4">
               <div className="card h-100">
-                {item.available ? ( 
+                {document.cookie || localStorage.getItem('userId') ? ( 
                   <Link to={'/items/' + item.id}>
                     <img
                       src={`/uploads/${item.img_dir}`}

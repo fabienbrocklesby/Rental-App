@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 const Layout = () => {
-  const [navbarCollapsed, setNavbarCollapsed] = useState(true);
+  const [navbarExpanded, setNavbarExpanded] = useState(false);
 
-  const handleLinkClick = () => {
-    setNavbarCollapsed(true);
+  const handleNavToggle = () => {
+    setNavbarExpanded(!navbarExpanded);
+  };
+
+  const handleNavCollapse = () => {
+    setNavbarExpanded(false);
   };
 
   let isLoggedIn = false;
@@ -16,105 +21,63 @@ const Layout = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle}>
         <div className="container">
-          <Link className="navbar-brand" to="/">
+          <Navbar.Brand as={Link} to="/">
             EZGear
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-            onClick={() => setNavbarCollapsed(!navbarCollapsed)}
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          
-          <div className={`collapse navbar-collapse ${navbarCollapsed ? '' : 'show'}`} id="navbarNav">
-            <ul className='navbar-nav ms-auto'>
-              {/* Unlocked Routes */}
-              <li className="nav-item">
-                <Link className="nav-link" to="/" onClick={handleLinkClick}>
-                  Home
-                </Link>
-              </li>
-              {/* Conditional Routes */}
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbarNav" />
+          <Navbar.Collapse id="navbarNav">
+            <Nav className="ms-auto">
+              <Nav.Link as={Link} to="/" onClick={handleNavCollapse}>
+                Home
+              </Nav.Link>
               {!isLoggedIn ? (
                 <>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/register" onClick={handleLinkClick}>
-                      Register
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/login" onClick={handleLinkClick}>
-                      Login
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/verifyotp" onClick={handleLinkClick}>
-                      Verify OTP
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/items" onClick={handleLinkClick}>
-                      All Items
-                    </Link>
-                  </li>
+                  <Nav.Link as={Link} to="/register" onClick={handleNavCollapse}>
+                    Register
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/login" onClick={handleNavCollapse}>
+                    Login
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/verifyotp" onClick={handleNavCollapse}>
+                    Verify OTP
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/items" onClick={handleNavCollapse}>
+                    All Items
+                  </Nav.Link>
                 </>
               ) : (
                 <>
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    id="itemsDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Items
-                  </a>
-                  <div
-                    className="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="itemsDropdown"
-                  >
-                    <Link className="dropdown-item" to="/items" onClick={handleLinkClick}>
+                  <NavDropdown title="Items" id="itemsDropdown">
+                    <NavDropdown.Item as={Link} to="/items" onClick={handleNavCollapse}>
                       All Items
-                    </Link>
-                    <Link className="dropdown-item" to="/newitem" onClick={handleLinkClick}>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/newitem" onClick={handleNavCollapse}>
                       New Item
-                    </Link>
-                    <Link className="dropdown-item" to="/renteditems" onClick={handleLinkClick}>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/renteditems" onClick={handleNavCollapse}>
                       Rented Items
-                    </Link>
-                    <Link className="dropdown-item" to="/searchbar" onClick={handleLinkClick}>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/searchbar" onClick={handleNavCollapse}>
                       Search Items
-                    </Link>
-                    <Link className="dropdown-item" to="/listings" onClick={handleLinkClick}>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/listings" onClick={handleNavCollapse}>
                       Listings
-                    </Link>
-                  </div>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/profile" onClick={handleLinkClick}>
-                      Profile
-                    </Link>
-                  </li>
-                 
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/logout" onClick={handleLinkClick}>
-                      Logout
-                    </Link>
-                  </li>
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                  <Nav.Link as={Link} to="/profile" onClick={handleNavCollapse}>
+                    Profile
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/logout" onClick={handleNavCollapse}>
+                    Logout
+                  </Nav.Link>
                 </>
               )}
-            </ul>
-          </div>
+            </Nav>
+          </Navbar.Collapse>
         </div>
-      </nav>
+      </Navbar>
 
       <div className="container py-4">
         <Outlet />

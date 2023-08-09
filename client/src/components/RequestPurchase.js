@@ -1,6 +1,8 @@
-function addToCart({ itemId }) {
+import { Button } from 'react-bootstrap';
 
-  async function addToCart() {
+function requestPurchase({ itemId }) {
+
+  async function reqPurchase() {
     const response = await fetch('http://localhost:3001/api/items/purchase', {
       method: 'POST',
       body: JSON.stringify({ itemId }),
@@ -9,15 +11,16 @@ function addToCart({ itemId }) {
       }
     })
 
-    console.log(await response.json())
+    window.location.href = await response.json()
   }
 
   return (
-    <div>
-      <h1>Request Purchase</h1>
-      <button onClick={addToCart}>Request Purchase</button>
+    <div className="add-to-cart mt-2">
+      <Button onClick={reqPurchase} variant="primary">
+        Request Purchase
+      </Button>
     </div>
   )
 }
 
-export default addToCart;
+export default requestPurchase;
