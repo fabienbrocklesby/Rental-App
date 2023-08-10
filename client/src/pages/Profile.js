@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import '../css/Home.css';
-import Header from '../components/Header.js';
 
-function profilePage() {
+function ProfilePage() {
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -16,19 +16,27 @@ function profilePage() {
   }, []);
 
   return (
-    <div className="itemsPage">
-      <Header />
-      <h2>Username: {user.username}</h2>
-      <h3>Email: {user.email}</h3>
-
-      {localStorage.getItem('userId') === user.id ? (
-        <>
-          <button onClick={() => window.location.href = `/updateuser`}>Update User</button>
-          <button onClick={() => window.location.href = `/reqdeleteuser`}>Delete User</button>
-        </>
-      ): null}
+    <div className="profilePage">
+      <Container>
+        <Row className="justify-content-center rounded align-items-center bg-light p-5">
+          <Col xs="auto" className="text-center">
+            <h2>Username: {user.username}</h2>
+            <h3>Email: {user.email}</h3>
+            {localStorage.getItem('userId') === user.id ? (
+              <>
+                <Button variant="primary" className="mx-1" onClick={() => window.location.href = `/updateuser`}>
+                  Update User
+                </Button>
+                <Button variant="danger" className="mx-1" onClick={() => window.location.href = `/reqdeleteuser`}>
+                  Delete User
+                </Button>
+              </>
+            ) : null}
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
 
-export default profilePage;
+export default ProfilePage;

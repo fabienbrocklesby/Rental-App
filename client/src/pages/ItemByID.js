@@ -58,14 +58,16 @@ function ItemByID() {
                   </Button>
                   {showSellerOptions && (
                     <div className="mt-2">
-                      <div className="mb-2">
-                        <Button
-                          onClick={() => (window.location.href = `/deleteitem/${item.id}`)}
-                          variant="danger"
-                        >
-                          Delete Item
-                        </Button>
-                      </div>
+                      {item.available === true ? (
+                          <div className="mb-2">
+                            <Button
+                            onClick={() => (window.location.href = `/deleteitem/${item.id}`)}
+                            variant="danger"
+                          >
+                            Delete Item
+                          </Button>
+                        </div>
+                      ): null}
                       <div className="mb-2">
                         <Button
                           onClick={() => (window.location.href = `/updateitem/${item.id}`)}

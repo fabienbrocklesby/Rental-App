@@ -28,7 +28,7 @@ function ReceiptItem() {
   return (
     <div className="receiptItemPage">
       <Container>
-        <Row className="justify-content-center align-items-center bg-light p-5">
+        <Row className="justify-content-center rounded align-items-center bg-light p-5">
           <Col xs="auto" className="text-center">
             <h1>Receipt Item</h1>
             <Button variant="primary" onClick={handleShow}>Mark Item as Received</Button>

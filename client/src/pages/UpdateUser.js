@@ -1,8 +1,8 @@
-import Header from "../components/Header";
+import React from "react";
+import { Button, Container, Form } from "react-bootstrap";
 
-function register() {
-
-  async function registerUser() {
+function UpdateUser() {
+  async function update() {
     const newUsername = document.getElementById("input-username").value;
     const email = document.getElementById("input-email").value;
     
@@ -23,18 +23,25 @@ function register() {
   }
 
   return (
-    <div id="registerPage">
-      <Header />
-      <h1>Update</h1>
+    <div id="loginPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
+      <Container className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: "400px" }}>
+        <h1 className="text-center mb-4">Update</h1>
 
-      <label for="input-username">Username:</label>
-      <input type="text" id="input-username" name="message" />
-      <label for="input-email">Email:</label>
-      <input type="email" id="input-email" name="message" />
-      
-      <button onClick={registerUser}>Update User</button>
+        <Form>
+          <Form.Group controlId="input-username">
+            <Form.Label>Username:</Form.Label>
+            <Form.Control type="text" name="message" />
+          </Form.Group>
+          <Form.Group controlId="input-email">
+            <Form.Label>Email:</Form.Label>
+            <Form.Control type="email" name="message" />
+          </Form.Group>
+
+          <Button variant="primary" className="mt-2" onClick={update}>Update User</Button>
+        </Form>
+      </Container>
     </div>
-  )
+  );
 }
 
-export default register;
+export default UpdateUser;

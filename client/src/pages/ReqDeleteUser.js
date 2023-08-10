@@ -1,9 +1,8 @@
-import '../css/Home.css';
-import Header from '../components/Header.js';
+import React from 'react';
+import { Button, Container } from 'react-bootstrap';
 
 function ReqDeleteUser() {
   async function DeleteUser() {
-
     const response = await fetch('http://localhost:3001/api/users/delete', {
       method: 'DELETE',
       headers: {
@@ -18,11 +17,14 @@ function ReqDeleteUser() {
   }
 
   return (
-    <div className="newItemPage">
-      <Header />
-      <h1>Delete User</h1>
+    <div id="deleteUserPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
+      <Container className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: "400px" }}>
+        <h1 className="text-center mb-4">Delete User</h1>
 
-      <button onClick={DeleteUser}>Delete User</button>
+        <div className="text-center">
+          <Button variant="danger" onClick={DeleteUser}>Delete User</Button>
+        </div>
+      </Container>
     </div>
   );
 }

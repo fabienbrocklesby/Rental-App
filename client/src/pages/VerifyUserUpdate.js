@@ -1,7 +1,7 @@
-import Header from "../components/Header";
+import React from "react";
+import { Button, Container, Form } from "react-bootstrap";
 
-function register() {
-
+function Register() {
   async function registerUser() {
     const otp = document.getElementById("input-otp").value;
     
@@ -21,16 +21,21 @@ function register() {
   }
 
   return (
-    <div id="registerPage">
-      <Header />
-      <h1>Verify Update</h1>
+    <div id="loginPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
+      <Container className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: "400px" }}>
+        <h1 className="text-center mb-4">Verify Update</h1>
 
-      <label for="input-otp">OTP:</label>
-      <input type="text" id="input-otp"  name="message" />
-      
-      <button onClick={registerUser}>Verify OTP</button>
+        <Form>
+          <Form.Group controlId="input-otp">
+            <Form.Label>OTP:</Form.Label>
+            <Form.Control type="text" name="message" />
+          </Form.Group>
+
+          <Button variant="primary" className="mt-2" onClick={registerUser}>Verify OTP</Button>
+        </Form>
+      </Container>
     </div>
-  )
+  );
 }
 
-export default register;
+export default Register;
