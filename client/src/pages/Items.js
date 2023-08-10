@@ -5,17 +5,38 @@ import Header from '../components/Header.js';
 
 function Items() {
   const [items, setItems] = useState([]);
+  const [showAvailableOnly, setShowAvailableOnly] = useState(true);
 
   useEffect(() => {
     fetch('http://localhost:3001/api/items')
       .then(response => response.json())
-      .then(items => setItems(items));
-  }, []);
+      .then(items => {
+        if (showAvailableOnly) {
+          setItems(items.filter(item => item.available));
+        } else {
+          setItems(items);
+        }
+      });
+  }, [showAvailableOnly]);
+
+  const handleCheckboxChange = () => {
+    setShowAvailableOnly(!showAvailableOnly);
+  };
 
   return (
     <div className="container">
       <Header />
-      <h1 className="my-4">Items Page</h1>
+      <h1 className="mt-4">Items Page</h1>
+      <div className="mb-4">
+        <label>
+          <input
+            type="checkbox"
+            checked={showAvailableOnly}
+            onChange={handleCheckboxChange}
+          />
+          <span className="ms-1">Show Available Items Only</span>
+        </label>
+      </div>
       <div className="row">
         {items.length === 0 ? (
           <p>No items yet</p>
@@ -23,7 +44,7 @@ function Items() {
           items.map(item => (
             <div key={item.id} className="col-md-4 mb-4">
               <div className="card h-100">
-                {document.cookie || localStorage.getItem('userId') ? ( 
+                {document.cookie || localStorage.getItem('userId') ? (
                   <Link to={'/items/' + item.id}>
                     <img
                       src={`/uploads/${item.img_dir}`}
