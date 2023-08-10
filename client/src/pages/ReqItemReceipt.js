@@ -1,10 +1,11 @@
+import React from 'react';
 import { useParams } from 'react-router-dom';
-
+import { Button, Container, Modal, Row, Col } from 'react-bootstrap';
 import '../css/Home.css';
-import Header from '../components/Header.js';
 
 function ReceiptItem() {
   const { id } = useParams();
+  const [showModal, setShowModal] = React.useState(false);
 
   async function postNewItem() {
     const response = await fetch('http://localhost:3001/api/items/receipt', {
@@ -21,12 +22,34 @@ function ReceiptItem() {
     }
   }
 
-  return (
-    <div className="newItemPage">
-      <Header />
-      <h1>Receipt Item</h1>
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
-      <button onClick={postNewItem}>Receipt Item</button>
+  return (
+    <div className="receiptItemPage">
+      <Container>
+        <Row className="justify-content-center align-items-center bg-light p-5">
+          <Col xs="auto" className="text-center">
+            <h1>Receipt Item</h1>
+            <Button variant="primary" onClick={handleShow}>Mark Item as Received</Button>
+          </Col>
+        </Row>
+      </Container>
+
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Receipt</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to mark this item as received?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={postNewItem}>
+            Mark as Received
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

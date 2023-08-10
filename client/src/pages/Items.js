@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
 import Header from '../components/Header.js';
@@ -34,7 +34,7 @@ function Items() {
             checked={showAvailableOnly}
             onChange={handleCheckboxChange}
           />
-          <span className="ms-1">Show Available Items Only</span>
+          <span className="ms-1">Available Items Only</span>
         </label>
       </div>
       <div className="row">

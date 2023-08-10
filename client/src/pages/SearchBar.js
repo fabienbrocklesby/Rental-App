@@ -6,24 +6,35 @@ import Header from '../components/Header.js';
 function Items() {
   const [items, setItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAvailableOnly, setShowAvailableOnly] = useState(true);
 
   useEffect(() => {
     fetch('http://localhost:3001/api/items')
-      .then((response) => response.json())
-      .then((items) => setItems(items));
-  }, []);
+      .then(response => response.json())
+      .then(items => {
+        if (showAvailableOnly) {
+          setItems(items.filter(item => item.available));
+        } else {
+          setItems(items);
+        }
+      });
+  }, [showAvailableOnly]);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = event => {
     setSearchQuery(event.target.value);
   };
 
+  const handleCheckboxChange = () => {
+    setShowAvailableOnly(!showAvailableOnly);
+  };
+
   const fuse = new Fuse(items, {
-    keys: ['name', 'description'], 
-    threshold: 0.3,
+    keys: ['name', 'description'],
+    threshold: 0.4,
   });
 
   const filteredItems = searchQuery
-    ? fuse.search(searchQuery).map((result) => result.item)
+    ? fuse.search(searchQuery).map(result => result.item)
     : items;
 
   return (
@@ -40,11 +51,21 @@ function Items() {
             onChange={handleSearchChange}
           />
         </div>
+        <div className="mb-4">
+          <label>
+            <input
+              type="checkbox"
+              checked={showAvailableOnly}
+              onChange={handleCheckboxChange}
+            />
+            <span className="ms-1">Available Items Only</span>
+          </label>
+        </div>
         <div className="row">
           {filteredItems.length === 0 ? (
             <p>No items found</p>
           ) : (
-            filteredItems.map((item) => (
+            filteredItems.map(item => (
               <div key={item.id} className="col-md-4 mb-4">
                 <div className="card h-100">
                   <a href={'items/' + item.id}>

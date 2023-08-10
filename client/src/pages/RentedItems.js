@@ -35,12 +35,21 @@ function RentedItems() {
                     </div>
                   </div>
                   <div className="card-footer">
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => (window.location.href = `/return/${item.id}`)}
-                    >
-                      Return Item
-                    </button>
+                    {item.return_status === 'pending' ? (
+                      <button
+                        className="btn btn-secondary"
+                        disabled
+                      >
+                        Return Pending
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => (window.location.href = `/return/${item.id}`)}
+                      >
+                        Return Item
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
