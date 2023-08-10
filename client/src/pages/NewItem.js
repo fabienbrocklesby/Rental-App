@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import '../css/Home.css';
 import { Form, Button, Container } from 'react-bootstrap';
 
@@ -13,17 +14,44 @@ function NewItem() {
     formData.append("name", name);
     formData.append("description", description);
     formData.append("price", price);
-    formData.append("image", imageFile);
 
-    const response = await fetch('http://localhost:3001/api/items/create', {
-      method: 'POST',
-      body: formData,
-      credentials: 'include',
-    })
+    const img = new Image();
+    img.src = URL.createObjectURL(imageFile);
 
-    if (response.ok) {
-      window.location.href = '/listings';
-    }
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx.drawImage(img, 0, 0);
+
+      const cropSize = Math.min(img.width, img.height);
+      const cropX = (img.width - cropSize) / 2;
+      const cropY = (img.height - cropSize) / 2;
+
+      const thumbnailCanvas = document.createElement("canvas");
+      const thumbnailCtx = thumbnailCanvas.getContext("2d");
+      thumbnailCanvas.width = cropSize;
+      thumbnailCanvas.height = cropSize;
+
+      thumbnailCtx.drawImage(canvas, cropX, cropY, cropSize, cropSize, 0, 0, cropSize, cropSize);
+
+      thumbnailCanvas.toBlob((blob) => {
+        formData.append("image", blob, imageFile.name);
+
+        fetch('http://localhost:3001/api/items/create', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',
+        }).then(response => {
+          if (response.ok) {
+            window.location.href = '/listings';
+          }
+        });
+      }, 'image/jpeg');
+    };
   }
 
   return (
