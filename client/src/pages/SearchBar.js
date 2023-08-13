@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Fuse from 'fuse.js';
 import '../css/Home.css';
-import Header from '../components/Header.js';
 
 function Items() {
   const [items, setItems] = useState([]);
@@ -39,7 +38,6 @@ function Items() {
 
   return (
     <div className="itemsPage">
-      <Header />
       <div className="container">
         <h1 className="my-4">Items Page</h1>
         <div className="searchBar mb-4">

@@ -29,6 +29,8 @@ app.use(express.static('./src/public'));
 app.get('/api/users', userController.indexUsers);
 app.get('/api/users/:id', userController.getUser);
 app.get('/api/users/get/email', authMiddleware, userController.getUserByEmail);
+app.get('/api/create/stripeaccount', authMiddleware, userController.createStripeAccount);
+app.get('/api/users/verify/stripe', userController.verifyStripeAccount);
 app.post('/api/users/register', userController.registerUser);
 app.post('/api/users/login', userController.loginUser);
 app.post('/api/users/verifyotp', userController.verifyOtp);

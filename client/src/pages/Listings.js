@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import '../css/Home.css';
-import Header from '../components/Header.js';
 
 function Items() {
   const [items, setItems] = useState([]);
@@ -16,7 +15,6 @@ function Items() {
 
   return (
     <div className="itemsPage">
-      <Header />
       <div className="container">
         <h1 className="my-4">My Listings</h1>
         {items.length === 0 ? (

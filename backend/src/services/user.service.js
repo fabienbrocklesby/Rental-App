@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import * as userModel from '../models/user.model.js';
 import * as itemModel from '../models/item.model.js';
 
+import * as paymentCommon from '../commons/payment.common.js';
+
 import emailHelper from '../commons/email.common.js';
 import otpGenerator from '../commons/otp.common.js';
 
@@ -18,6 +20,49 @@ export const indexUsers = async () => (userModel.indexUsers());
 export const getUser = async (id) => (userModel.selectUserById(id));
 
 export const getUserByEmail = async (email) => (userModel.selectUserByEmail(email));
+
+export const createStripeAccount = async (email) => {
+  const user = await userModel.selectUserByEmail(email);
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const account = await paymentCommon.createAccountLink();
+
+  if (!account) {
+    throw new Error('Something went wrong');
+  }
+
+  await userModel.setStripeAccount({
+    accountId: account.accountId,
+    userId: user.id,
+  });
+
+  return account.accountLink;
+};
+
+export const verifyStripeAccount = async (email) => {
+  const user = await userModel.selectUserByEmail(email);
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  if (user.seller_verified) {
+    throw new Error('User already verified');
+  }
+
+  const account = await paymentCommon.verifyStripeAccount(user.stripe_account);
+
+  if (account === true) {
+    await userModel.setSellerVerified(user.id);
+  } else {
+    throw new Error('Something went wrong');
+  }
+
+  return 'Account verified successfully';
+};
 
 export const registerUser = async ({
   username,

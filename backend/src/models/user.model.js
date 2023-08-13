@@ -27,6 +27,12 @@ export const selectUserByEmail = async (email) => (
 export const selectUserByUsername = async (username) => (
   await db.query('SELECT * FROM users WHERE username = $1', [username])).rows[0];
 
+export const setStripeAccount = async (user) => (
+  await db.query('UPDATE users SET stripe_account = $1, seller_verified = false WHERE id = $2 RETURNING *', [user.accountId, user.userId])).rows[0];
+
+export const setSellerVerified = async (id) => (
+  await db.query('UPDATE users SET seller_verified = true WHERE id = $1 RETURNING *', [id])).rows[0];
+
 export const updateOTP = async (user) => (
   await db.query('UPDATE users SET otp = $1 WHERE email = $2 RETURNING *', [user.otp, user.email])).rows[0];
 

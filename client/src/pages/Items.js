@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
-import Header from '../components/Header.js';
 
 function Items() {
   const [items, setItems] = useState([]);
@@ -25,7 +24,6 @@ function Items() {
 
   return (
     <div className="container">
-      <Header />
       <h1 className="mt-4">Items Page</h1>
       <div className="mb-4">
         <label>

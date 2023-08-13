@@ -30,6 +30,32 @@ export const getUserByEmail = async (request, response, next) => {
   }
 };
 
+export const createStripeAccount = async (request, response, next) => {
+  try {
+    const email = await jwt.verify(
+      request.cookies.access_token,
+      process.env.JWT_SECRET,
+    ).email;
+
+    response.status(200).json(await userService.createStripeAccount(email));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyStripeAccount = async (request, response, next) => {
+  try {
+    const email = await jwt.verify(
+      request.cookies.access_token,
+      process.env.JWT_SECRET,
+    ).email;
+
+    response.status(200).json(await userService.verifyStripeAccount(email));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const registerUser = async (request, response, next) => {
   try {
     response.status(201).json(await userService.registerUser(request.body));

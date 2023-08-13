@@ -130,6 +130,8 @@ export const purchaseItem = async (email, { itemId }) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
   const item = await itemModel.selectItemById(itemId);
 
+  const sellerStripeAccount = (await userModel.selectUserById(item.seller_id)).stripe_account;
+
   const transactionId = uid().toLowerCase();
 
   const cartExpiry = new Date(Date.now() + 10 * 60 * 1000);
@@ -150,6 +152,7 @@ export const purchaseItem = async (email, { itemId }) => {
     item.price,
     item.name,
     transactionId,
+    sellerStripeAccount,
   );
 
   const job = new cron.CronJob(cartExpiry, async () => {

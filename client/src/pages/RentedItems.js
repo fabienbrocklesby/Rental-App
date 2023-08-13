@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
 
 function RentedItems() {
   const [items, setItems] = useState([]);
@@ -12,7 +11,6 @@ function RentedItems() {
 
   return (
     <div className="itemsPage">
-      <Header />
       <div className="container">
         <h1 className="my-4">Rented Items</h1>
         {items.length === 0 ? (

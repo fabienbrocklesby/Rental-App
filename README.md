@@ -30,6 +30,8 @@ CREATE TABLE users (
   seller_rating INT,
   buyer_rating INT,
   temp_email VARCHAR(255),
+  seller_verified BOOLEAN DEFAULT FALSE,
+  stripe_account VARCHAR(255) DEFAULT NULL,
   created_at TIMESTAMP NOT NULL
 );
 
