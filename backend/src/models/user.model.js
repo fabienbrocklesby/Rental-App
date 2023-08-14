@@ -1,12 +1,10 @@
-import ShortUniqueId from 'short-unique-id';
+import { v4 as uuidv4 } from 'uuid';
 import db from '../commons/database.common.js';
-
-const uid = new ShortUniqueId({ length: 6 });
 
 // eslint-disable-next-line import/prefer-default-export
 export const createUser = async (user) => (
   await db.query('INSERT INTO users (id, username, email, otp, seller_rating, buyer_rating, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [
-    uid(),
+    uuidv4(),
     user.username,
     user.email,
     user.otp,

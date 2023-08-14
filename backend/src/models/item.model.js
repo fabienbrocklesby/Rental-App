@@ -1,10 +1,5 @@
-import ShortUniqueId from 'short-unique-id';
+import { v4 as uuidv4 } from 'uuid';
 import db from '../commons/database.common.js';
-
-const uid = new ShortUniqueId({
-  dictionary: 'alpha_lower',
-  length: 6,
-});
 
 export const indexItems = async () => (await db.query('SELECT * FROM items')).rows;
 
@@ -18,7 +13,7 @@ export const selectItemsByHolderId = async (holderId) => (await db.query('SELECT
 
 export const createItem = async (item) => (
   await db.query('INSERT INTO items (id, name, description, img_dir, price, rating, seller_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *', [
-    uid(),
+    uuidv4(),
     item.name,
     item.description,
     item.imageName,

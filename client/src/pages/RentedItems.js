@@ -18,7 +18,7 @@ function RentedItems() {
         ) : (
           <div className="row">
             {items.map(item => (
-              <div key={item.id} className="col-md-4 mb-4">
+              <div key={item.id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div className="card h-100">
                   <div className="d-flex p-2 align-items-center">
                     <img

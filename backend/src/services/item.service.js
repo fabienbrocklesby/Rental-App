@@ -1,12 +1,10 @@
-import ShortUniqueId from 'short-unique-id';
+import { v4 as uuidv4 } from 'uuid';
 import cron from 'cron';
 
 import * as itemModel from '../models/item.model.js';
 import * as userModel from '../models/user.model.js';
 
 import * as paymentCommon from '../commons/payment.common.js';
-
-const uid = new ShortUniqueId({ length: 12 });
 
 export const indexItems = async () => (itemModel.indexItems());
 
@@ -47,7 +45,7 @@ export const createItem = async (email, {
     throw new Error('No images were uploaded.');
   }
 
-  const imageName = `${uid()}-${image.name}`;
+  const imageName = `${uuidv4()}-${image.name}`;
   const imageDir = `./uploads/${imageName}`;
 
   image.mv(imageDir, (error) => {
@@ -80,7 +78,7 @@ export const updateItem = async (
   }
 
   if (image) {
-    imageName = `${uid()}-${image.name}`;
+    imageName = `${uuidv4()}-${image.name}`;
     imageDir = `./uploads/${imageName}`;
 
     image.mv(imageDir, (error) => {
@@ -138,7 +136,7 @@ export const purchaseItem = async (email, { itemId }) => {
 
   const sellerStripeAccount = (await userModel.selectUserById(item.seller_id)).stripe_account;
 
-  const transactionId = uid().toLowerCase();
+  const transactionId = uuidv4().toLowerCase();
 
   const cartExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
