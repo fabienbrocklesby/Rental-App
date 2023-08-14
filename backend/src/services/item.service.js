@@ -37,6 +37,12 @@ export const createItem = async (email, {
   description,
   price,
 }, image) => {
+  const user = await userModel.selectUserByEmail(email);
+
+  if (user.seller_verified === false || !user.stripe_account) {
+    throw new Error('You are not a verified seller');
+  }
+
   if (!image || Object.keys(image).length === 0) {
     throw new Error('No images were uploaded.');
   }

@@ -52,7 +52,7 @@ const createPaymentSession = async (price, productName, transactionId, sellerStr
         },
       ],
       payment_intent_data: {
-        application_fee_amount: 123,
+        application_fee_amount: Math.round(price * 100 * 0.1),
         transfer_data: {
           destination: sellerStripeAccount,
         },
