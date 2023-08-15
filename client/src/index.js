@@ -26,7 +26,6 @@ import VerifyDeleteUser from './pages/VerifyDeleteUser';
 import Listings from './pages/Listings';
 import Profile from './pages/Profile';
 import RentedItems from './pages/RentedItems';
-import SearchBar from './pages/SearchBar';
 import Logout from './pages/Logout';
 
 let isLoggedIn = false;
@@ -63,7 +62,6 @@ export default function App() {
             <Route path="listings" element={<Listings />} />
             <Route path="profile" element={<Profile />} />
             <Route path="renteditems" element={<RentedItems />} />
-            <Route path="searchbar" element={<SearchBar />} />
             <Route path="logout" element={<Logout />} />
             </>
           ): null}

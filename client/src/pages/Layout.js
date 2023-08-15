@@ -42,10 +42,12 @@ const Layout = () => {
     <>
       <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle}>
         <div className="container">
-          <Navbar.Brand as={Link} to="/">
-            EZGear
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarNav" />
+          <div className="d-flex align-items-center">
+            <Navbar.Brand as={Link} to="/">
+              <img src="/images/Logo.png" alt="logo" className="d-inline-block align-top w-25 mb-1" />
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbarNav" className="ms-auto" />
+          </div>
           <Navbar.Collapse id="navbarNav">
             <Nav className="ms-auto">
               <Nav.Link as={Link} to="/" onClick={handleNavCollapse}>
@@ -70,19 +72,16 @@ const Layout = () => {
                 <>
                   <NavDropdown title="Items" id="itemsDropdown">
                     <NavDropdown.Item as={Link} to="/items" onClick={handleNavCollapse}>
-                      All Items
+                      Browse Listings
                     </NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/newitem" onClick={handleNavCollapse}>
-                      New Item
+                      New Listing
                     </NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/renteditems" onClick={handleNavCollapse}>
                       Rented Items
                     </NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/searchbar" onClick={handleNavCollapse}>
-                      Search Items
-                    </NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/listings" onClick={handleNavCollapse}>
-                      Listings
+                      My Listings
                     </NavDropdown.Item>
                   </NavDropdown>
                   <NavDropdown title="Profile" id="profileDropdown">
@@ -107,7 +106,7 @@ const Layout = () => {
         </div>
       </Navbar>
 
-      <div className="container py-4">
+      <div className="py-4">
         <Outlet />
       </div>
     </>

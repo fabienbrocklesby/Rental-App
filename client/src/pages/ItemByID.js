@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Container, Row, Col, Card, Badge, ButtonGroup } from 'react-bootstrap';
+import { Button, Container, Row, Col, Card, Badge } from 'react-bootstrap';
 import '../css/Home.css';
 import AddToCart from '../components/AddToCart.js';
 import ReqPurchase from '../components/RequestPurchase.js';
@@ -8,6 +8,8 @@ import ReqPurchase from '../components/RequestPurchase.js';
 function ItemByID() {
   const [item, setItem] = useState({});
   const [showSellerOptions, setShowSellerOptions] = useState(false);
+  const [sellerUsername, setSellerInfo] = useState(null);
+  
   let { id } = useParams();
 
   const loggedInUser = localStorage.getItem('userId');
@@ -18,6 +20,15 @@ function ItemByID() {
       .then(item => setItem(item))
       .catch(error => console.log(error))
   }, [id]);
+
+  useEffect(() => {
+    if (item.seller_id) {
+      fetch(`http://localhost:3001/api/users/${item.seller_id}`)
+        .then(response => response.json())
+        .then(sellerUsername => setSellerInfo(sellerUsername.username))
+        .catch(error => console.log(error))
+    }
+  }, [item.seller_id]);
 
   return (
     <div className="itemsPage" id="itemsPage">
@@ -46,6 +57,10 @@ function ItemByID() {
               <div className="description-box">
                 <h3>Description</h3>
                 <h5>{item.description}</h5>
+              </div>
+              <div className="description-box">
+                <h6 className="mt-2">Posted On: {new Date(item.created_at).toLocaleDateString()}</h6>
+                <h6>By: {sellerUsername}</h6>
               </div>
               {loggedInUser === item.seller_id ? (
                 <div>

@@ -59,8 +59,11 @@
 }
 
 .itemsPage {
-  padding: 20px;
   min-height: 100vh;
+}
+
+.itemList {
+  padding: 20px;
 }
 
 #itemsPage .item-image-container {
@@ -101,8 +104,35 @@
 
 .stacked-button {
   display: block;
-  margin-bottom: 10px; /* Add spacing between vertically stacked buttons */
+  margin-bottom: 10px;
 }
 
+.custom-bottom-margin {
+  margin-top: -1.5rem;
+}
 
+.custom-checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid white;
+  background-color: transparent;
+  border-radius: 4px;
+  outline: none;
+  margin-right: 0.3em;
+  vertical-align: middle;
+  cursor: pointer;
+}
 
+.custom-checkbox input[type="checkbox"]:not(:checked) {
+  background-color: white;
+}
+
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: transparent;
+}
+
+.custom-checkbox .ms-1 {
+  color: white;
+  vertical-align: middle;
+}

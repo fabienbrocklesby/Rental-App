@@ -38,25 +38,52 @@ function NewItem() {
     formData.append("name", name);
     formData.append("description", description);
     formData.append("price", price);
-    formData.append("image", image.files[0]);
 
-    try {
-      const response = await fetch('http://localhost:3001/api/items/create', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      });
+    const img = new Image();
+    img.src = URL.createObjectURL(image.files[0]);
 
-      if (response.ok) {
-        window.location.href = '/listings';
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
-    } catch (error) {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx.drawImage(img, 0, 0);
+
+      const cropSize = Math.min(img.width, img.height);
+      const cropX = (img.width - cropSize) / 2;
+      const cropY = (img.height - cropSize) / 2;
+
+      const thumbnailCanvas = document.createElement("canvas");
+      const thumbnailCtx = thumbnailCanvas.getContext("2d");
+      thumbnailCanvas.width = cropSize;
+      thumbnailCanvas.height = cropSize;
+
+      thumbnailCtx.drawImage(canvas, cropX, cropY, cropSize, cropSize, 0, 0, cropSize, cropSize);
+
+      thumbnailCanvas.toBlob(async (blob) => {
+        formData.append("image", blob, image.files[0].name);
+
+        try {
+          const response = await fetch('http://localhost:3001/api/items/create', {
+            method: 'POST',
+            body: formData,
+            credentials: 'include',
+          });
+
+          if (response.ok) {
+            window.location.href = '/listings';
+          } else {
+            setError("Something went wrong. Please try again.");
+          }
+        } catch (error) {
+          setError("An error occurred. Please try again.");
+        } finally {
+          setIsLoading(false);
+        }
+      }, 'image/jpeg');
+    };
   }
 
   return (
