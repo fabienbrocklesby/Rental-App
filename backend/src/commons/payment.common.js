@@ -36,6 +36,7 @@ const verifyStripeAccount = async (accountId) => {
 };
 
 const createPaymentSession = async (price, productName, transactionId, sellerStripeAccount) => {
+  console.log(price, productName, transactionId, sellerStripeAccount);
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

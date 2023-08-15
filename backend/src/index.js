@@ -41,6 +41,7 @@ app.delete('/api/users/verifydelete', authMiddleware, userController.verifyDelet
 
 // Item Routes
 app.get('/api/items', itemController.indexItems);
+app.get('/api/items/cart', authMiddleware, itemController.getCart);
 app.get('/api/items/:itemId', itemController.getItem);
 app.get('/api/items/get/byholder', authMiddleware, itemController.getItemByHolder);
 app.get('/api/items/user/email', authMiddleware, itemController.getItemByEmail);

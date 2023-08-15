@@ -10,6 +10,18 @@ export const indexItems = async () => (itemModel.indexItems());
 
 export const getItem = async (itemId) => (itemModel.selectItemById(itemId));
 
+export const getCart = async (email) => {
+  const userId = (await userModel.selectUserByEmail(email)).id;
+
+  if (!userId) {
+    throw new Error('User does not exist');
+  }
+
+  console.log(userId);
+
+  return itemModel.selectCartByUserId(userId);
+};
+
 export const getItemByEmail = async (email) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
 

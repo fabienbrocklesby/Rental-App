@@ -23,7 +23,7 @@ To run in development mode:
 
 ## Setup Postgres DB
 CREATE TABLE users (
-  id VARCHAR(10) PRIMARY KEY,
+  id VARCHAR(255) PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   otp VARCHAR(255),
@@ -36,18 +36,18 @@ CREATE TABLE users (
 );
 
 CREATE TABLE items (
-  id VARCHAR(10) PRIMARY KEY,
+  id VARCHAR(255) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   description VARCHAR(255) NOT NULL,
   img_dir VARCHAR(255) NOT NULL,
   price INT NOT NULL,
   rating INT,
-  seller_id VARCHAR(10) NOT NULL,
-  cart_id VARCHAR(10),
+  seller_id VARCHAR(255) NOT NULL,
+  cart_id VARCHAR(255),
   cart_expires_at TIMESTAMP,
-  holder_id VARCHAR(10) DEFAULT NULL,
+  holder_id VARCHAR(255) DEFAULT NULL,
   available BOOLEAN DEFAULT TRUE,
-  transaction_id VARCHAR(12) DEFAULT NULL,
+  transaction_id VARCHAR(255) DEFAULT NULL,
   stripe_id VARCHAR(255) DEFAULT NULL,
   return_status VARCHAR(12) DEFAULT NULL,
   receipt_status VARCHAR(12) DEFAULT NULL,

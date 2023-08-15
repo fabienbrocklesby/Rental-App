@@ -7,6 +7,8 @@ export const selectItemById = async (id) => (await db.query('SELECT * FROM items
 
 export const selectItemsByUserId = async (userId) => (await db.query('SELECT * FROM items WHERE seller_id = $1', [userId])).rows;
 
+export const selectCartByUserId = async (userId) => (await db.query('SELECT * FROM items WHERE cart_id = $1', [userId])).rows;
+
 export const selectItemByTransactionId = async (transactionId) => (await db.query('SELECT * FROM items WHERE transaction_id = $1', [transactionId])).rows[0];
 
 export const selectItemsByHolderId = async (holderId) => (await db.query('SELECT * FROM items WHERE holder_id = $1', [holderId])).rows;
