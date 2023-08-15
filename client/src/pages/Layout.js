@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 const Layout = () => {
   const [navbarExpanded, setNavbarExpanded] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
   const handleNavToggle = () => {
     setNavbarExpanded(!navbarExpanded);
@@ -18,6 +19,24 @@ const Layout = () => {
   if (document.cookie.includes("access_token")) {
     isLoggedIn = true;
   }
+
+  useEffect(() => {
+    async function fetchCartItems() {
+      try {
+        const response = await fetch("http://localhost:3001/api/items/cart", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const cartData = await response.json();
+        setCartItems(cartData || []);
+      } catch (error) {
+        console.error("An error occurred while fetching cart items:", error);
+      }
+    }
+
+    fetchCartItems();
+  }, []);
 
   return (
     <>
@@ -66,12 +85,21 @@ const Layout = () => {
                       Listings
                     </NavDropdown.Item>
                   </NavDropdown>
-                  <Nav.Link as={Link} to="/profile" onClick={handleNavCollapse}>
-                    Profile
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/logout" onClick={handleNavCollapse}>
-                    Logout
-                  </Nav.Link>
+                  <NavDropdown title="Profile" id="profileDropdown">
+                    <NavDropdown.Item as={Link} to="/profile" onClick={handleNavCollapse}>
+                      View profile
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/logout" onClick={handleNavCollapse}>
+                      Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                  <NavDropdown title={`My Cart (${cartItems.length})`} id="cartDropdown">
+                    {cartItems.map((item, index) => (
+                      <NavDropdown.Item key={index} as={Link} to={`/items/${item.id}`} onClick={handleNavCollapse}>
+                        {item.name}
+                      </NavDropdown.Item>
+                    ))}
+                  </NavDropdown>
                 </>
               )}
             </Nav>
