@@ -8,12 +8,18 @@ function Items() {
   const [showAvailableOnly, setShowAvailableOnly] = useState(true);
   const [sortAscending, setSortAscending] = useState(false);
 
+  let loggedIn = false;
+
+  if (localStorage.getItem('userId') && document.cookie) {
+    loggedIn = true
+  }
+
   useEffect(() => {
     fetch('http://localhost:3001/api/items')
       .then(response => response.json())
       .then(items => {
         if (showAvailableOnly) {
-          setItems(items.filter(item => item.available));
+          setItems(items.filter(item => item.available && !item.cart_id));
         } else {
           setItems(items);
         }
@@ -92,16 +98,24 @@ function Items() {
               sortedItems.map(item => (
                 <div key={item.id} className="col-md-4 mb-4">
                   <div className="card h-100">
-                    <a href={'items/' + item.id}>
+                    {loggedIn === true ? (
+                      <a href={'items/' + item.id}>
+                        <img
+                          src={`/uploads/${item.img_dir}`}
+                          className="card-img-top item-image"
+                          alt={item.name}
+                        />
+                      </a>
+                    ): (
                       <img
                         src={`/uploads/${item.img_dir}`}
                         className="card-img-top item-image"
                         alt={item.name}
                       />
-                    </a>
+                    )}
                     <div className="card-body">
                       <h5 className="card-title">{item.name}</h5>
-                      <p className="card-text">${item.price}</p>
+                      <p className="card-text">${item.price} / day</p>
                     </div>
                   </div>
                 </div>

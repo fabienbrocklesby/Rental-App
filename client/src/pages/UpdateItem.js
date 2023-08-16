@@ -87,7 +87,7 @@ function UpdateItem() {
               <Form.Control type="text" name="message" value={description} onChange={(e) => setDescription(e.target.value)} />
             </Form.Group>
             <Form.Group controlId="input-price">
-              <Form.Label>Price:</Form.Label>
+              <Form.Label>Price per day:</Form.Label>
               <Form.Control type="text" name="message" value={price} onChange={(e) => setPrice(e.target.value)} />
             </Form.Group>
             <Form.Group controlId="input-image">

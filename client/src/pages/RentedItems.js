@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 
 function RentedItems() {
   const [items, setItems] = useState([]);
@@ -10,11 +11,20 @@ function RentedItems() {
   }, []);
 
   return (
-    <div className="itemsPage">
-      <div className="container">
-        <h1 className="my-4">Rented Items</h1>
+    <div className="itemsPage ">
+      <div className="bg-primary mw-100 text-white py-4 custom-bottom-margin">
+        <h1 className="my-4 container">Rented Items</h1>
+      </div>
+      <div className="container mt-4">
         {items.length === 0 ? (
-          <p>No items rented yet</p>
+          <span>
+            <h4>You haven't rented any items yet .. </h4>
+            <h5>
+              <Link as={Link} to="/items" className="text-decoration-none text-primary">
+                Check out some cool listings here!
+              </Link>
+            </h5>
+          </span>
         ) : (
           <div className="row">
             {items.map(item => (

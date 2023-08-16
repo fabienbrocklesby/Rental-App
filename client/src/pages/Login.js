@@ -40,7 +40,7 @@ function Login() {
   }
 
   return (
-    <div id="loginPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
+    <div id="loginPage" className="d-flex flex-column align-items-center py-5">
       <div className="container bg-white p-4 rounded shadow-sm" style={{ maxWidth: "400px" }}>
         <h1 className="text-center mb-4">Login</h1>
 

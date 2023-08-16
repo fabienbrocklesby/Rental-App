@@ -47,7 +47,7 @@ function ItemByID() {
                 <h1>
                   {item.name}
                 </h1>
-                <h4>Price: ${item.price}</h4>
+                <h4>Price: ${item.price} / day</h4>
                 {item.available ? (
                   <Badge variant="success" className="item-badge">Available</Badge>
                 ) : (

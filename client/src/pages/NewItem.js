@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../css/Home.css';
 import { Form, Button, Container } from 'react-bootstrap';
 
 function NewItem() {
@@ -21,7 +20,7 @@ function NewItem() {
 
   async function postNewItem() {
     setError("");
-    
+
     const name = document.getElementById("input-name").value;
     const description = document.getElementById("input-description").value;
     const price = document.getElementById("input-price").value;
@@ -87,34 +86,38 @@ function NewItem() {
   }
 
   return (
-    <div id="newItemPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
-      <Container className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
-        <h1 className="text-center mb-4">New Item</h1>
+    <div id="newItemPage" className="d-flex flex-column align-items-center container">
+      <Container className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
+        <div className="text-center bg-primary py-3 rounded-top">
+          <h1 className="text-white">New Item</h1>
+        </div>
 
-        <Form>
-          <Form.Group controlId="input-name">
-            <Form.Label>Name:</Form.Label>
-            <Form.Control type="text" name="message" />
-          </Form.Group>
-          <Form.Group controlId="input-description">
-            <Form.Label>Description:</Form.Label>
-            <Form.Control type="text" name="message" />
-          </Form.Group>
-          <Form.Group controlId="input-price">
-            <Form.Label>Price:</Form.Label>
-            <Form.Control type="text" name="message" />
-          </Form.Group>
-          <Form.Group controlId="input-image">
-            <Form.Label>Image:</Form.Label>
-            <Form.Control type="file" name="message" />
-          </Form.Group>
-          <Button variant="primary" className="mt-2" onClick={postNewItem} disabled={isLoading || !user.seller_verified || !user.stripe_account}>
-            {isLoading ? "Loading..." : "Post Item"}
-          </Button>
-          
-          {!user.seller_verified && <p className="text-danger mt-2">Please become a verified seller to post items. <a href="/profile" className="text-danger">Become one here!</a></p>}
-          {error && <p className="text-danger mt-2">{error}</p>}
-        </Form>
+        <div className="p-4">
+          <Form>
+            <Form.Group controlId="input-name">
+              <Form.Label>Name:</Form.Label>
+              <Form.Control type="text" name="message" />
+            </Form.Group>
+            <Form.Group controlId="input-description">
+              <Form.Label>Description:</Form.Label>
+              <Form.Control type="text" name="message" />
+            </Form.Group>
+            <Form.Group controlId="input-price">
+              <Form.Label>Price per day:</Form.Label>
+              <Form.Control type="text" name="message" />
+            </Form.Group>
+            <Form.Group controlId="input-image">
+              <Form.Label>Image:</Form.Label>
+              <Form.Control type="file" name="message" />
+            </Form.Group>
+            <Button variant="primary" className="mt-2" onClick={postNewItem} disabled={isLoading || !user.seller_verified || !user.stripe_account}>
+              {isLoading ? "Loading..." : "Post Item"}
+            </Button>
+
+            {!user.seller_verified && <p className="text-danger mt-2">Please become a verified seller to post items. <a href="/profile" className="text-danger">Become one here!</a></p>}
+            {error && <p className="text-danger mt-2">{error}</p>}
+          </Form>
+        </div>
       </Container>
     </div>
   );

@@ -40,7 +40,7 @@ const Layout = () => {
 
   return (
     <>
-      <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle}>
+      <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle} className="sticky-top">
         <div className="container">
           <div className="d-flex align-items-center">
             <Navbar.Brand as={Link} to="/">
@@ -106,7 +106,7 @@ const Layout = () => {
         </div>
       </Navbar>
 
-      <div className="py-4">
+      <div className="pt-4">
         <Outlet />
       </div>
     </>
