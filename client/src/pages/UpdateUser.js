@@ -23,22 +23,27 @@ function UpdateUser() {
   }
 
   return (
-    <div id="loginPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
-      <Container className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: "400px" }}>
-        <h1 className="text-center mb-4">Update</h1>
+    <div id="loginPage" className="container min-vh-100 d-flex flex-column align-items-center py-5">
+      <Container className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
+        <div className="text-center bg-primary py-3 rounded-top">
+          <h1 className="text-white">Update User</h1>
+        </div>
 
-        <Form>
-          <Form.Group controlId="input-username">
-            <Form.Label>Username:</Form.Label>
-            <Form.Control type="text" name="message" />
-          </Form.Group>
-          <Form.Group controlId="input-email">
-            <Form.Label>Email:</Form.Label>
-            <Form.Control type="email" name="message" />
-          </Form.Group>
+        <div className="p-4">
+          <Form>
+            <Form.Group controlId="input-username">
+              <Form.Label>Username:</Form.Label>
+              <Form.Control type="text" name="message" />
+            </Form.Group>
+            <Form.Group controlId="input-email">
+              <Form.Label>Email:</Form.Label>
+              <Form.Control type="email" name="message" />
+            </Form.Group>
+            <p className="text-muted mt-1" style={{ fontSize: "12px" }}><u>Tip:</u> You only need to provide what you want to update (you can update both email and username at the same time aswell)</p>
 
-          <Button variant="primary" className="mt-2" onClick={update}>Update User</Button>
-        </Form>
+            <Button variant="primary" className="mt-2" onClick={update}>Update User</Button>
+          </Form>
+        </div>
       </Container>
     </div>
   );

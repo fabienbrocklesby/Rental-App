@@ -43,18 +43,20 @@ const Layout = () => {
       <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle} className="sticky-top">
         <div className="container">
           <div className="d-flex align-items-center">
-            <Navbar.Brand as={Link} to="/">
-              <img src="/images/Logo.png" alt="logo" className="d-inline-block align-top w-25 mb-1" />
+            <Navbar.Brand>
+              <Link to={isLoggedIn ? "/items" : "/"} className="nav-link">
+                <img src="/images/Logo.png" alt="logo" className="d-inline-block align-top w-25 mb-1" />
+              </Link>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarNav" className="ms-auto" />
           </div>
           <Navbar.Collapse id="navbarNav">
             <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/" onClick={handleNavCollapse}>
-                Home
-              </Nav.Link>
               {!isLoggedIn ? (
                 <>
+                  <Nav.Link as={Link} to="/" onClick={handleNavCollapse}>
+                    Home
+                  </Nav.Link>
                   <Nav.Link as={Link} to="/register" onClick={handleNavCollapse}>
                     Register
                   </Nav.Link>
@@ -93,11 +95,15 @@ const Layout = () => {
                     </NavDropdown.Item>
                   </NavDropdown>
                   <NavDropdown title={`My Cart (${cartItems.length})`} id="cartDropdown">
-                    {cartItems.map((item, index) => (
-                      <NavDropdown.Item key={index} as={Link} to={`/items/${item.id}`} onClick={handleNavCollapse}>
-                        {item.name}
-                      </NavDropdown.Item>
-                    ))}
+                    {cartItems.length === 0 ? (
+                      <NavDropdown.Item disabled>Nothing in cart yet</NavDropdown.Item>
+                    ) : (
+                      cartItems.map((item, index) => (
+                        <NavDropdown.Item key={index} as={Link} to={`/items/${item.id}`} onClick={handleNavCollapse}>
+                          {item.name}
+                        </NavDropdown.Item>
+                      ))
+                    )}
                   </NavDropdown>
                 </>
               )}

@@ -89,7 +89,7 @@ function NewItem() {
     <div id="newItemPage" className="d-flex flex-column align-items-center container">
       <Container className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
         <div className="text-center bg-primary py-3 rounded-top">
-          <h1 className="text-white">New Item</h1>
+          <h1 className="text-white">New Listing</h1>
         </div>
 
         <div className="p-4">
@@ -111,7 +111,7 @@ function NewItem() {
               <Form.Control type="file" name="message" />
             </Form.Group>
             <Button variant="primary" className="mt-2" onClick={postNewItem} disabled={isLoading || !user.seller_verified || !user.stripe_account}>
-              {isLoading ? "Loading..." : "Post Item"}
+              {isLoading ? "Loading..." : "Create Listing"}
             </Button>
 
             {!user.seller_verified && <p className="text-danger mt-2">Please become a verified seller to post items. <a href="/profile" className="text-danger">Become one here!</a></p>}

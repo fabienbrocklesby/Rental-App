@@ -48,36 +48,41 @@ function Register() {
   }
 
   return (
-    <div id="registerPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
-      <div className="container bg-white p-4 rounded shadow-sm" style={{ maxWidth: "400px" }}>
-        <h1 className="text-center mb-4">Register</h1>
-
-        <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            id="input-username"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <input
-            type="email"
-            className="form-control"
-            id="input-email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <div id="registerPage" className="d-flex flex-column align-items-center container pt-5"  style={{ maxWidth: "500px" }}>
+      <div className="container bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
+        <div className="text-center bg-primary py-3 rounded-top">
+          <h1 className="text-white">Register</h1>
         </div>
 
-        {error && <p className="text-danger">{error}</p>}
+        <div className="p-4">
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="input-username"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              type="email"
+              className="form-control"
+              id="input-email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <p className="text-muted mt-1" style={{ fontSize: "12px" }}><u>No password needed!</u> We'll send a verification code to your email so you can log in!</p>
 
-        <button className="btn btn-primary" onClick={registerUser} disabled={isLoading}>
-          {isLoading ? "Loading..." : "Register"}
-        </button>
+          {error && <p className="text-danger">{error}</p>}
+
+          <button className="btn btn-primary" onClick={registerUser} disabled={isLoading}>
+            {isLoading ? "Loading..." : "Register"}
+          </button>
+        </div>
       </div>
     </div>
   );

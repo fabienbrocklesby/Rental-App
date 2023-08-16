@@ -73,29 +73,33 @@ function UpdateItem() {
 
   return (
     <div>
-      <div id="newItemPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
-        <Container className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: '500px', backgroundColor: '#f0f0f0' }}>
-          <h1 className="text-center mb-4">Update Item</h1>
+      <div id="newItemPage" className="d-flex flex-column align-items-center container">
+        <Container className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
+          <div className="text-center bg-primary py-3 rounded-top">
+            <h1 className="text-white">Update Listing</h1>
+          </div>
 
-          <Form>
-            <Form.Group controlId="input-name">
-              <Form.Label>Name:</Form.Label>
-              <Form.Control type="text" name="message" value={name} onChange={(e) => setName(e.target.value)} />
-            </Form.Group>
-            <Form.Group controlId="input-description">
-              <Form.Label>Description:</Form.Label>
-              <Form.Control type="text" name="message" value={description} onChange={(e) => setDescription(e.target.value)} />
-            </Form.Group>
-            <Form.Group controlId="input-price">
-              <Form.Label>Price per day:</Form.Label>
-              <Form.Control type="text" name="message" value={price} onChange={(e) => setPrice(e.target.value)} />
-            </Form.Group>
-            <Form.Group controlId="input-image">
-              <Form.Label>Image:</Form.Label>
-              <Form.Control type="file" name="message" onChange={handleImageChange} />
-            </Form.Group>
-            <Button variant="primary" className="mt-2" onClick={PostUpdateItem}>Update Item</Button>
-          </Form>
+          <div className="p-4">
+            <Form>
+              <Form.Group controlId="input-name">
+                <Form.Label>Name:</Form.Label>
+                <Form.Control type="text" name="message" value={name} onChange={(e) => setName(e.target.value)} />
+              </Form.Group>
+              <Form.Group controlId="input-description">
+                <Form.Label>Description:</Form.Label>
+                <Form.Control type="text" name="message" value={description} onChange={(e) => setDescription(e.target.value)} />
+              </Form.Group>
+              <Form.Group controlId="input-price">
+                <Form.Label>Price per day:</Form.Label>
+                <Form.Control type="text" name="message" value={price} onChange={(e) => setPrice(e.target.value)} />
+              </Form.Group>
+              <Form.Group controlId="input-image">
+                <Form.Label>Image:</Form.Label>
+                <Form.Control type="file" name="message" onChange={handleImageChange} />
+              </Form.Group>
+              <Button variant="primary" className="mt-2" onClick={PostUpdateItem}>Update Listing</Button>
+            </Form>
+          </div>
         </Container>
       </div>
     </div>
