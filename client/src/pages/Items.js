@@ -56,7 +56,7 @@ function Items() {
   });
 
   return (
-    <div className="itemsPage">
+    <div className="itemsPage mb-5">
       <div className="bg-primary custom-bottom-margin mw-100 text-white py-4">
         <div className="container">
           <h1 className="my-4">All Listings</h1>
