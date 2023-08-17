@@ -21,8 +21,8 @@ const LandingPage = () => {
             <h1 className="text-white">Check It Out</h1>
           </div>
           <div className="d-flex justify-content-center p-4">
-            <Link as="Link" to="/items" className="btn btn-primary mx-2">Login</Link>
-            <Link as="Link" to="/items" className="btn btn-primary mx-2">Register</Link>
+            <Link as="Link" to="/login" className="btn btn-primary mx-2">Login</Link>
+            <Link as="Link" to="/register" className="btn btn-primary mx-2">Register</Link>
           </div>
         </div>
       </div>

@@ -17,8 +17,6 @@ export const getCart = async (email) => {
     throw new Error('User does not exist');
   }
 
-  console.log(userId);
-
   return itemModel.selectCartByUserId(userId);
 };
 
@@ -46,6 +44,7 @@ export const createItem = async (email, {
   name,
   description,
   price,
+  location,
 }, image) => {
   const user = await userModel.selectUserByEmail(email);
 
@@ -69,7 +68,7 @@ export const createItem = async (email, {
   const sellerId = (await userModel.selectUserByEmail(email)).id;
 
   return itemModel.createItem({
-    name, description, imageName, price, sellerId,
+    name, description, imageName, price, location, sellerId,
   });
 };
 
