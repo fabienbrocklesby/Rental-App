@@ -8,8 +8,13 @@ function UpdateItem() {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [image, setImage] = useState(null);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   async function PostUpdateItem() {
+    setError('');
+    setIsLoading(true);
+
     const formData = new FormData();
     formData.append('id', id);
     formData.append('name', name);
@@ -50,21 +55,31 @@ function UpdateItem() {
           }).then((response) => {
             if (response.ok) {
               window.location.href = `/items/${id}`;
+            } else {
+              setError('Something went wrong. Please try again.');
             }
           });
         }, 'image/jpeg');
       };
     } else {
-      const response = await fetch('http://localhost:3001/api/items/update', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      });
+      try {
+        const response = await fetch('http://localhost:3001/api/items/update', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',
+        });
 
-      if (response.ok) {
-        window.location.href = `/items/${id}`;
+        if (response.ok) {
+          window.location.href = `/items/${id}`;
+        } else {
+          setError('Something went wrong. Please try again.');
+        }
+      } catch (error) {
+        setError('An error occurred. Please try again.');
       }
     }
+
+    setIsLoading(false);
   }
 
   const handleImageChange = (event) => {
@@ -97,7 +112,10 @@ function UpdateItem() {
                 <Form.Label>Image:</Form.Label>
                 <Form.Control type="file" name="message" onChange={handleImageChange} />
               </Form.Group>
-              <Button variant="primary" className="mt-2" onClick={PostUpdateItem}>Update Listing</Button>
+              {error && <p className="text-danger">{error}</p>}
+              <Button variant="primary" className="mt-2" onClick={PostUpdateItem} disabled={isLoading}>
+                {isLoading ? "Loading..." : "Update Listing"}
+              </Button>
             </Form>
           </div>
         </Container>

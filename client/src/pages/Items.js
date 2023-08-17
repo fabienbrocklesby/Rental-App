@@ -8,7 +8,15 @@ function Items() {
   const [showAvailableOnly, setShowAvailableOnly] = useState(true);
   const [sortAscending, setSortAscending] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const locations = ['Auckland', 'Wellington', 'Christchurch', 'Hamilton', 'Dunedin', 'Tauranga']; // Replace with your actual locations
+  const [selectedLocation, setSelectedLocation] = useState('');
+  
+  const locations = [
+    "Auckland", "Wellington", "Christchurch", "Hamilton", "Tauranga", "Dunedin", 
+    "Palmerston North", "Napier", "Hastings", "Nelson", "Rotorua", "New Plymouth", 
+    "Whangārei", "Invercargill", "Whanganui", "Gisborne", "Wanganui", "Taranaki", 
+    "Manawatu-Wanganui", "Bay of Plenty", "Northland", "Waikato", "Wellington", 
+    "Canterbury", "Otago", "Southland", "Hawke's Bay", "Marlborough", "West Coast"
+  ];
 
   let loggedIn = false;
 
@@ -44,6 +52,10 @@ function Items() {
     setShowLocationDropdown(!showLocationDropdown);
   };
 
+  const handleLocationSelect = event => {
+    setSelectedLocation(event.target.value);
+  };
+
   const fuse = new Fuse(items, {
     keys: ['name', 'description'],
     threshold: 0.4,
@@ -60,6 +72,10 @@ function Items() {
       return b.price - a.price;
     }
   });
+
+  const locationFilteredItems = selectedLocation
+    ? sortedItems.filter(item => item.location === selectedLocation)
+    : sortedItems;
 
   return (
     <div className="itemsPage mb-5">
@@ -101,9 +117,15 @@ function Items() {
                 />
                 <span className="ms-1">Filter By Location</span>
               </label>
+            </div>
+            <div className="d-flex flex-wrap flex-column flex-md-row align-items-md-center">
               {showLocationDropdown && (
                 <div className="mt-3">
-                  <select className="form-select">
+                  <select 
+                    className="form-select"
+                    value={selectedLocation}
+                    onChange={handleLocationSelect}
+                  >
                     <option value="">Select Location</option>
                     {locations.map((location, index) => (
                       <option key={index} value={location}>
@@ -120,10 +142,10 @@ function Items() {
       <div className="container mt-5">
         <div className="itemsList">
           <div className="row">
-            {sortedItems.length === 0 ? (
+            {locationFilteredItems.length === 0 ? (
               <p>No items found</p>
             ) : (
-              sortedItems.map(item => (
+              locationFilteredItems.map(item => (
                 <div key={item.id} className="col-md-4 mb-4">
                   <div className="card h-100">
                     {loggedIn === true ? (
