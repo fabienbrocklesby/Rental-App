@@ -61,6 +61,7 @@ function ItemByID() {
               <div className="description-box">
                 <h6 className="mt-2">Posted On: {new Date(item.created_at).toLocaleDateString()}</h6>
                 <h6>By: {sellerUsername}</h6>
+                <h5>{item.location}, New Zealand</h5>
               </div>
               {loggedInUser === item.seller_id ? (
                 <div>

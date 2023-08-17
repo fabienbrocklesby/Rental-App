@@ -41,15 +41,13 @@ const Layout = () => {
   return (
     <>
       <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle} className="sticky-top">
-        <div className="container">
-          <div className="d-flex align-items-center">
-            <Navbar.Brand>
-              <Link to={isLoggedIn ? "/items" : "/"} className="nav-link">
-                <img src="/images/Logo.png" alt="logo" className="d-inline-block align-top w-25 mb-1" />
-              </Link>
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="navbarNav" className="ms-auto" />
-          </div>
+        <div className="container d-flex justify-content-between align-items-center">
+          <Navbar.Brand>
+            <Link to={isLoggedIn ? "/items" : "/"} className="nav-link">
+              <img src="/images/Logo.png" alt="logo" className="d-inline-block align-top mb-1" style={{ height: "50px" }} />
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbarNav" />
           <Navbar.Collapse id="navbarNav">
             <Nav className="ms-auto">
               {!isLoggedIn ? (

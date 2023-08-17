@@ -7,11 +7,13 @@ function Items() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showAvailableOnly, setShowAvailableOnly] = useState(true);
   const [sortAscending, setSortAscending] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const locations = ['Auckland', 'Wellington', 'Christchurch', 'Hamilton', 'Dunedin', 'Tauranga']; // Replace with your actual locations
 
   let loggedIn = false;
 
   if (localStorage.getItem('userId') && document.cookie) {
-    loggedIn = true
+    loggedIn = true;
   }
 
   useEffect(() => {
@@ -36,6 +38,10 @@ function Items() {
 
   const handleSortChange = () => {
     setSortAscending(!sortAscending);
+  };
+
+  const handleLocationCheckboxChange = () => {
+    setShowLocationDropdown(!showLocationDropdown);
   };
 
   const fuse = new Fuse(items, {
@@ -70,27 +76,49 @@ function Items() {
             />
           </div>
           <div className="mb-4">
-            <label className="custom-checkbox">
-              <input
-                type="checkbox"
-                checked={showAvailableOnly}
-                onChange={handleCheckboxChange}
-              />
-              <span className="ms-1">Available Items Only</span>
-            </label>
-            <label className="custom-checkbox ms-4">
-              <input
-                type="checkbox"
-                checked={sortAscending}
-                onChange={handleSortChange}
-              />
-              <span className="ms-1">Sort by Lowest Price</span>
-            </label>
+            <div className="d-flex flex-wrap flex-column flex-md-row align-items-md-center">
+              <label className="custom-checkbox mb-2 mb-md-0 me-md-4">
+                <input
+                  type="checkbox"
+                  checked={showAvailableOnly}
+                  onChange={handleCheckboxChange}
+                />
+                <span className="ms-1">Available Items Only</span>
+              </label>
+              <label className="custom-checkbox mb-2 mb-md-0 me-md-4">
+                <input
+                  type="checkbox"
+                  checked={sortAscending}
+                  onChange={handleSortChange}
+                />
+                <span className="ms-1">Sort by Lowest Price</span>
+              </label>
+              <label className="custom-checkbox mb-2 mb-md-0 me-md-4">
+                <input
+                  type="checkbox"
+                  checked={showLocationDropdown}
+                  onChange={handleLocationCheckboxChange}
+                />
+                <span className="ms-1">Filter By Location</span>
+              </label>
+              {showLocationDropdown && (
+                <div className="mt-3">
+                  <select className="form-select">
+                    <option value="">Select Location</option>
+                    {locations.map((location, index) => (
+                      <option key={index} value={location}>
+                        {location}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
       <div className="container mt-5">
-        <div class="itemsList">
+        <div className="itemsList">
           <div className="row">
             {sortedItems.length === 0 ? (
               <p>No items found</p>
@@ -106,7 +134,7 @@ function Items() {
                           alt={item.name}
                         />
                       </a>
-                    ): (
+                    ) : (
                       <img
                         src={`/uploads/${item.img_dir}`}
                         className="card-img-top item-image"

@@ -5,6 +5,15 @@ function NewItem() {
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  
+  const locations = [
+    "Auckland", "Wellington", "Christchurch", "Hamilton", "Tauranga", "Dunedin", 
+    "Palmerston North", "Napier", "Hastings", "Nelson", "Rotorua", "New Plymouth", 
+    "Whangārei", "Invercargill", "Whanganui", "Gisborne", "Wanganui", "Taranaki", 
+    "Manawatu-Wanganui", "Bay of Plenty", "Northland", "Waikato", "Wellington", 
+    "Canterbury", "Otago", "Southland", "Hawke's Bay", "Marlborough", "West Coast"
+  ];
 
   useEffect(() => {
     fetch('http://localhost:3001/api/users/get/email', {
@@ -26,7 +35,7 @@ function NewItem() {
     const price = document.getElementById("input-price").value;
     const image = document.getElementById("input-image");
 
-    if (!name || !description || !price || !image.files[0]) {
+    if (!name || !description || !price || !image.files[0] || !selectedLocation) {
       setError("Please fill in all fields.");
       return;
     }
@@ -37,6 +46,7 @@ function NewItem() {
     formData.append("name", name);
     formData.append("description", description);
     formData.append("price", price);
+    formData.append("location", selectedLocation);
 
     const img = new Image();
     img.src = URL.createObjectURL(image.files[0]);
@@ -98,19 +108,34 @@ function NewItem() {
               <Form.Label>Name:</Form.Label>
               <Form.Control type="text" name="message" />
             </Form.Group>
-            <Form.Group controlId="input-description">
+            <Form.Group controlId="input-description" className="mt-1">
               <Form.Label>Description:</Form.Label>
               <Form.Control type="text" name="message" />
             </Form.Group>
-            <Form.Group controlId="input-price">
+            <Form.Group controlId="input-price" className="mt-1">
               <Form.Label>Price per day:</Form.Label>
               <Form.Control type="text" name="message" />
             </Form.Group>
-            <Form.Group controlId="input-image">
+            <Form.Group controlId="input-location" className="mt-1">
+              <Form.Label>Location:</Form.Label>
+              <Form.Control
+                as="select"
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+              >
+                <option value="">Select Location</option>
+                {locations.map((location, index) => (
+                  <option key={index} value={location}>
+                    {location}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="input-image" className="mt-1">
               <Form.Label>Image:</Form.Label>
               <Form.Control type="file" name="message" />
             </Form.Group>
-            <Button variant="primary" className="mt-2" onClick={postNewItem} disabled={isLoading || !user.seller_verified || !user.stripe_account}>
+            <Button variant="primary" className="mt-3" onClick={postNewItem} disabled={isLoading || !user.seller_verified || !user.stripe_account}>
               {isLoading ? "Loading..." : "Create Listing"}
             </Button>
 
