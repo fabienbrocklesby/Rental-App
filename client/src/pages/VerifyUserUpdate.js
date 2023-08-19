@@ -12,7 +12,7 @@ function Register() {
     const otp = document.getElementById("input-otp").value;
     
     try {
-      const response = await fetch('http://localhost:3001/api/users/verifyupdate', {
+      const response = await fetch('/api/users/verifyupdate', {
         method: 'POST',
         body: JSON.stringify({ otp }),
         headers: {

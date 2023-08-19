@@ -8,7 +8,7 @@ function ReturnItem() {
   const [showModal, setShowModal] = React.useState(false);
 
   async function postNewItem() {
-    const response = await fetch('http://localhost:3001/api/items/return', {
+    const response = await fetch('/api/items/return', {
       method: 'POST',
       body: JSON.stringify({ itemId: id }),
       headers: {

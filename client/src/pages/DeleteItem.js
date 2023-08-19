@@ -8,7 +8,7 @@ function DeleteItem() {
   const [showModal, setShowModal] = React.useState(false);
 
   async function confirmDelete() {
-    const response = await fetch('http://localhost:3001/api/items/delete', {
+    const response = await fetch('/api/items/delete', {
       method: 'DELETE',
       body: JSON.stringify({ itemId: id }),
       headers: {

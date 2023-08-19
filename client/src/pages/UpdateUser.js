@@ -18,7 +18,7 @@ function UpdateUser() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/users/requpdate', {
+      const response = await fetch('/api/users/requpdate', {
         method: 'POST',
         body: JSON.stringify({ newUsername, email }),
         headers: {

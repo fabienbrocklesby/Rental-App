@@ -51,7 +51,7 @@ CREATE TABLE items (
   stripe_id VARCHAR(255) DEFAULT NULL,
   return_status VARCHAR(12) DEFAULT NULL,
   receipt_status VARCHAR(12) DEFAULT NULL,
-  location VARCHAR(255)
+  location VARCHAR(255),
   created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (seller_id) REFERENCES users(id)
 );

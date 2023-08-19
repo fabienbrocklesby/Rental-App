@@ -23,7 +23,7 @@ const Layout = () => {
   useEffect(() => {
     async function fetchCartItems() {
       try {
-        const response = await fetch("http://localhost:3001/api/items/cart", {
+        const response = await fetch("/api/items/cart", {
           method: "GET",
           credentials: "include",
         });

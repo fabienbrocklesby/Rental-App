@@ -6,7 +6,7 @@ function Items() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/items/user/email', {
+    fetch('/api/items/user/email', {
       method: 'GET',
       credentials: 'include',
     })

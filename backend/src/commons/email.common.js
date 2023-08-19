@@ -9,14 +9,14 @@ export default async (data) => {
       Body: [
         {
           ContentType: 'HTML',
-          Content: `<h1>Your one time password is: ${data.otp}</h1><br />`,
+          Content: data.message,
           Charset: 'string',
         },
       ],
       Postback: 'string',
       EnvelopeFrom: process.env.EMAIL_FROM_EMAIL,
       From: process.env.EMAIL_FROM_EMAIL,
-      Subject: 'EZGear One Time Password',
+      Subject: 'EZGear',
     },
   };
 
@@ -34,7 +34,7 @@ export default async (data) => {
       body: JSON.stringify(emailData),
     });
 
-    console.log(data.otp);
+    console.log(data.message);
 
     return response;
   } catch (error) {

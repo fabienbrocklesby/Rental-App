@@ -12,7 +12,7 @@ function VerifyOTP() {
     const otp = document.getElementById("input-otp").value;
 
     try {
-      const response = await fetch('http://localhost:3001/api/users/verifyotp', {
+      const response = await fetch('/api/users/verifyotp', {
         method: 'POST',
         body: JSON.stringify({ email, otp }),
         headers: {

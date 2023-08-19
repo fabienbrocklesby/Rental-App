@@ -8,7 +8,7 @@ function ReceiptItem() {
   const [showModal, setShowModal] = React.useState(false);
 
   async function postNewItem() {
-    const response = await fetch('http://localhost:3001/api/items/receipt', {
+    const response = await fetch('/api/items/receipt', {
       method: 'POST',
       body: JSON.stringify({ itemId: id }),
       headers: {

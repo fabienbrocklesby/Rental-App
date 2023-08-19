@@ -4,6 +4,7 @@ import cron from 'cron';
 import * as itemModel from '../models/item.model.js';
 import * as userModel from '../models/user.model.js';
 
+import emailHelper from '../commons/email.common.js';
 import * as paymentCommon from '../commons/payment.common.js';
 
 export const indexItems = async () => (itemModel.indexItems());
@@ -187,6 +188,8 @@ export const verifyPurchase = async (email, transactionId) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
   const item = await itemModel.selectItemByTransactionId(transactionId);
 
+  const sellerEmail = (await userModel.selectUserById(item.seller_id)).email;
+
   if (!item || !userId) {
     throw new Error('Item or user does not exist');
   }
@@ -194,6 +197,15 @@ export const verifyPurchase = async (email, transactionId) => {
   if (userId !== item.cart_id) {
     throw new Error('You are not the owner of this cart');
   }
+
+  if (!sellerEmail) {
+    throw new Error('Seller does not exist');
+  }
+
+  await emailHelper({
+    email: sellerEmail,
+    message: `<h1>Somebody has rented your EZGear listing: ${item.name} (https://ezgear.app/items/${item.id}). <br /> Here is the buyer's email, contact them to arrange the collection: ${email}</h1><br />`,
+  });
 
   const payment = await paymentCommon.verifyPaymentSession(item.stripe_id);
 
@@ -203,7 +215,10 @@ export const verifyPurchase = async (email, transactionId) => {
 
   await itemModel.purchaseItem(userId, item.id);
 
-  return 'Payment successful';
+  return {
+    message: 'Payment successful',
+    sellerEmail,
+  };
 };
 
 export const cancelPurchase = async (email, transactionId) => {

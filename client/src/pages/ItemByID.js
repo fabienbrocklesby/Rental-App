@@ -15,7 +15,7 @@ function ItemByID() {
   const loggedInUser = localStorage.getItem('userId');
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/items/${id}`)
+    fetch(`/api/items/${id}`)
       .then(response => response.json())
       .then(item => setItem(item))
       .catch(error => console.log(error))
@@ -23,7 +23,7 @@ function ItemByID() {
 
   useEffect(() => {
     if (item.seller_id) {
-      fetch(`http://localhost:3001/api/users/${item.seller_id}`)
+      fetch(`/api/users/${item.seller_id}`)
         .then(response => response.json())
         .then(sellerUsername => setSellerInfo(sellerUsername.username))
         .catch(error => console.log(error))

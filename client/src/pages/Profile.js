@@ -8,7 +8,7 @@ function ProfilePage() {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/users/get/email', {
+    fetch('/api/users/get/email', {
       method: 'GET',
       credentials: 'include',
     })
@@ -22,7 +22,7 @@ function ProfilePage() {
     setIsLoading(true);
     
     try {
-      const response = await fetch('http://localhost:3001/api/create/stripeaccount', {
+      const response = await fetch('/api/create/stripeaccount', {
         method: 'GET',
         credentials: 'include',
       });

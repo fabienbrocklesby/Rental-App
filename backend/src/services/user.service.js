@@ -88,7 +88,7 @@ export const registerUser = async ({
 
   await emailHelper({
     email: user.email,
-    otp,
+    message: `<h1>Your one time password is: ${otp}</h1><br />`,
   });
 
   return `OTP has been sent to ${user.email}`;
@@ -110,7 +110,7 @@ export const loginUser = async ({ email: originalEmail }) => {
 
   await emailHelper({
     email: user.email,
-    otp,
+    message: `<h1>Your one time password is: ${otp}</h1><br />`,
   });
 
   return 'OTP sent successfully';
@@ -175,7 +175,7 @@ export const reqUpdateUser = async (username, newData) => {
       email: user.email,
     });
 
-    await emailHelper({ email, otp });
+    await emailHelper({ email, message: `<h1>Your one time password is: ${otp}</h1><br />` });
   }
 
   if (Object.keys(updatedFields).length > 0) {
@@ -239,7 +239,7 @@ export const reqDeleteUser = async (username) => {
 
   await emailHelper({
     email: user.email,
-    otp,
+    message: `<h1>Your one time password is: ${otp}</h1><br />`,
   });
 
   return `OTP has been sent to ${user.email}`;

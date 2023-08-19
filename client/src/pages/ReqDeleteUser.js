@@ -3,7 +3,7 @@ import { Button, Container } from 'react-bootstrap';
 
 function ReqDeleteUser() {
   async function DeleteUser() {
-    const response = await fetch('http://localhost:3001/api/users/delete', {
+    const response = await fetch('/api/users/delete', {
       method: 'DELETE',
       headers: {
         "Content-type": "application/json; charset=UTF-8"

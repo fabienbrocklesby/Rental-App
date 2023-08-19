@@ -13,7 +13,7 @@ import authMiddleware from './middleware/auth.middleware.js';
 import * as errorMiddleware from './middleware/error.middleware.js';
 
 const app = express();
-const port = process.env.API_PORT || 3001;
+const port = 3000;
 
 app.disable('x-powered-by');
 app.use(cors());

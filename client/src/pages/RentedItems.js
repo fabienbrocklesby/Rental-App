@@ -5,7 +5,7 @@ function RentedItems() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/items/get/byholder')
+    fetch('/api/items/get/byholder')
       .then(response => response.json())
       .then(items => setItems(items));
   }, []);

@@ -6,7 +6,7 @@ function Register() {
   async function verifyUserDelete() {
     const otp = document.getElementById("input-otp").value;
     
-    const response = await fetch('http://localhost:3001/api/users/verifydelete', {
+    const response = await fetch('/api/users/verifydelete', {
       method: 'DELETE',
       body: JSON.stringify({ otp }),
       headers: {

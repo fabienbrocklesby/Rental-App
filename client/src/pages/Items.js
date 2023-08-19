@@ -25,7 +25,7 @@ function Items() {
   }
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/items')
+    fetch('/api/items')
       .then(response => response.json())
       .then(items => {
         if (showAvailableOnly) {

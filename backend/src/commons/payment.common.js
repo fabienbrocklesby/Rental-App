@@ -11,8 +11,8 @@ const createAccountLink = async () => {
 
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'http://localhost:3001',
-      return_url: 'http://localhost:3001/api/users/verify/stripe',
+      refresh_url: 'http://ezgear.app',
+      return_url: 'http://ezgear.app/api/users/verify/stripe',
       type: 'account_onboarding',
     });
 
@@ -59,8 +59,8 @@ const createPaymentSession = async (price, productName, transactionId, sellerStr
         },
       },
       mode: 'payment',
-      success_url: `http://localhost:3001/successful/${transactionId}`,
-      cancel_url: `http://localhost:3001/cancel/${transactionId}`,
+      success_url: `https://ezgear.app/successful/${transactionId}`,
+      cancel_url: `https://ezgear.app/cancel/${transactionId}`,
     });
     return session;
   } catch (error) {

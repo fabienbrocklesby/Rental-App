@@ -9,7 +9,7 @@ function SuccessfulPayment() {
   useEffect(() => {
     async function fetchPaymentData() {
       try {
-        const response = await fetch(`http://localhost:3001/api/payment/cancel/${id}`, {
+        const response = await fetch(`/api/payment/cancel/${id}`, {
           method: 'POST',
           credentials: 'include',
         });

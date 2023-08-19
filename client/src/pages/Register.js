@@ -24,7 +24,7 @@ function Register() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/users/register', {
+      const response = await fetch('/api/users/register', {
         method: 'POST',
         body: JSON.stringify({ username, email }),
         headers: {

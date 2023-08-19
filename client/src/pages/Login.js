@@ -16,7 +16,7 @@ function Login() {
     const email = document.getElementById("input-email").value;
 
     try {
-      const response = await fetch('http://localhost:3001/api/users/login', {
+      const response = await fetch('/api/users/login', {
         method: 'POST',
         body: JSON.stringify({ email }),
         headers: {

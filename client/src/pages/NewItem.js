@@ -16,7 +16,7 @@ function NewItem() {
   ];
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/users/get/email', {
+    fetch('/api/users/get/email', {
       method: 'GET',
       credentials: 'include',
     })
@@ -75,7 +75,7 @@ function NewItem() {
         formData.append("image", blob, image.files[0].name);
 
         try {
-          const response = await fetch('http://localhost:3001/api/items/create', {
+          const response = await fetch('/api/items/create', {
             method: 'POST',
             body: formData,
             credentials: 'include',

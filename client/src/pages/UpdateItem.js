@@ -48,7 +48,7 @@ function UpdateItem() {
         thumbnailCanvas.toBlob((blob) => {
           formData.append('image', blob, image.name);
 
-          fetch('http://localhost:3001/api/items/update', {
+          fetch('/api/items/update', {
             method: 'POST',
             body: formData,
             credentials: 'include',
@@ -63,7 +63,7 @@ function UpdateItem() {
       };
     } else {
       try {
-        const response = await fetch('http://localhost:3001/api/items/update', {
+        const response = await fetch('/api/items/update', {
           method: 'POST',
           body: formData,
           credentials: 'include',
