@@ -7,7 +7,7 @@ export default async (endpoint, cartExpiry) => {
 
   const cronJobPayload = {
     job: {
-      url: `https://www.ezgear.app/${endpoint}`,
+      url: `https://www.ezgear.app${endpoint}`,
       enabled: 'true',
       saveResponses: true,
       schedule: {
@@ -15,8 +15,8 @@ export default async (endpoint, cartExpiry) => {
         minutes: [futureTime.getMinutes().toString()],
         hours: [futureTime.getHours().toString()],
         mdays: [futureTime.getDate().toString()],
-        months: [(futureTime.getMonth() + 1).toString()], // Month is 0-based
-        wdays: ['*'],
+        months: [(futureTime.getMonth() + 1).toString()],
+        wdays: [futureTime.getDay().toString()],
       },
     },
   };
