@@ -141,7 +141,7 @@ export const addItemToCart = async (email, { itemId }) => {
     throw new Error('Item already in cart or purchased');
   }
 
-  await scheduleCronJob(`/api/items/reset/cart/${item.id}`, cartExpiry);
+  await scheduleCronJob(`/api/items/reset/cart/${item.id}`);
 
   return itemModel.addItemToCart(itemId, userId, cartExpiry);
 };
@@ -175,7 +175,7 @@ export const purchaseItem = async (email, { itemId }) => {
     sellerStripeAccount,
   );
 
-  await scheduleCronJob(`/api/items/reset/cart/${item.id}`, cartExpiry);
+  await scheduleCronJob(`/api/items/reset/cart/${item.id}`);
 
   await itemModel.reqPurchaseItem(itemId, transactionId, cartExpiry, payment.id);
 
