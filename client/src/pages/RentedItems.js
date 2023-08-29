@@ -11,7 +11,7 @@ function RentedItems() {
   }, []);
 
   return (
-    <div className="itemsPage ">
+    <div className="rentedItemsPage">
       <div className="bg-primary mw-100 text-white py-4 custom-bottom-margin">
         <h1 className="my-4 container">Rented Items</h1>
       </div>

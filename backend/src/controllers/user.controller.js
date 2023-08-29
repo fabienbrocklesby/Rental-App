@@ -71,6 +71,7 @@ export const verifyOtp = async (request, response, next) => {
     if (data.token) {
       return response
         .cookie('access_token', data.token, {
+          expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
@@ -104,6 +105,7 @@ export const reqUpdateUser = async (request, response, next) => {
     if (updatedRes.token) {
       response
         .cookie('access_token', updatedRes.token, {
+          expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
@@ -128,6 +130,7 @@ export const verifyUpdateOTP = async (request, response, next) => {
     if (updatedRes.token) {
       response
         .cookie('access_token', updatedRes.token, {
+          expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)

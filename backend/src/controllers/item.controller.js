@@ -27,6 +27,14 @@ export const getCart = async (request, response, next) => {
   }
 };
 
+export const resetCart = async (request, response, next) => {
+  try {
+    response.status(200).json(await itemService.resetCart(request.params));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getItemByEmail = async (request, response, next) => {
   try {
     const email = await jwt.verify(request.cookies.access_token, process.env.JWT_SECRET).email;

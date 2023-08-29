@@ -11,8 +11,8 @@ const createAccountLink = async () => {
 
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'http://ezgear.app',
-      return_url: 'http://ezgear.app/api/users/verify/stripe',
+      refresh_url: 'https://ezgear.app',
+      return_url: 'https://ezgear.app/api/users/verify/stripe',
       type: 'account_onboarding',
     });
 

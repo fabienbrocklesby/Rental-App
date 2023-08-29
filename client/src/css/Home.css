@@ -37,14 +37,33 @@
   }
 }
 
+@media (max-width: 768px) {
+  .homepage-landing {
+    background-size: 60% auto;
+  }
+}
+
+@media (min-width: 769px) {
+  .homepage-landing {
+    background-size: 30% auto;
+  }
+}
+
+@media (min-width: 1080px) {
+  .homepage-landing {
+    background-size: 20% auto;
+  }
+}
+
+
 .item-image {
-  height: 200px; 
+  height: 250px; 
   object-fit: cover;
 }
 
-/* Add this CSS to your stylesheet */
+
 .custom-dropdown-toggle::after {
-  content: none; /* Remove default caret icon */
+  content: none;
 }
 
 .custom-dropdown-toggle::before {
@@ -60,6 +79,22 @@
 
 .itemsPage {
   min-height: 90vh;
+  padding-bottom: 3vh;
+}
+
+.rentedItemsPage {
+  min-height: 80vh;
+  padding-bottom: -5vh;
+}
+
+.listingsPage {
+  min-height: 80vh;
+  padding-bottom: -5vh;
+}
+
+.defaultPageLayout {
+  min-height: 70vh;
+  padding-bottom: -5vh;
 }
 
 .itemList {

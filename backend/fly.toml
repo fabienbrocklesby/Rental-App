@@ -1,8 +1,3 @@
-# fly.toml app configuration file generated for ezgear on 2023-08-17T18:03:13+12:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
 app = "ezgear"
 primary_region = "syd"
 
@@ -13,7 +8,10 @@ primary_region = "syd"
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   max_machines_running = 1
   processes = ["app"]
 
+[mounts]
+  source="ezgear_data"
+  destination="/app/uploads"

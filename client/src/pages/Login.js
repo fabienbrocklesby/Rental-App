@@ -41,22 +41,24 @@ function Login() {
   }
 
   return (
-    <div id="loginPage" className="d-flex flex-column align-items-center container pt-5"  style={{ maxWidth: "500px" }}>
+    <div id="loginPage" className="defaultPageLayout d-flex flex-column align-items-center container pt-5"  style={{ maxWidth: "500px" }}>
       <Container  className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
         <div className="text-center bg-primary py-3 rounded-top">
           <h1 className="text-white">Login</h1>
         </div>
 
         <div className="p-4 my-2">
-          <div className="mb-3">
-            <input type="email" className="form-control" id="input-email" placeholder="Email" />
-            <p className="text-muted mt-1" style={{ fontSize: "12px" }}><u>How it works:</u> You type in your email, we'll send you a verification code, no passwords needed!</p>
-          </div>
-          
-          <button className="btn btn-primary mt-1" onClick={loginUser} disabled={isLoading}>
-            {isLoading ? "Sending code..." : "Send verification code"}
-          </button>
-          {error && <p className="text-danger mt-2">{error}</p>}
+          <form>
+            <div className="mb-3">
+              <input type="email" className="form-control" id="input-email" placeholder="Email" />
+              <p className="text-muted mt-1" style={{ fontSize: "12px" }}><u>How it works:</u> You type in your email, we'll send you a verification code, no passwords needed!</p>
+            </div>
+            
+            <button type="submit" className="btn btn-primary mt-1" onClick={loginUser} disabled={isLoading}>
+              {isLoading ? "Sending code..." : "Send verification code"}
+            </button>
+            {error && <p className="text-danger mt-2">{error}</p>}
+          </form>
         </div>
       </Container>
     </div>

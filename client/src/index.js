@@ -27,6 +27,7 @@ import Listings from './pages/Listings';
 import Profile from './pages/Profile';
 import RentedItems from './pages/RentedItems';
 import Logout from './pages/Logout';
+import TermsAndCondition from './pages/TermsAndConditions';
 
 let isLoggedIn = false;
 
@@ -44,10 +45,11 @@ export default function App() {
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="verifyotp" element={<VerifyOTP />} />
+          <Route path="termsandcondition" element={<TermsAndCondition />} />
+          <Route path="items/:id" element={<ItemByID />} />
 
           {isLoggedIn ? (
             <>
-            <Route path="items/:id" element={<ItemByID />} />
             <Route path="newitem" element={<NewItem />} />
             <Route path="updateitem/:id" element={<UpdateItem />} />
             <Route path="updateuser" element={<UpdateUser />} />

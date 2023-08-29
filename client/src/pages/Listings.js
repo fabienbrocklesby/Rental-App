@@ -15,7 +15,7 @@ function Items() {
   }, []);
 
   return (
-    <div className="itemsPage">
+    <div className="listingsPage">
       <div className="bg-primary mw-100 text-white py-4 custom-bottom-margin">
         <h1 className="my-4 container">My Listings</h1>
       </div>

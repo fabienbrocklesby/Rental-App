@@ -21,7 +21,7 @@ app.use(fileupload());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static('./src/public'));
+app.use(express.static('./src/public', { maxAge: 0 }));
 
 // Routes
 
@@ -42,6 +42,7 @@ app.delete('/api/users/verifydelete', authMiddleware, userController.verifyDelet
 // Item Routes
 app.get('/api/items', itemController.indexItems);
 app.get('/api/items/cart', authMiddleware, itemController.getCart);
+app.get('/api/items/reset/cart/:itemId', itemController.resetCart);
 app.get('/api/items/:itemId', itemController.getItem);
 app.get('/api/items/get/byholder', authMiddleware, itemController.getItemByHolder);
 app.get('/api/items/user/email', authMiddleware, itemController.getItemByEmail);
@@ -57,6 +58,11 @@ app.delete('/api/items/delete', authMiddleware, itemController.deleteItem);
 
 // Image Routes
 app.use('/uploads', express.static('uploads'));
+
+// Sitemap
+app.get('/sitemap.xml', (req, res) => {
+  res.sendFile('sitemap.xml', { root: './src/' });
+});
 
 app.get('*', (req, res) => res.status(200).sendFile('/index.html', { root: './src/public' }));
 

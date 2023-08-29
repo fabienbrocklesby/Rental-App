@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 function AddToCart({ itemId }) {
   async function addToCart() {
     try {
-      const response = await fetch('http://localhost:3001/api/items/addtocart', {
+      const response = await fetch('/api/items/addtocart', {
         method: 'POST',
         body: JSON.stringify({ itemId }),
         headers: {

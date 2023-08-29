@@ -26,7 +26,7 @@ function DeleteItem() {
   const handleShow = () => setShowModal(true);
 
   return (
-    <div className="deleteItemPage">
+    <div className="deleteItemPage defaultPageLayout">
       <Container>
         <Row className="justify-content-center rounded align-items-center bg-light p-5">
           <Col xs="auto" className="text-center">

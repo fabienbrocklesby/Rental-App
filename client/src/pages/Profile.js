@@ -39,7 +39,7 @@ function ProfilePage() {
   console.log(user);
 
   return (
-    <div className="profilePage">
+    <div className="defaultPageLayout">
       <Container>
         <Row className="justify-content-center rounded align-items-center bg-light p-5">
           <Col xs="auto" className="text-center">

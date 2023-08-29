@@ -12,6 +12,12 @@ function ItemByID() {
   
   let { id } = useParams();
 
+  let loggedIn = false;
+
+  if (localStorage.getItem('userId') && document.cookie) {
+    loggedIn = true;
+  }
+
   const loggedInUser = localStorage.getItem('userId');
 
   useEffect(() => {
@@ -63,61 +69,74 @@ function ItemByID() {
                 <h6>By: {sellerUsername}</h6>
                 <h5>{item.location}, New Zealand</h5>
               </div>
-              {loggedInUser === item.seller_id ? (
-                <div>
-                  <Button
-                    variant="secondary"
-                    className="mb-2 mt-4"
-                    onClick={() => setShowSellerOptions(!showSellerOptions)}
-                  >
-                    {showSellerOptions ? 'Hide Seller Options' : 'Show Seller Options'}
-                  </Button>
-                  {showSellerOptions && (
-                    <div className="mt-2">
-                      {item.available === true ? (
+              {loggedIn === true ? (
+                  <>
+                  {loggedInUser === item.seller_id ? (
+                    <div>
+                      <Button
+                        variant="secondary"
+                        className="mb-2 mt-4"
+                        onClick={() => setShowSellerOptions(!showSellerOptions)}
+                      >
+                        {showSellerOptions ? 'Hide Seller Options' : 'Show Seller Options'}
+                      </Button>
+                      {showSellerOptions && (
+                        <div className="mt-2">
+                          {item.available === true ? (
+                              <div className="mb-2">
+                                <Button
+                                onClick={() => (window.location.href = `/deleteitem/${item.id}`)}
+                                variant="danger"
+                              >
+                                Delete Item
+                              </Button>
+                            </div>
+                          ): null}
                           <div className="mb-2">
                             <Button
-                            onClick={() => (window.location.href = `/deleteitem/${item.id}`)}
-                            variant="danger"
-                          >
-                            Delete Item
-                          </Button>
-                        </div>
-                      ): null}
-                      <div className="mb-2">
-                        <Button
-                          onClick={() => (window.location.href = `/updateitem/${item.id}`)}
-                          variant="info"
-                        >
-                          Update Item
-                        </Button>
-                      </div>
-                      {item.available === false && (
-                        <div className="mt-4 border p-3 bg-light rounded">
-                          <h2 className="mb-3">This item is currently rented</h2>
-                          <Button
-                            onClick={() => (window.location.href = `/receipt/${item.id}`)}
-                            variant="primary"
-                          >
-                            {item.return_status === 'pending' ? 'Accept Return' : 'Receipt Item'}
-                          </Button>
+                              onClick={() => (window.location.href = `/updateitem/${item.id}`)}
+                              variant="info"
+                            >
+                              Update Item
+                            </Button>
+                          </div>
+                          {item.available === false && (
+                            <div className="mt-4 border p-3 bg-light rounded">
+                              <h2 className="mb-3">This item is currently rented</h2>
+                              {item.holder_id === loggedInUser ? (
+                                <Button
+                                  onClick={() => (window.location.href = `/receipt/${item.id}`)}
+                                  variant="primary"
+                                >
+                                  {item.return_status === 'pending' ? 'Accept Return' : 'Receipt Item'}
+                                </Button>
+                              ): null}
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
+                  ) : (
+                    <div>
+                      {item.available === true ? (
+                        <>
+                          {item.cart_id !== loggedInUser ? (
+                            <AddToCart itemId={item.id} />
+                          ) : (
+                            <ReqPurchase itemId={item.id} />
+                          )}
+                        </>
+                      ): null}
+                    </div>
                   )}
-                </div>
+                </>
               ) : (
-                <div>
-                  {item.available === true ? (
-                    <>
-                      {item.cart_id !== loggedInUser ? (
-                        <AddToCart itemId={item.id} />
-                      ) : (
-                        <ReqPurchase itemId={item.id} />
-                      )}
-                    </>
-                  ): null}
-                </div>
+                <Button
+                  onClick={() => (window.location.href = '/login')}
+                  className="mt-4"
+                >
+                  Login to rent this item
+                </Button>
               )}
             </div>
           </Col>

@@ -18,12 +18,6 @@ function Items() {
     "Canterbury", "Otago", "Southland", "Hawke's Bay", "Marlborough", "West Coast"
   ];
 
-  let loggedIn = false;
-
-  if (localStorage.getItem('userId') && document.cookie) {
-    loggedIn = true;
-  }
-
   useEffect(() => {
     fetch('/api/items')
       .then(response => response.json())
@@ -57,8 +51,20 @@ function Items() {
   };
 
   const fuse = new Fuse(items, {
-    keys: ['name', 'description'],
+    keys: [
+      {
+        name: 'name',
+        weight: 0.7,
+      },
+      {
+        name: 'description',
+        weight: 0.3,
+      },
+    ],
     threshold: 0.4,
+    tokenize: false,
+    shouldSort: true,
+    includeMatches: true,
   });
 
   const filteredItems = searchQuery
@@ -148,21 +154,13 @@ function Items() {
               locationFilteredItems.map(item => (
                 <div key={item.id} className="col-md-4 mb-4">
                   <div className="card h-100">
-                    {loggedIn === true ? (
-                      <a href={'items/' + item.id}>
-                        <img
-                          src={`/uploads/${item.img_dir}`}
-                          className="card-img-top item-image"
-                          alt={item.name}
-                        />
-                      </a>
-                    ) : (
+                    <a href={'items/' + item.id}>
                       <img
                         src={`/uploads/${item.img_dir}`}
-                        className="card-img-top item-image"
+                        className="card-img-top item-image taller-image"
                         alt={item.name}
                       />
-                    )}
+                    </a>
                     <div className="card-body">
                       <h5 className="card-title">{item.name}</h5>
                       <p className="card-text">${item.price} / day</p>

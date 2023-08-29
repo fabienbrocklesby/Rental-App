@@ -6,7 +6,6 @@ export default (() => {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    console.log(process.env.PG_URL);
     pool.options.connectionString = process.env.PG_URL;
   }
 
@@ -18,10 +17,7 @@ export default (() => {
   });
 
   return {
-    query: (text, params) => {
-      console.log(text, params);
-      return pool.query(text, params);
-    },
+    query: (text, params) => pool.query(text, params),
     ...pool,
   };
 })();

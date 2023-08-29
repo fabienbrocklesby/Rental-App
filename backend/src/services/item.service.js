@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
-import cron from 'cron';
 
 import * as itemModel from '../models/item.model.js';
 import * as userModel from '../models/user.model.js';
 
 import emailHelper from '../commons/email.common.js';
 import * as paymentCommon from '../commons/payment.common.js';
+import scheduleCronJob from '../commons/cron.common.js';
 
 export const indexItems = async () => (itemModel.indexItems());
 
@@ -39,6 +39,16 @@ export const getItemByHolder = async (email) => {
   }
 
   return itemModel.selectItemsByHolderId(userId);
+};
+
+export const resetCart = async (data) => {
+  const { itemId } = data;
+
+  if (!itemId) {
+    throw new Error('Invalid request');
+  }
+
+  return itemModel.resetCartItem(itemId);
 };
 
 export const createItem = async (email, {
@@ -131,13 +141,7 @@ export const addItemToCart = async (email, { itemId }) => {
     throw new Error('Item already in cart or purchased');
   }
 
-  const job = new cron.CronJob(cartExpiry, async () => {
-    await itemModel.resetCartItem(itemId);
-
-    job.stop();
-  });
-
-  job.start();
+  await scheduleCronJob(`/api/items/reset/cart/${item.id}`, cartExpiry);
 
   return itemModel.addItemToCart(itemId, userId, cartExpiry);
 };
@@ -171,13 +175,7 @@ export const purchaseItem = async (email, { itemId }) => {
     sellerStripeAccount,
   );
 
-  const job = new cron.CronJob(cartExpiry, async () => {
-    await itemModel.resetPurchaseItem(itemId);
-
-    job.stop();
-  });
-
-  job.start();
+  await scheduleCronJob(`/api/items/reset/cart/${item.id}`, cartExpiry);
 
   await itemModel.reqPurchaseItem(itemId, transactionId, cartExpiry, payment.id);
 
@@ -204,7 +202,7 @@ export const verifyPurchase = async (email, transactionId) => {
 
   await emailHelper({
     email: sellerEmail,
-    message: `<h1>Somebody has rented your EZGear listing: ${item.name} (https://ezgear.app/items/${item.id}). <br /> Here is the buyer's email, contact them to arrange the collection: ${email}</h1><br />`,
+    message: `Somebody has rented your EZGear listing: ${item.name} (https://ezgear.app/items/${item.id}). <br /> Here is the buyer's email, contact them to arrange the collection: ${email}`,
   });
 
   const payment = await paymentCommon.verifyPaymentSession(item.stripe_id);

@@ -42,7 +42,7 @@ function UpdateUser() {
   }
 
   return (
-    <div id="verifyOTP" className="container min-vh-100 d-flex flex-column align-items-center py-5">
+    <div id="verifyOTP" className="container defaultPageLayout d-flex flex-column align-items-center py-5">
       <Container className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
         <div className="text-center bg-primary py-3 rounded-top">
           <h1 className="text-white">Update User</h1>

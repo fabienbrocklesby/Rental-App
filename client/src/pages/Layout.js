@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
+import Footer from "../components/Footer";
+
 const Layout = () => {
   const [navbarExpanded, setNavbarExpanded] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -43,7 +45,7 @@ const Layout = () => {
       <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle} className="sticky-top">
         <div className="container d-flex justify-content-between align-items-center">
           <Navbar.Brand>
-            <Link to={isLoggedIn ? "/items" : "/"} className="nav-link">
+            <Link to="/" className="nav-link">
               <img src="/images/Logo.png" alt="logo" className="d-inline-block align-top mb-1" style={{ height: "50px" }} />
             </Link>
           </Navbar.Brand>
@@ -112,6 +114,9 @@ const Layout = () => {
 
       <div className="pt-4">
         <Outlet />
+        <div>
+          <Footer />
+        </div>
       </div>
     </>
   );

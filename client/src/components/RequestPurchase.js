@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 function requestPurchase({ itemId }) {
 
   async function reqPurchase() {
-    const response = await fetch('http://localhost:3001/api/items/purchase', {
+    const response = await fetch('/api/items/purchase', {
       method: 'POST',
       body: JSON.stringify({ itemId }),
       headers: {

@@ -40,7 +40,7 @@ function Register() {
   }
 
   return (
-    <div id="verifyOTP" className="container min-vh-100 d-flex flex-column align-items-center py-5">
+    <div id="verifyOTP" className="container defaultPageLayout d-flex flex-column align-items-center py-5">
       <Container className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
         <div className="text-center bg-primary py-3 rounded-top">
           <h1 className="text-white">Verify Your Code</h1>
@@ -50,7 +50,7 @@ function Register() {
           <Form>
             <Form.Group controlId="input-otp">
               <Form.Label>Validation Code:</Form.Label>
-              <Form.Control type="text" name="message" />
+              <Form.Control type="password" name="message" />
             </Form.Group>
 
             {error && <p className="text-danger">{error}</p>}

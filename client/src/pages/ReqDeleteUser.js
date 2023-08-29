@@ -17,7 +17,7 @@ function ReqDeleteUser() {
   }
 
   return (
-    <div id="deleteUserPage" className="min-vh-100 d-flex flex-column align-items-center py-5">
+    <div id="deleteUserPage" className="defaultPageLayout d-flex flex-column align-items-center py-5">
       <Container className="bg-white p-4 rounded shadow-sm" style={{ maxWidth: "400px" }}>
         <h1 className="text-center mb-4">Delete User</h1>
 
