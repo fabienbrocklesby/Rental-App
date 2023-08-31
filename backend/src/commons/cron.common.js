@@ -12,7 +12,7 @@ export default async (endpoint) => {
 
     const cronJobPayload = {
       job: {
-        url: `https://www.ezgear.app${endpoint}`,
+        url: `https://ezgear.fly.dev${endpoint}`,
         enabled: 'true',
         saveResponses: true,
         schedule: {

@@ -31,7 +31,7 @@ import TermsAndCondition from './pages/TermsAndConditions';
 
 let isLoggedIn = false;
 
-if (document.cookie.includes("access_token")) {
+if (document.cookie.includes("access_token") && localStorage.getItem("userId")) {
   isLoggedIn = true;
 }
 

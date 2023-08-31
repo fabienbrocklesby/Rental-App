@@ -18,27 +18,29 @@ const Layout = () => {
 
   let isLoggedIn = false;
 
-  if (document.cookie.includes("access_token")) {
+  if (document.cookie.includes("access_token") && localStorage.getItem("userId")) {
     isLoggedIn = true;
   }
 
-  useEffect(() => {
-    async function fetchCartItems() {
-      try {
-        const response = await fetch("/api/items/cart", {
-          method: "GET",
-          credentials: "include",
-        });
+  if (isLoggedIn) {
+    useEffect(() => {
+      async function fetchCartItems() {
+        try {
+          const response = await fetch("/api/items/cart", {
+            method: "GET",
+            credentials: "include",
+          });
 
-        const cartData = await response.json();
-        setCartItems(cartData || []);
-      } catch (error) {
-        console.error("An error occurred while fetching cart items:", error);
+          const cartData = await response.json();
+          setCartItems(cartData || []);
+        } catch (error) {
+          console.error("An error occurred while fetching cart items:", error);
+        }
       }
-    }
 
-    fetchCartItems();
-  }, []);
+      fetchCartItems();
+    }, []);
+  }
 
   return (
     <>

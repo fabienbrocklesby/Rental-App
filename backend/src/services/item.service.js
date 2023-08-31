@@ -123,14 +123,30 @@ export const updateItem = async (
   return itemModel.updateItem(updatedItem);
 };
 
-export const addItemToCart = async (email, { itemId }) => {
+export const addItemToCart = async (email, { itemId, bookingDate }) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
   const item = await itemModel.selectItemById(itemId);
 
   const cartExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
   if (!item || !userId) {
-    throw new Error('Item or user does not exist');
+    throw new Error('Item, booking date, or user does not exist');
+  }
+
+  if (!bookingDate) {
+    throw new Error('Missing booking date');
+  }
+
+  const parsedBookingDate = new Date(bookingDate);
+
+  parsedBookingDate.setHours(0, 0, 0, 0);
+
+  const bookingTimestamp = parsedBookingDate.getTime();
+
+  if (item && Array.isArray(item.unavailable_dates)) {
+    if (item.unavailable_dates.some((date) => new Date(date).getTime() === bookingTimestamp)) {
+      throw new Error('Item is unavailable on the selected booking date');
+    }
   }
 
   if (userId === item.seller_id) {
@@ -143,7 +159,7 @@ export const addItemToCart = async (email, { itemId }) => {
 
   await scheduleCronJob(`/api/items/reset/cart/${item.id}`);
 
-  return itemModel.addItemToCart(itemId, userId, cartExpiry);
+  return itemModel.addItemToCart(itemId, parsedBookingDate, userId, cartExpiry);
 };
 
 export const purchaseItem = async (email, { itemId }) => {

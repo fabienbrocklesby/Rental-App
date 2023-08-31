@@ -35,9 +35,10 @@ export const updateItem = async (item) => (
     item.id,
   ])).rows[0];
 
-export const addItemToCart = async (itemId, userId, cartExpiry) => (
-  await db.query('UPDATE items SET cart_id = $1, cart_expires_at = $2 WHERE id = $3 RETURNING *', [
+export const addItemToCart = async (itemId, bookingDate, userId, cartExpiry) => (
+  await db.query('UPDATE items SET cart_id = $1, unavailable_dates = array_append(unavailable_dates, $2), cart_expires_at = $3 WHERE id = $4 RETURNING *', [
     userId,
+    bookingDate,
     cartExpiry,
     itemId,
   ])).rows[0];
