@@ -161,3 +161,13 @@ export const deleteItem = async (request, response, next) => {
     next(error);
   }
 };
+
+export const activatePayment = async (request, response, next) => {
+  try {
+    response
+      .status(200)
+      .json(await itemService.activatePayment(request.params.paymentId));
+  } catch (error) {
+    next(error);
+  }
+};

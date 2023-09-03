@@ -5,7 +5,10 @@ import * as userModel from '../models/user.model.js';
 
 import emailHelper from '../commons/email.common.js';
 import * as paymentCommon from '../commons/payment.common.js';
-import scheduleCronJob from '../commons/cron.common.js';
+import { scheduleCronJob, deleteCronJob } from '../commons/cron.common.js';
+import getCurrentTimeInAuckland from '../commons/time.common.js';
+
+const currentTimeInAuckland = await getCurrentTimeInAuckland();
 
 export const indexItems = async () => (itemModel.indexItems());
 
@@ -42,13 +45,17 @@ export const getItemByHolder = async (email) => {
 };
 
 export const resetCart = async (data) => {
-  const { itemId } = data;
+  const { cartId } = data;
 
-  if (!itemId) {
+  if (!cartId) {
     throw new Error('Invalid request');
   }
 
-  return itemModel.resetCartItem(itemId);
+  const cart = await itemModel.selectCartByCartId(cartId);
+
+  await deleteCronJob(cart.cron_id);
+
+  return itemModel.deleteCart(cartId);
 };
 
 export const createItem = async (email, {
@@ -123,66 +130,57 @@ export const updateItem = async (
   return itemModel.updateItem(updatedItem);
 };
 
-export const addItemToCart = async (email, { itemId, bookingDate }) => {
+export const addItemToCart = async (email, { itemId, date }) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
   const item = await itemModel.selectItemById(itemId);
 
-  const cartExpiry = new Date(Date.now() + 10 * 60 * 1000);
+  const cartId = uuidv4().toLowerCase();
 
-  if (!item || !userId) {
-    throw new Error('Item, booking date, or user does not exist');
-  }
+  const futureTime = new Date(currentTimeInAuckland);
+  futureTime.setMinutes(futureTime.getMinutes() + 10);
 
-  if (!bookingDate) {
-    throw new Error('Missing booking date');
-  }
+  Date(date);
 
-  const parsedBookingDate = new Date(bookingDate);
-
-  parsedBookingDate.setHours(0, 0, 0, 0);
-
-  const bookingTimestamp = parsedBookingDate.getTime();
-
-  if (item && Array.isArray(item.unavailable_dates)) {
-    if (item.unavailable_dates.some((date) => new Date(date).getTime() === bookingTimestamp)) {
-      throw new Error('Item is unavailable on the selected booking date');
-    }
-  }
-
-  if (userId === item.seller_id) {
+  if (!item) {
+    throw new Error('Item does not exist');
+  } else if (!userId) {
+    throw new Error('User does not exist');
+  } else if (userId === item.seller_id) {
     throw new Error('You cannot add your own item to cart');
+  } else if (
+    await itemModel.selectCartByDate(date)
+    || await itemModel.selectPurchaseByDate(date, item.id)) {
+    throw new Error('Item unavailable on this date');
   }
 
-  if (item.cart_id || item.holder_id || item.available === false) {
-    throw new Error('Item already in cart or purchased');
-  }
+  const cronId = await scheduleCronJob(`/api/items/reset/cart/${cartId}`, futureTime);
 
-  await scheduleCronJob(`/api/items/reset/cart/${item.id}`);
-
-  return itemModel.addItemToCart(itemId, parsedBookingDate, userId, cartExpiry);
+  return (await itemModel.addItemToCart(cartId, itemId, date, userId, cronId)).id;
 };
 
-export const purchaseItem = async (email, { itemId }) => {
+export const purchaseItem = async (email, { itemId, cartId }) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
   const item = await itemModel.selectItemById(itemId);
-
-  const sellerStripeAccount = (await userModel.selectUserById(item.seller_id)).stripe_account;
+  const cart = await itemModel.selectCartByCartId(cartId);
 
   const transactionId = uuidv4().toLowerCase();
 
-  const cartExpiry = new Date(Date.now() + 10 * 60 * 1000);
+  const futureTime = new Date(currentTimeInAuckland);
+  futureTime.setMinutes(futureTime.getMinutes() + 30);
 
-  if (!item || !userId) {
-    throw new Error('Item or user does not exist');
-  }
-
-  if (!item.cart_id) {
-    throw new Error('Item not in cart');
-  }
-
-  if (userId !== item.cart_id) {
+  if (!item) {
+    throw new Error('Item does not exist');
+  } else if (!userId) {
+    throw new Error('User does not exist');
+  } else if (!cart) {
+    throw new Error('No cart exists with this ID');
+  } else if (cart.user_id !== userId) {
     throw new Error('You are not the owner of this cart');
+  } else if (cart.item_id !== item.id) {
+    throw new Error('Item in cart is not item provided');
   }
+
+  const sellerStripeAccount = (await userModel.selectUserById(item.seller_id)).stripe_account;
 
   const payment = await paymentCommon.createPaymentSession(
     item.price,
@@ -191,29 +189,40 @@ export const purchaseItem = async (email, { itemId }) => {
     sellerStripeAccount,
   );
 
-  await scheduleCronJob(`/api/items/reset/cart/${item.id}`);
+  await deleteCronJob(cart.cron_id);
+  const cronId = await scheduleCronJob(`/api/items/reset/cart/${cart.id}`, futureTime);
 
-  await itemModel.reqPurchaseItem(itemId, transactionId, cartExpiry, payment.id);
+  await itemModel.reqPurchaseItem(cartId, transactionId, payment.id, cronId);
 
   return payment.url;
 };
 
 export const verifyPurchase = async (email, transactionId) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
-  const item = await itemModel.selectItemByTransactionId(transactionId);
+  const cart = await itemModel.selectCartByTransactionId(transactionId);
 
-  const sellerEmail = (await userModel.selectUserById(item.seller_id)).email;
-
-  if (!item || !userId) {
-    throw new Error('Item or user does not exist');
-  }
-
-  if (userId !== item.cart_id) {
+  if (!cart) {
+    throw new Error('Cart does not exist this transaction ID');
+  } else if (cart.user_id !== userId) {
     throw new Error('You are not the owner of this cart');
   }
 
+  const item = await itemModel.selectItemById(cart.item_id);
+
+  if (!item) {
+    throw new Error('Item does not exist');
+  }
+
+  const sellerEmail = await userModel.selectUserById(item.seller_id);
+
   if (!sellerEmail) {
     throw new Error('Seller does not exist');
+  }
+
+  const payment = await paymentCommon.verifyPaymentSession(cart.stripe_id);
+
+  if (!payment) {
+    throw new Error('Payment failed');
   }
 
   await emailHelper({
@@ -221,13 +230,10 @@ export const verifyPurchase = async (email, transactionId) => {
     message: `Somebody has rented your EZGear listing: ${item.name} (https://ezgear.app/items/${item.id}). <br /> Here is the buyer's email, contact them to arrange the collection: ${email}`,
   });
 
-  const payment = await paymentCommon.verifyPaymentSession(item.stripe_id);
+  await itemModel.deleteCart(cart.id);
+  const activePayment = await itemModel.purchaseItem(userId, item.id, cart.date);
 
-  if (!payment) {
-    throw new Error('Payment failed');
-  }
-
-  await itemModel.purchaseItem(userId, item.id);
+  await scheduleCronJob(`/api/activepayment/${activePayment.id}`, cart.date);
 
   return {
     message: 'Payment successful',
@@ -237,17 +243,17 @@ export const verifyPurchase = async (email, transactionId) => {
 
 export const cancelPurchase = async (email, transactionId) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
-  const item = await itemModel.selectItemByTransactionId(transactionId);
+  const cart = await itemModel.selectCartByTransactionId(transactionId);
 
-  if (!item || !userId) {
-    throw new Error('Item or user does not exist');
-  }
-
-  if (userId !== item.cart_id) {
+  if (!cart) {
+    throw new Error('Cart does not exist with this ID');
+  } else if (!userId) {
+    throw new Error('User does not exist');
+  } else if (userId !== cart.user_id) {
     throw new Error('You are not the owner of this cart');
   }
 
-  await itemModel.resetPurchaseItem(item.id);
+  await itemModel.deleteCart(cart.id);
 
   return 'Payment cancelled';
 };
@@ -256,25 +262,28 @@ export const returnStatus = async (email, { itemId }) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
   const item = await itemModel.selectItemById(itemId);
 
-  if (!item || !userId) {
-    throw new Error('Item or user does not exist');
+  if (!item) {
+    throw new Error('Item does not exist');
+  } else if (!userId) {
+    throw new Error('User does not exist');
   }
 
-  if (userId !== item.holder_id) {
+  const purchase = await itemModel.selectPurchaseById(item.purchase_id);
+
+  if (!purchase) {
+    throw new Error('No purchase exists with this ID');
+  } else if (userId !== item.holder_id || userId !== purchase.user_id) {
     throw new Error('You are not the owner of this item');
-  }
-
-  if (item.return_status === 'pending') {
+  } else if (purchase.return_status === 'pending') {
     throw new Error('Return request already pending');
-  }
-
-  if (item.receipt_status === 'pending') {
+  } else if (item.receipt_status === 'pending') {
     await itemModel.resetPurchaseItem(item.id);
+    await itemModel.deletePurchase(purchase.id);
 
     return 'Item Returned';
   }
 
-  await itemModel.updateReturnStatus(item.id);
+  await itemModel.updateReturnStatus(purchase.id);
 
   return 'Return request sent';
 };
@@ -283,25 +292,34 @@ export const receiptStatus = async (email, { itemId }) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
   const item = await itemModel.selectItemById(itemId);
 
-  if (!item || !userId) {
-    throw new Error('Item or user does not exist');
+  if (!item) {
+    throw new Error('Item does not exist');
+  } else if (!userId) {
+    throw new Error('User does not exist');
+  }
+
+  const purchase = await itemModel.selectPurchaseById(item.purchase_id);
+
+  if (!purchase) {
+    throw new Error('No purchase exists with this ID');
   }
 
   if (userId !== item.seller_id) {
     throw new Error('You are not the seller of this item');
   }
 
-  if (item.receipt_status === 'pending') {
+  if (purchase.receipt_status === 'pending') {
     throw new Error('Receipt request already pending');
   }
 
-  if (item.return_status === 'pending') {
+  if (purchase.return_status === 'pending') {
     await itemModel.resetPurchaseItem(item.id);
+    await itemModel.deletePurchase(purchase.id);
 
     return 'Receipt Sent';
   }
 
-  await itemModel.updateReceiptStatus(item.id);
+  await itemModel.updateReceiptStatus(purchase.id);
 
   return 'Receipt request sent';
 };
@@ -325,4 +343,16 @@ export const deleteItem = async (email, { itemId }) => {
   await itemModel.deleteItem(item.id);
 
   return 'Item deleted';
+};
+
+export const activatePayment = async (paymentId) => {
+  const purchase = await itemModel.selectPurchaseById(paymentId);
+
+  if (!purchase) {
+    throw new Error('No purchase exists with this ID');
+  } else if (purchase.date.getDate() !== new Date(currentTimeInAuckland).getDate()) {
+    throw new Error('Invalid date provided');
+  }
+
+  return itemModel.activatePayment(purchase.item_id, purchase.user_id, purchase.id);
 };

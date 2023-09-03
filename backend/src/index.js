@@ -42,7 +42,7 @@ app.delete('/api/users/verifydelete', authMiddleware, userController.verifyDelet
 // Item Routes
 app.get('/api/items', itemController.indexItems);
 app.get('/api/items/cart', authMiddleware, itemController.getCart);
-app.get('/api/items/reset/cart/:itemId', itemController.resetCart);
+app.get('/api/items/reset/cart/:cartId', itemController.resetCart);
 app.get('/api/items/:itemId', itemController.getItem);
 app.get('/api/items/get/byholder', authMiddleware, itemController.getItemByHolder);
 app.get('/api/items/user/email', authMiddleware, itemController.getItemByEmail);
@@ -55,6 +55,7 @@ app.post('/api/payment/cancel/:transactionId', authMiddleware, itemController.ca
 app.post('/api/items/return', authMiddleware, itemController.returnStatus);
 app.post('/api/items/receipt', authMiddleware, itemController.receiptStatus);
 app.delete('/api/items/delete', authMiddleware, itemController.deleteItem);
+app.get('/api/activepayment/:paymentId', itemController.activatePayment);
 
 // Image Routes
 app.use('/uploads', express.static('uploads'));

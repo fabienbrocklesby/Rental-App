@@ -7,11 +7,19 @@ export const selectItemById = async (id) => (await db.query('SELECT * FROM items
 
 export const selectItemsByUserId = async (userId) => (await db.query('SELECT * FROM items WHERE seller_id = $1', [userId])).rows;
 
-export const selectCartByUserId = async (userId) => (await db.query('SELECT * FROM items WHERE cart_id = $1', [userId])).rows;
+export const selectCartByUserId = async (userId) => (await db.query('SELECT * FROM active_carts WHERE user_id = $1', [userId])).rows;
 
-export const selectItemByTransactionId = async (transactionId) => (await db.query('SELECT * FROM items WHERE transaction_id = $1', [transactionId])).rows[0];
+export const selectCartByTransactionId = async (transactionId) => (await db.query('SELECT * FROM active_carts WHERE transaction_id = $1', [transactionId])).rows[0];
 
 export const selectItemsByHolderId = async (holderId) => (await db.query('SELECT * FROM items WHERE holder_id = $1', [holderId])).rows;
+
+export const selectCartByDate = async (date) => (await db.query('SELECT * FROM active_carts WHERE date = $1', [date])).rows[0];
+
+export const selectCartByCartId = async (cartId) => (await db.query('SELECT * FROM active_carts WHERE id = $1', [cartId])).rows[0];
+
+export const selectPurchaseById = async (purchaseId) => (await db.query('SELECT * FROM active_purchases WHERE id = $1', [purchaseId])).rows[0];
+
+export const selectPurchaseByDate = async (date, itemId) => (await db.query('SELECT * FROM active_purchases WHERE date = $1 AND item_id = $2', [date, itemId])).rows[0];
 
 export const createItem = async (item) => (
   await db.query('INSERT INTO items (id, name, description, img_dir, price, rating, location,  seller_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *', [
@@ -35,61 +43,58 @@ export const updateItem = async (item) => (
     item.id,
   ])).rows[0];
 
-export const addItemToCart = async (itemId, bookingDate, userId, cartExpiry) => (
-  await db.query('UPDATE items SET cart_id = $1, unavailable_dates = array_append(unavailable_dates, $2), cart_expires_at = $3 WHERE id = $4 RETURNING *', [
+export const addItemToCart = async (cartId, itemId, date, userId, cronId) => (
+  await db.query('INSERT INTO active_carts (id, item_id, date, user_id, cron_id) VALUES ($1, $2, $3, $4, $5) RETURNING *', [
+    cartId,
+    itemId,
+    date,
     userId,
-    bookingDate,
-    cartExpiry,
-    itemId,
+    cronId,
   ])).rows[0];
 
-export const resetCartItem = async (itemId) => (
-  await db.query('UPDATE items SET cart_id = $1, cart_expires_at = $2 WHERE id = $3 RETURNING *', [
-    null,
-    null,
-    itemId,
-  ])).rows[0];
-
-export const reqPurchaseItem = async (itemId, transactionId, cartExpiry, stripeId) => (
-  await db.query('UPDATE items SET transaction_id = $1, cart_expires_at = $2, stripe_id = $3 WHERE id = $4 RETURNING *', [
+export const reqPurchaseItem = async (cartId, transactionId, stripeId, cronId) => (
+  await db.query('UPDATE active_carts SET transaction_id = $1, stripe_id = $2, cron_id = $3 WHERE id = $4 RETURNING *', [
     transactionId,
-    cartExpiry,
     stripeId,
-    itemId,
+    cronId,
+    cartId,
   ])).rows[0];
 
-export const purchaseItem = async (userId, itemId) => (
-  await db.query('UPDATE items SET holder_id = $1, transaction_id = $2, available = $3, stripe_id = $4 WHERE id = $5 RETURNING *', [
+export const purchaseItem = async (userId, itemId, date) => (
+  await db.query('INSERT INTO active_purchases (id, user_id, item_id, date) VALUES ($1, $2, $3, $4) RETURNING *', [
+    uuidv4(),
     userId,
-    null,
-    false,
-    null,
+    itemId,
+    date,
+  ])).rows[0];
+
+export const activatePayment = async (itemId, userId, purchaseId) => (
+  await db.query('UPDATE items SET holder_id = $1, purchase_id = $2 WHERE id = $3 RETURNING *', [
+    userId,
+    purchaseId,
     itemId,
   ])).rows[0];
 
-export const resetPurchaseItem = async (itemId) => (
-  await db.query('UPDATE items SET holder_id = $1, transaction_id = $2, available = $3, cart_id = $4, cart_expires_at = $5, stripe_id = $6, return_status = $7, receipt_status = $8 WHERE id = $9 RETURNING *', [
-    null,
-    null,
-    true,
-    null,
-    null,
-    null,
-    null,
-    null,
-    itemId,
+export const deleteCart = async (cartId) => (
+  await db.query('DELETE FROM active_carts WHERE id = $1 RETURNING *', [
+    cartId,
   ])).rows[0];
 
-export const updateReturnStatus = async (itemId) => (
-  await db.query('UPDATE items SET return_status = $1 WHERE id = $2 RETURNING *', [
+export const deletePurchase = async (purchaseID) => (
+  await db.query('DELETE FROM active_purchases WHERE id = $1 RETURNING *', [
+    purchaseID,
+  ])).rows[0];
+
+export const updateReturnStatus = async (purchaseId) => (
+  await db.query('UPDATE active_purchases SET return_status = $1 WHERE id = $2 RETURNING *', [
     'pending',
-    itemId,
+    purchaseId,
   ])).rows[0];
 
-export const updateReceiptStatus = async (itemId) => (
-  await db.query('UPDATE items SET receipt_status = $1 WHERE id = $2 RETURNING *', [
+export const updateReceiptStatus = async (purchaseId) => (
+  await db.query('UPDATE active_purchases SET receipt_status = $1 WHERE id = $2 RETURNING *', [
     'pending',
-    itemId,
+    purchaseId,
   ])).rows[0];
 
 export const deleteItem = async (itemId) => (

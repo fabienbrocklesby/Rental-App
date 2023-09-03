@@ -1,15 +1,9 @@
 import fetch from 'node-fetch';
-import getCurrentTimeInAuckland from './time.common.js'; // Update the path accordingly
 
 const accessToken = process.env.CRON_JOB_ACCESS_TOKEN;
 
-export default async (endpoint) => {
+export const scheduleCronJob = async (endpoint, futureTime) => {
   try {
-    const currentTimeInAuckland = await getCurrentTimeInAuckland();
-
-    const futureTime = new Date(currentTimeInAuckland);
-    futureTime.setMinutes(futureTime.getMinutes() + 10);
-
     const cronJobPayload = {
       job: {
         url: `https://ezgear.fly.dev${endpoint}`,
@@ -26,6 +20,8 @@ export default async (endpoint) => {
       },
     };
 
+    console.log(cronJobPayload);
+
     const response = await fetch('https://api.cron-job.org/jobs', {
       method: 'PUT',
       headers: {
@@ -37,6 +33,27 @@ export default async (endpoint) => {
 
     if (!response.ok) {
       throw new Error(`Failed to schedule cron job ${response}`);
+    }
+
+    return (await response.json()).jobId;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};
+
+export const deleteCronJob = async (jobId) => {
+  try {
+    const response = await fetch(`https://api.cron-job.org/jobs/${jobId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete cron job ${response}`);
     }
   } catch (error) {
     console.error('Error:', error);
