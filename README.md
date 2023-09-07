@@ -55,3 +55,22 @@ CREATE TABLE items (
   created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (seller_id) REFERENCES users(id)
 );
+
+CREATE TABLE active_purchases (
+  id VARCHAR(255) PRIMARY KEY,
+  user_id VARCHAR(255) NOT NULL,
+  item_id VARCHAR(255) NOT NULL,
+  date DATE NOT NULL,
+  return_statuts VARCHAR(12),
+  receipt_status VARCHAR(12),
+)
+
+CREATE TABLE active_carts (
+  id VARCHAR(255) PRIMARY KEY,
+  user_id VARCHAR(255) NOT NULL,
+  item_id VARCHAR(255) NOT NULL,
+  date DATE NOT NULL,
+  transaction_id VARCHAR(255),
+  stripe_id VARCHAR(255),
+  cron_id VARCHAR(255),
+)

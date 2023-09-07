@@ -97,6 +97,12 @@ export const updateReceiptStatus = async (purchaseId) => (
     purchaseId,
   ])).rows[0];
 
+export const resetItemHolder = async (itemId) => (
+  await db.query('UPDATE items SET holder_id = $1 WHERE id = $2 RETURNING *', [
+    null,
+    itemId,
+  ])).rows[0];
+
 export const deleteItem = async (itemId) => (
   await db.query('DELETE FROM items WHERE id = $1 RETURNING *', [itemId])).rows[0];
 

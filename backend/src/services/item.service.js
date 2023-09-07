@@ -21,7 +21,19 @@ export const getCart = async (email) => {
     throw new Error('User does not exist');
   }
 
-  return itemModel.selectCartByUserId(userId);
+  const cartItems = await itemModel.selectCartByUserId(userId);
+
+  const itemDetailsPromises = cartItems.map(async (cartItem) => {
+    const itemDetails = await itemModel.selectItemById(cartItem.item_id);
+    return {
+      id: cartItem.item_id,
+      name: itemDetails.name,
+    };
+  });
+
+  const itemDetails = await Promise.all(itemDetailsPromises);
+
+  return itemDetails;
 };
 
 export const getItemByEmail = async (email) => {
@@ -198,47 +210,65 @@ export const purchaseItem = async (email, { itemId, cartId }) => {
 };
 
 export const verifyPurchase = async (email, transactionId) => {
-  const userId = (await userModel.selectUserByEmail(email)).id;
-  const cart = await itemModel.selectCartByTransactionId(transactionId);
+  try {
+    const userId = (await userModel.selectUserByEmail(email)).id;
+    const cart = await itemModel.selectCartByTransactionId(transactionId);
 
-  if (!cart) {
-    throw new Error('Cart does not exist this transaction ID');
-  } else if (cart.user_id !== userId) {
-    throw new Error('You are not the owner of this cart');
+    if (!cart) {
+      throw new Error('Cart does not exist for this transaction ID');
+    } else if (cart.user_id !== userId) {
+      throw new Error('You are not the owner of this cart');
+    }
+
+    const item = await itemModel.selectItemById(cart.item_id);
+
+    if (!item) {
+      throw new Error('Item does not exist');
+    }
+
+    const sellerEmail = (await userModel.selectUserById(item.seller_id)).email;
+
+    if (!sellerEmail) {
+      throw new Error('Seller does not exist');
+    }
+
+    const payment = await paymentCommon.verifyPaymentSession(cart.stripe_id);
+
+    if (!payment) {
+      throw new Error('Payment failed');
+    }
+
+    await emailHelper({
+      email: sellerEmail,
+      message: `Somebody has rented your EZGear listing: ${item.name} (https://ezgear.app/items/${item.id}). <br /> Here is the buyer's email, contact them to arrange the collection: ${email}`,
+    });
+
+    const activePayment = await itemModel.purchaseItem(userId, item.id, cart.date);
+
+    const futureTime = new Date();
+    futureTime.setMinutes(futureTime.getMinutes() + 1);
+
+    const cartDate = new Date(cart.date);
+
+    if (
+      cartDate.getDate() === futureTime.getDate()
+      && cartDate.getMonth() === futureTime.getMonth()
+      && cartDate.getFullYear() === futureTime.getFullYear()
+    ) {
+      await scheduleCronJob(`/api/activepayment/${activePayment.id}`, futureTime);
+    } else {
+      const cartDateMidnight = new Date(cart.date);
+      cartDateMidnight.setHours(0, 0, 0, 0);
+      await scheduleCronJob(`/api/activepayment/${activePayment.id}`, cartDateMidnight);
+    }
+
+    return {
+      message: 'Payment successful',
+      sellerEmail,
+    };
+  } catch (error) {
+    return error;
   }
-
-  const item = await itemModel.selectItemById(cart.item_id);
-
-  if (!item) {
-    throw new Error('Item does not exist');
-  }
-
-  const sellerEmail = await userModel.selectUserById(item.seller_id);
-
-  if (!sellerEmail) {
-    throw new Error('Seller does not exist');
-  }
-
-  const payment = await paymentCommon.verifyPaymentSession(cart.stripe_id);
-
-  if (!payment) {
-    throw new Error('Payment failed');
-  }
-
-  await emailHelper({
-    email: sellerEmail,
-    message: `Somebody has rented your EZGear listing: ${item.name} (https://ezgear.app/items/${item.id}). <br /> Here is the buyer's email, contact them to arrange the collection: ${email}`,
-  });
-
-  await itemModel.deleteCart(cart.id);
-  const activePayment = await itemModel.purchaseItem(userId, item.id, cart.date);
-
-  await scheduleCronJob(`/api/activepayment/${activePayment.id}`, cart.date);
-
-  return {
-    message: 'Payment successful',
-    sellerEmail,
-  };
 };
 
 export const cancelPurchase = async (email, transactionId) => {
@@ -277,8 +307,8 @@ export const returnStatus = async (email, { itemId }) => {
   } else if (purchase.return_status === 'pending') {
     throw new Error('Return request already pending');
   } else if (item.receipt_status === 'pending') {
-    await itemModel.resetPurchaseItem(item.id);
     await itemModel.deletePurchase(purchase.id);
+    await itemModel.resetItemHolder(item.id);
 
     return 'Item Returned';
   }
@@ -313,7 +343,8 @@ export const receiptStatus = async (email, { itemId }) => {
   }
 
   if (purchase.return_status === 'pending') {
-    await itemModel.resetPurchaseItem(item.id);
+    console.log(item.id);
+    await itemModel.resetItemHolder(item.id);
     await itemModel.deletePurchase(purchase.id);
 
     return 'Receipt Sent';

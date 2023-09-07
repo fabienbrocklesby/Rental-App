@@ -21,21 +21,11 @@ function Items() {
   useEffect(() => {
     fetch('/api/items')
       .then(response => response.json())
-      .then(items => {
-        if (showAvailableOnly) {
-          setItems(items.filter(item => item.available && !item.cart_id));
-        } else {
-          setItems(items);
-        }
-      });
-  }, [showAvailableOnly]);
+      .then(items => setItems(items));
+  }, []);
 
   const handleSearchChange = event => {
     setSearchQuery(event.target.value);
-  };
-
-  const handleCheckboxChange = () => {
-    setShowAvailableOnly(!showAvailableOnly);
   };
 
   const handleSortChange = () => {
@@ -99,14 +89,6 @@ function Items() {
           </div>
           <div className="mb-4">
             <div className="d-flex flex-wrap flex-column flex-md-row align-items-md-center">
-              <label className="custom-checkbox mb-2 mb-md-0 me-md-4">
-                <input
-                  type="checkbox"
-                  checked={showAvailableOnly}
-                  onChange={handleCheckboxChange}
-                />
-                <span className="ms-1">Available Items Only</span>
-              </label>
               <label className="custom-checkbox mb-2 mb-md-0 me-md-4">
                 <input
                   type="checkbox"

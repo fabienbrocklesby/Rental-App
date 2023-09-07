@@ -26,7 +26,7 @@ function ReceiptItem() {
   const handleShow = () => setShowModal(true);
 
   return (
-    <div className="receiptItemPage">
+    <div className="receiptItemPage defaultPageLayout">
       <Container>
         <Row className="justify-content-center rounded align-items-center bg-light p-5">
           <Col xs="auto" className="text-center">

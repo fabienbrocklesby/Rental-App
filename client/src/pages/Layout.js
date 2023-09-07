@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
+import loggedInStatus from '../Functions/checkLoggedInStatus.js';
+
 import Footer from "../components/Footer";
 
 const Layout = () => {
@@ -16,14 +18,10 @@ const Layout = () => {
     setNavbarExpanded(false);
   };
 
-  let isLoggedIn = false;
+  const isLoggedIn = loggedInStatus();
 
-  if (document.cookie.includes("access_token") && localStorage.getItem("userId")) {
-    isLoggedIn = true;
-  }
-
-  if (isLoggedIn) {
-    useEffect(() => {
+  useEffect(() => {
+    if (isLoggedIn) {
       async function fetchCartItems() {
         try {
           const response = await fetch("/api/items/cart", {
@@ -31,16 +29,20 @@ const Layout = () => {
             credentials: "include",
           });
 
-          const cartData = await response.json();
-          setCartItems(cartData || []);
+          if (response.ok) {
+            const cartData = await response.json();
+            setCartItems(cartData || []);
+          } else {
+            console.error("An error occurred while fetching cart items:", response.statusText);
+          }
         } catch (error) {
           console.error("An error occurred while fetching cart items:", error);
         }
       }
 
       fetchCartItems();
-    }, []);
-  }
+    }
+  }, [isLoggedIn]);
 
   return (
     <>

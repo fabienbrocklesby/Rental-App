@@ -28,12 +28,9 @@ import Profile from './pages/Profile';
 import RentedItems from './pages/RentedItems';
 import Logout from './pages/Logout';
 import TermsAndCondition from './pages/TermsAndConditions';
+import UpdateLogs from './pages/UpdateLogs';
 
-let isLoggedIn = false;
-
-if (document.cookie.includes("access_token") && localStorage.getItem("userId")) {
-  isLoggedIn = true;
-}
+import loggedInStatus from './Functions/checkLoggedInStatus.js';
 
 export default function App() {
   return (
@@ -46,9 +43,10 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="verifyotp" element={<VerifyOTP />} />
           <Route path="termsandcondition" element={<TermsAndCondition />} />
+          <Route path="updatelogs" element={<UpdateLogs />} />
           <Route path="items/:id" element={<ItemByID />} />
 
-          {isLoggedIn ? (
+          {loggedInStatus() ? (
             <>
             <Route path="newitem" element={<NewItem />} />
             <Route path="updateitem/:id" element={<UpdateItem />} />

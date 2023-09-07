@@ -26,7 +26,7 @@ function ReturnItem() {
   const handleShow = () => setShowModal(true);
 
   return (
-    <div className="returnItemPage">
+    <div className="returnItemPage defaultPageLayout">
       <Container>
         <Row className="justify-content-center align-items-center rounded bg-light p-5">
           <Col xs="auto" className="text-center">

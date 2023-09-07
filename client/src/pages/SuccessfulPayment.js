@@ -26,7 +26,7 @@ function SuccessfulPayment() {
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="defaultPageLayout">Loading...</div>;
   }
 
   if (!paymentData) {
@@ -34,7 +34,7 @@ function SuccessfulPayment() {
   }
 
   return (
-    <div id="paymentConfirmationPage" className="d-flex flex-column align-items-center container pt-5"  style={{ maxWidth: "500px" }}>
+    <div id="paymentConfirmationPage" className="defaultPageLayout d-flex flex-column align-items-center container pt-5"  style={{ maxWidth: "500px" }}>
     <div className="container bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
       <div className="text-center bg-primary py-3 rounded-top">
         <h1 className="text-white">Payment Successful</h1>

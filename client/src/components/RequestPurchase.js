@@ -1,17 +1,20 @@
 import { Button } from 'react-bootstrap';
 
-function requestPurchase({ itemId }) {
-
+function requestPurchase({ itemId, cartId }) {
   async function reqPurchase() {
+    console.log(cartId);
     const response = await fetch('/api/items/purchase', {
       method: 'POST',
-      body: JSON.stringify({ itemId }),
+      body: JSON.stringify({ itemId, cartId }),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
       }
-    })
+    });
 
-    window.location.href = await response.json()
+    const responseData = await response.json();
+    console.log(responseData);
+
+    window.location.href = responseData;
   }
 
   return (

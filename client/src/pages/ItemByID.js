@@ -5,18 +5,17 @@ import '../css/Home.css';
 import AddToCart from '../components/AddToCart.js';
 import ReqPurchase from '../components/RequestPurchase.js';
 
+import loggedInStatus from '../Functions/checkLoggedInStatus.js';
+
 function ItemByID() {
   const [item, setItem] = useState({});
   const [showSellerOptions, setShowSellerOptions] = useState(false);
   const [sellerUsername, setSellerInfo] = useState(null);
-  
+  const [cartItems, setCartItems] = useState([]);
+
   let { id } = useParams();
 
-  let loggedIn = false;
-
-  if (localStorage.getItem('userId') && document.cookie) {
-    loggedIn = true;
-  }
+  let loggedIn = loggedInStatus();
 
   const loggedInUser = localStorage.getItem('userId');
 
@@ -35,6 +34,18 @@ function ItemByID() {
         .catch(error => console.log(error))
     }
   }, [item.seller_id]);
+
+  useEffect(() => {
+    if (loggedIn) {
+      fetch('/api/items/cart', {
+        method: 'GET',
+        credentials: 'include',
+      })
+        .then(response => response.json())
+        .then(userCart => setCartItems(userCart || []))
+        .catch(error => console.error('An error occurred while fetching cart items:', error));
+    }
+  }, [loggedIn]);
 
   return (
     <div className="itemsPage" id="itemsPage">
@@ -100,17 +111,15 @@ function ItemByID() {
                               Update Item
                             </Button>
                           </div>
-                          {item.available === false && (
+                          {item.holder_id && (
                             <div className="mt-4 border p-3 bg-light rounded">
                               <h2 className="mb-3">This item is currently rented</h2>
-                              {item.holder_id === loggedInUser ? (
-                                <Button
-                                  onClick={() => (window.location.href = `/receipt/${item.id}`)}
-                                  variant="primary"
-                                >
-                                  {item.return_status === 'pending' ? 'Accept Return' : 'Receipt Item'}
-                                </Button>
-                              ): null}
+                              <Button
+                                onClick={() => (window.location.href = `/receipt/${item.id}`)}
+                                variant="primary"
+                              >
+                                {item.return_status === 'pending' ? 'Accept Return' : 'Receipt Item'}
+                              </Button>
                             </div>
                           )}
                         </div>
@@ -118,15 +127,13 @@ function ItemByID() {
                     </div>
                   ) : (
                     <div>
-                      {item.available === true ? (
-                        <>
-                          {item.cart_id !== loggedInUser ? (
-                            <AddToCart itemId={item.id} />
-                          ) : (
-                            <ReqPurchase itemId={item.id} />
-                          )}
-                        </>
-                      ): null}
+                      <>
+                      {cartItems.some(cartItem => cartItem.id === item.id) ? (
+                        <ReqPurchase itemId={item.id} cartId={localStorage.getItem(`${item.id}`)} />
+                      ) : (
+                        <AddToCart itemId={item.id} />
+                      )}
+                      </>
                     </div>
                   )}
                 </>

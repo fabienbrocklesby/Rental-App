@@ -43,6 +43,7 @@ function Items() {
                     />
                     <div className="card-body">
                       <h5 className="card-title">{item.name}</h5>
+                      {item.holder_id && (<h6 className="text-success">This item is currently rented</h6>)}
                     </div>
                   </div>
                   <div className="card-footer">

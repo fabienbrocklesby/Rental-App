@@ -19,7 +19,6 @@ export const scheduleCronJob = async (endpoint, futureTime) => {
         },
       },
     };
-
     console.log(cronJobPayload);
 
     const response = await fetch('https://api.cron-job.org/jobs', {
@@ -30,6 +29,7 @@ export const scheduleCronJob = async (endpoint, futureTime) => {
       },
       body: JSON.stringify(cronJobPayload),
     });
+    console.log(response);
 
     if (!response.ok) {
       throw new Error(`Failed to schedule cron job ${response}`);
@@ -37,8 +37,7 @@ export const scheduleCronJob = async (endpoint, futureTime) => {
 
     return (await response.json()).jobId;
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    return error;
   }
 };
 
