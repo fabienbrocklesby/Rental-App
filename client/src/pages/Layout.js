@@ -95,24 +95,24 @@ const Layout = () => {
                 ) : (
                   <>
                     <NavDropdown title="Items" id="itemsDropdown">
-                      <a as={Link} to="/items" onClick={handleNavCollapse}>
+                      <a href="/items" class="dropdown-item" onClick={handleNavCollapse}>
                         Browse Listings
                       </a>
-                      <a href="/newitem" onClick={handleNavCollapse}>
+                      <a href="/newitem" class="dropdown-item" onClick={handleNavCollapse}>
                         New Listing
                       </a>
-                      <a href="/renteditems" onClick={handleNavCollapse}>
+                      <a href="/renteditems" class="dropdown-item" onClick={handleNavCollapse}>
                         Rented Items
                       </a>
-                      <a href="/listings" onClick={handleNavCollapse}>
+                      <a href="/listings" class="dropdown-item" onClick={handleNavCollapse}>
                         My Listings
                       </a>
                     </NavDropdown>
                     <NavDropdown title="Profile" id="profileDropdown">
-                      <a href="/profile" onClick={handleNavCollapse}>
+                      <a href="/profile" class="dropdown-item" onClick={handleNavCollapse}>
                         View profile
                       </a>
-                      <a href="/logout" onClick={handleNavCollapse}>
+                      <a href="/logout" class="dropdown-item" onClick={handleNavCollapse}>
                         Logout
                       </a>
                     </NavDropdown>

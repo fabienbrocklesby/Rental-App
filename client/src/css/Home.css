@@ -59,10 +59,12 @@
     background-size: 20% auto;
   }
 }
-
 .navbar a:not(.home-link) {
   text-decoration: none;
   color: #656565;
+}
+
+.navbar a:not(.home-link .dropdown-item) {
   padding: 0px 10px;
   transition: color 0.3s;
 }
@@ -72,7 +74,7 @@
 }
 
 @media (max-width: 768px) {
-  .navbar a:not(.home-link) {
+  .navbar a:not(.home-link .dropdown-item) {
     padding: 7.5px 5px;
   }
 }
