@@ -8,6 +8,7 @@ function TermsAndConditions() {
         <p>Last Updated: August 26, 2023</p>
 
         <p>Welcome to EZGear.app!</p>
+        <a href="/updatelogs">EZGear Update Logs</a>
       </div>
 
       <div className="mb-4">

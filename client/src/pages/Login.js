@@ -41,7 +41,7 @@ function Login() {
   }
 
   return (
-    <div id="loginPage" className="defaultPageLayout d-flex flex-column align-items-center container pt-5"  style={{ maxWidth: "500px" }}>
+    <div id="loginPage" className="defaultPageLayout d-flex flex-column align-items-center container"  style={{ maxWidth: "500px" }}>
       <Container  className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
         <div className="text-center bg-primary py-3 rounded-top">
           <h1 className="text-white">Login</h1>

@@ -160,7 +160,7 @@ export const addItemToCart = async (email, { itemId, date }) => {
   } else if (userId === item.seller_id) {
     throw new Error('You cannot add your own item to cart');
   } else if (
-    await itemModel.selectCartByDate(date)
+    await itemModel.selectCartByDate(date, item.id)
     || await itemModel.selectPurchaseByDate(date, item.id)) {
     throw new Error('Item unavailable on this date');
   }

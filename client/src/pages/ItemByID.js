@@ -128,7 +128,7 @@ function ItemByID() {
                   ) : (
                     <div>
                       <>
-                      {cartItems.some(cartItem => cartItem.id === item.id) ? (
+                      {Array.isArray(cartItems) && cartItems.some(cartItem => cartItem.id === item.id) ? (
                         <ReqPurchase itemId={item.id} cartId={localStorage.getItem(`${item.id}`)} />
                       ) : (
                         <AddToCart itemId={item.id} />

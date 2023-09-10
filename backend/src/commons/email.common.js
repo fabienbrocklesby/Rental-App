@@ -47,8 +47,6 @@ export default async (data) => {
       body: JSON.stringify(emailData),
     });
 
-    console.log(data.message);
-
     return response;
   } catch (error) {
     return 'Failed to send email';

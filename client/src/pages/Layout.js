@@ -2,7 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
+import '../css/Home.css';
+
 import loggedInStatus from '../Functions/checkLoggedInStatus.js';
+const CartIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="28"
+    height="28"
+    fill="currentColor"
+    className="bi bi-bag"
+    viewBox="0 0 15 18"
+    alt="cart"
+  >
+    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+  </svg>
+
+);
 
 import Footer from "../components/Footer";
 
@@ -46,80 +62,83 @@ const Layout = () => {
 
   return (
     <>
-      <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle} className="sticky-top">
-        <div className="container d-flex justify-content-between align-items-center">
-          <Navbar.Brand>
-            <Link to="/" className="nav-link">
-              <img src="/images/Logo.png" alt="logo" className="d-inline-block align-top mb-1" style={{ height: "50px" }} />
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarNav" />
-          <Navbar.Collapse id="navbarNav">
-            <Nav className="ms-auto">
-              {!isLoggedIn ? (
-                <>
-                  <Nav.Link as={Link} to="/" onClick={handleNavCollapse}>
-                    Home
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/register" onClick={handleNavCollapse}>
-                    Register
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/login" onClick={handleNavCollapse}>
-                    Login
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/verifyotp" onClick={handleNavCollapse}>
-                    Verify OTP
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/items" onClick={handleNavCollapse}>
-                    All Items
-                  </Nav.Link>
-                </>
-              ) : (
-                <>
-                  <NavDropdown title="Items" id="itemsDropdown">
-                    <NavDropdown.Item as={Link} to="/items" onClick={handleNavCollapse}>
-                      Browse Listings
-                    </NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/newitem" onClick={handleNavCollapse}>
-                      New Listing
-                    </NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/renteditems" onClick={handleNavCollapse}>
-                      Rented Items
-                    </NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/listings" onClick={handleNavCollapse}>
-                      My Listings
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                  <NavDropdown title="Profile" id="profileDropdown">
-                    <NavDropdown.Item as={Link} to="/profile" onClick={handleNavCollapse}>
-                      View profile
-                    </NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/logout" onClick={handleNavCollapse}>
-                      Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                  <NavDropdown title={`My Cart (${cartItems.length})`} id="cartDropdown">
-                    {cartItems.length === 0 ? (
-                      <NavDropdown.Item disabled>Nothing in cart yet</NavDropdown.Item>
-                    ) : (
-                      cartItems.map((item, index) => (
-                        <NavDropdown.Item key={index} as={Link} to={`/items/${item.id}`} onClick={handleNavCollapse}>
-                          {item.name}
-                        </NavDropdown.Item>
-                      ))
-                    )}
-                  </NavDropdown>
-                </>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </div>
-      </Navbar>
+      <div id="topofpage" style={{ position: "relative", top: "-100vh" }}></div>
+      <div className="App">
+        <Navbar bg="light" expand="lg" expanded={navbarExpanded} onToggle={handleNavToggle} className="sticky-top navbar">
+          <div className="container d-flex justify-content-between align-items-center">
+            <Navbar.Brand>
+              <a href="/" className="nav-link home-link">
+                <img src="/images/Logo.png" alt="logo" className="d-inline-block align-top mb-1" style={{ height: "50px" }} />
+              </a>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbarNav" />
+            <Navbar.Collapse id="navbarNav">
+              <Nav className="ms-auto links">
+                {!isLoggedIn ? (
+                  <>
+                    <a href="/" onClick={handleNavCollapse}>
+                      Home
+                    </a>
+                    <a href="/register" onClick={handleNavCollapse}>
+                      Register
+                    </a>
+                    <a href="/login" onClick={handleNavCollapse}>
+                      Login
+                    </a>
+                    <a href="/verifyotp" onClick={handleNavCollapse}>
+                      Verify OTP
+                    </a>
+                    <a href="/items" onClick={handleNavCollapse}>
+                      All items
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <NavDropdown title="Items" id="itemsDropdown">
+                      <a as={Link} to="/items" onClick={handleNavCollapse}>
+                        Browse Listings
+                      </a>
+                      <a href="/newitem" onClick={handleNavCollapse}>
+                        New Listing
+                      </a>
+                      <a href="/renteditems" onClick={handleNavCollapse}>
+                        Rented Items
+                      </a>
+                      <a href="/listings" onClick={handleNavCollapse}>
+                        My Listings
+                      </a>
+                    </NavDropdown>
+                    <NavDropdown title="Profile" id="profileDropdown">
+                      <a href="/profile" onClick={handleNavCollapse}>
+                        View profile
+                      </a>
+                      <a href="/logout" onClick={handleNavCollapse}>
+                        Logout
+                      </a>
+                    </NavDropdown>
+                    <NavDropdown title={<>{CartIcon} ({cartItems.length}) </>} id="cartDropdown">
+                      {cartItems.length === 0 ? (
+                        <NavDropdown.Item disabled>Nothing in cart yet</NavDropdown.Item>
+                      ) : (
+                        cartItems.map((item, index) => (
+                          <a key={index} href={`/items/${item.id}`} onClick={handleNavCollapse}>
+                            {item.name}
+                          </a>
+                        ))
+                      )}
+                    </NavDropdown>
+                  </>
+                )}
+              </Nav>
+            </Navbar.Collapse>
+          </div>
+        </Navbar>
 
-      <div className="pt-4">
-        <Outlet />
-        <div>
-          <Footer />
+        <div className="mt-4">
+          <Outlet />
+          <div>
+            <Footer />
+          </div>
         </div>
       </div>
     </>

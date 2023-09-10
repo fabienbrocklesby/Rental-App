@@ -65,6 +65,11 @@ app.get('/sitemap.xml', (req, res) => {
   res.sendFile('sitemap.xml', { root: './src/' });
 });
 
+// Adsense
+app.get('/Ads.txt', (req, res) => {
+  res.sendFile('ads.txt', { root: './src/' });
+});
+
 app.get('*', (req, res) => res.status(200).sendFile('/index.html', { root: './src/public' }));
 
 // // Error Routes

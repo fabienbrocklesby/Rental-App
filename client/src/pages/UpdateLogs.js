@@ -11,6 +11,23 @@ function UpdateLogs() {
       </div>
 
       <div className="mb-4">
+        <p className="mb-2">September 11, 2023</p>
+
+        <p>
+          Fix scrolling issue on page change
+        </p>
+      </div>
+
+      <div className="mb-4">
+        <p className="mb-2">September 9, 2023</p>
+
+        <p>
+          Cart icon added - UI Update
+          Scroll animation on page change
+        </p>
+      </div>
+
+      <div className="mb-4">
         <p className="mb-2">September 7, 2023</p>
 
         <p>

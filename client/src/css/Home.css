@@ -1,5 +1,10 @@
 .App {
-  text-align: center;
+  overscroll-behavior: none;
+}
+
+#topofpage {
+  transform: translateY(-100vh); /* Move the div above the top of the viewport */
+  visibility: hidden; /* Hide the div, so it doesn't take up space */
 }
 
 .App-logo {
@@ -55,12 +60,28 @@
   }
 }
 
+.navbar a:not(.home-link) {
+  text-decoration: none;
+  color: #656565;
+  padding: 0px 10px;
+  transition: color 0.3s;
+}
+
+.navbar a:not(.home-link):hover {
+  color: #1f1e1e;
+}
+
+@media (max-width: 768px) {
+  .navbar a:not(.home-link) {
+    padding: 7.5px 5px;
+  }
+}
+
 
 .item-image {
   height: 250px; 
   object-fit: cover;
 }
-
 
 .custom-dropdown-toggle::after {
   content: none;
@@ -94,7 +115,7 @@
 
 .defaultPageLayout {
   min-height: 70vh;
-  padding-bottom: -5vh;
+  padding-top: 5vh;
 }
 
 .itemList {

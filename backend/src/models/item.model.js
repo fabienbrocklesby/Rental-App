@@ -13,7 +13,7 @@ export const selectCartByTransactionId = async (transactionId) => (await db.quer
 
 export const selectItemsByHolderId = async (holderId) => (await db.query('SELECT * FROM items WHERE holder_id = $1', [holderId])).rows;
 
-export const selectCartByDate = async (date) => (await db.query('SELECT * FROM active_carts WHERE date = $1', [date])).rows[0];
+export const selectCartByDate = async (date, itemId) => (await db.query('SELECT * FROM active_carts WHERE date = $1 AND item_id = $2', [date, itemId])).rows[0];
 
 export const selectCartByCartId = async (cartId) => (await db.query('SELECT * FROM active_carts WHERE id = $1', [cartId])).rows[0];
 

@@ -32,6 +32,8 @@ import UpdateLogs from './pages/UpdateLogs';
 
 import loggedInStatus from './Functions/checkLoggedInStatus.js';
 
+// import ScrollToTop from './components/ScrollToTop';
+
 export default function App() {
   return (
     <BrowserRouter>

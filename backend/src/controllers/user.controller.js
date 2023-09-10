@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken';
 import * as userService from '../services/user.service.js';
 
+import getCurrentTimeInAuckland from '../commons/time.common.js';
+
+const currentTimeInAuckland = await getCurrentTimeInAuckland();
+
 export const indexUsers = async (request, response, next) => {
   try {
     response.status(200).json(await userService.indexUsers());
@@ -67,11 +71,10 @@ export const registerUser = async (request, response, next) => {
 export const verifyOtp = async (request, response, next) => {
   try {
     const data = await userService.verifyOtp(request.body);
-    console.log(data.token);
     if (data.token) {
       return response
         .cookie('access_token', data.token, {
-          expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+          expires: new Date(new Date(currentTimeInAuckland).getTime() + 7 * 24 * 60 * 60 * 1000),
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
@@ -105,7 +108,7 @@ export const reqUpdateUser = async (request, response, next) => {
     if (updatedRes.token) {
       response
         .cookie('access_token', updatedRes.token, {
-          expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+          expires: new Date(new Date(currentTimeInAuckland).getTime() + 7 * 24 * 60 * 60 * 1000),
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
@@ -130,7 +133,7 @@ export const verifyUpdateOTP = async (request, response, next) => {
     if (updatedRes.token) {
       response
         .cookie('access_token', updatedRes.token, {
-          expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+          expires: new Date(new Date(currentTimeInAuckland).getTime() + 7 * 24 * 60 * 60 * 1000),
           secure: process.env.NODE_ENV === 'production',
         })
         .status(200)
