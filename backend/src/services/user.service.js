@@ -263,3 +263,32 @@ export const verifyDeleteOTP = async (username, { otp }) => {
 
   throw new Error('Wrong OTP');
 };
+
+export const reqBusinessAccount = async (email, { businessWebsite }) => {
+  if (!email) {
+    throw new Error('No email found');
+  } else if (!businessWebsite) {
+    throw new Error('No business website found');
+  }
+
+  const user = await userModel.selectUserByEmail(email);
+
+  if (!user) {
+    throw new Error('No user exists with this email');
+  } else if (user.seller_verified === false) {
+    throw new Error('Seller must be verified to request business account');
+  } else if (user.business_website && user.business_account === false) {
+    throw new Error('Verification has already been requested');
+  } else if (user.business_account === true) {
+    throw new Error('Business already verified');
+  }
+
+  await emailHelper({
+    email: 'verifybussiness@ezgear.app',
+    message: `Business Account Verification Requested <br /> User Id = ${user.id} <br /> User Email = ${user.email} <br /> Business Website = ${businessWebsite}`,
+  });
+
+  await userModel.setBusinessAccount(email, businessWebsite, false);
+
+  return 'Sucessfully requested business account, awaiting verification.';
+};

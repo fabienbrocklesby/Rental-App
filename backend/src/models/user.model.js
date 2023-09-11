@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import db from '../commons/database.common.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const createUser = async (user) => (
   await db.query('INSERT INTO users (id, username, email, otp, seller_rating, buyer_rating, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [
     uuidv4(),
@@ -39,3 +38,6 @@ export const updateUser = async (user) => (
 
 export const deleteUser = async (user) => (
   await db.query('DELETE FROM users WHERE username = $1 RETURNING *', [user])).rows[0];
+
+export const setBusinessAccount = async (email, businessWebsite, verificationStatus) => (
+  await db.query('UPDATE users SET business_account = $1, business_website = $2 WHERE email = $3 RETURNING *', [verificationStatus, businessWebsite, email])).rows[0];

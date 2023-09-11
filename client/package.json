@@ -5,7 +5,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "BUILD_PATH='../backend/src/public' react-scripts build",
-    "watch-build": "nodemon --watch src --exec \"npm run build\""
+    "watch-build": "nodemon --watch src --watch 'src/css/*.css' --exec \"npm run build\""
   },
   "dependencies": {
     "bootstrap": "^5.3.1",

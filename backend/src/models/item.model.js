@@ -22,8 +22,8 @@ export const selectPurchaseById = async (purchaseId) => (await db.query('SELECT 
 export const selectPurchaseByDate = async (date, itemId) => (await db.query('SELECT * FROM active_purchases WHERE date = $1 AND item_id = $2', [date, itemId])).rows[0];
 
 export const createItem = async (item) => (
-  await db.query('INSERT INTO items (id, name, description, img_dir, price, rating, location,  seller_id, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *', [
-    uuidv4(),
+  await db.query('INSERT INTO items (id, name, description, img_dir, price, rating, location,  seller_id, business_listing, business_listing_url, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *', [
+    item.itemId,
     item.name,
     item.description,
     item.imageName,
@@ -31,6 +31,8 @@ export const createItem = async (item) => (
     null,
     item.location,
     item.sellerId,
+    false,
+    item.businessUrl,
     new Date(),
   ])).rows[0];
 

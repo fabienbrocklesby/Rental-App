@@ -172,3 +172,16 @@ export const verifyDeleteOTP = async (request, response, next) => {
     next(error);
   }
 };
+
+export const reqBusinessAccount = async (request, response, next) => {
+  try {
+    const email = await jwt.verify(
+      request.cookies.access_token,
+      process.env.JWT_SECRET,
+    ).email;
+
+    response.status(200).json(await userService.reqBusinessAccount(email, request.body));
+  } catch (error) {
+    next(error);
+  }
+};

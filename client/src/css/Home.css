@@ -59,10 +59,16 @@
     background-size: 20% auto;
   }
 }
+
 .navbar a:not(.home-link) {
   text-decoration: none;
   color: #656565;
 }
+
+.dropdown-item {
+  padding: 5px 10px !important;
+}
+
 
 .navbar a:not(.home-link .dropdown-item) {
   padding: 0px 10px;
@@ -71,6 +77,10 @@
 
 .navbar a:not(.home-link):hover {
   color: #1f1e1e;
+}
+
+.dropdown-item:active {
+  background-color: #e4e4e4;
 }
 
 @media (max-width: 768px) {

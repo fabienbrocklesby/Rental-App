@@ -38,6 +38,7 @@ app.post('/api/users/requpdate', authMiddleware, userController.reqUpdateUser);
 app.post('/api/users/verifyupdate', authMiddleware, userController.verifyUpdateOTP);
 app.delete('/api/users/delete', authMiddleware, userController.reqDeleteUser);
 app.delete('/api/users/verifydelete', authMiddleware, userController.verifyDeleteOTP);
+app.post('/api/users/req/business', authMiddleware, userController.reqBusinessAccount);
 
 // Item Routes
 app.get('/api/items', itemController.indexItems);

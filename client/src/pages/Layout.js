@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 import '../css/Home.css';
@@ -116,14 +116,16 @@ const Layout = () => {
                         Logout
                       </a>
                     </NavDropdown>
-                    <NavDropdown title={<>{CartIcon} ({cartItems.length}) </>} id="cartDropdown">
+                    <NavDropdown title={<>{CartIcon} ({cartItems.length}) </>} id="cartDropdown" className="dropdown">
                       {cartItems.length === 0 ? (
                         <NavDropdown.Item disabled>Nothing in cart yet</NavDropdown.Item>
                       ) : (
                         cartItems.map((item, index) => (
-                          <a key={index} href={`/items/${item.id}`} onClick={handleNavCollapse}>
-                            {item.name}
-                          </a>
+                          <>
+                            <a key={index} href={`/items/${item.id}`} class="dropdown-item" onClick={handleNavCollapse}>
+                              {item.name}
+                            </a>
+                          </>
                         ))
                       )}
                     </NavDropdown>
