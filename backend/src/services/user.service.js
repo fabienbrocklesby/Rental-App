@@ -8,7 +8,7 @@ import * as paymentCommon from '../commons/payment.common.js';
 import emailHelper from '../commons/email.common.js';
 import otpGenerator from '../commons/otp.common.js';
 
-import userValidator from '../validators/user.validator.js';
+import { validateUsername, validateEmail } from '../validators/user.validator.js';
 import otpValidator from '../validators/otp.validator.js';
 
 import tokenMiddleware from '../middleware/token.middleware.js';
@@ -69,7 +69,8 @@ export const registerUser = async ({
   email: originalEmail,
 }) => {
   const email = originalEmail.toLowerCase();
-  await userValidator({ username, email }, ['username', 'email']);
+  await validateEmail({ email }, ['email']);
+  await validateUsername({ username }, ['username']);
 
   if (
     await userModel.selectUserByEmail(email)
@@ -96,7 +97,7 @@ export const registerUser = async ({
 
 export const loginUser = async ({ email: originalEmail }) => {
   const email = originalEmail.toLowerCase();
-  await userValidator({ email }, ['email']);
+  await validateEmail({ email }, ['email']);
 
   const user = await userModel.selectUserByEmail(email);
 
@@ -150,7 +151,8 @@ export const reqUpdateUser = async (username, newData) => {
   const updatedFields = {};
 
   if (newUsername && newUsername !== user.username) {
-    await userValidator({ username: newUsername, email: user.email }, ['username']);
+    await validateUsername({ username: newUsername }, ['username']);
+    await validateEmail({ email: user.email }, ['email']);
 
     if (await userModel.selectUserByUsername(newUsername)) {
       throw new Error('Username already exists');
@@ -161,7 +163,8 @@ export const reqUpdateUser = async (username, newData) => {
 
   if (newEmail && newEmail.toLowerCase() !== user.email) {
     const email = newEmail.toLowerCase();
-    await userValidator({ username: newUsername || user.username, email }, ['username', 'email']);
+    await validateUsername({ username: newUsername || user.username }, ['username']);
+    await validateEmail({ email }, ['email']);
 
     if (await userModel.selectUserByEmail(email)) {
       throw new Error('Email already exists');

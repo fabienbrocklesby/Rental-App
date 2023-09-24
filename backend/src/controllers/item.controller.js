@@ -171,3 +171,13 @@ export const activatePayment = async (request, response, next) => {
     next(error);
   }
 };
+
+export const countClick = async (request, response, next) => {
+  try {
+    response
+      .status(200)
+      .json(await itemService.countClick(request.params.itemId, request.socket.remoteAddress));
+  } catch (error) {
+    next(error);
+  }
+};

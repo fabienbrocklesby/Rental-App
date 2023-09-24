@@ -2,11 +2,23 @@ import { v4 as uuidv4 } from 'uuid';
 
 import * as itemModel from '../models/item.model.js';
 import * as userModel from '../models/user.model.js';
+import * as businessModel from '../models/business.model.js';
 
 import emailHelper from '../commons/email.common.js';
 import * as paymentCommon from '../commons/payment.common.js';
 import { scheduleCronJob, deleteCronJob } from '../commons/cron.common.js';
 import getCurrentTimeInAuckland from '../commons/time.common.js';
+
+import {
+  validateId,
+  validateName,
+  validateDescription,
+  validatePrice,
+  validateLocation,
+  validateExternalUrl,
+  validateIpAddress,
+} from '../validators/item.validator.js';
+import { validateEmail } from '../validators/user.validator.js';
 
 const currentTimeInAuckland = await getCurrentTimeInAuckland();
 
@@ -75,7 +87,15 @@ export const createItem = async (email, {
   description,
   price,
   location,
+  externalUrl,
 }, image) => {
+  // validate data
+  await validateName({ name }, ['name']);
+  await validateDescription({ description }, ['description']);
+  await validatePrice({ price }, ['price']);
+  await validateLocation({ location }, ['location']);
+  await validateEmail({ email }, ['email']);
+
   const user = await userModel.selectUserByEmail(email);
 
   if (user.seller_verified === false || !user.stripe_account) {
@@ -97,8 +117,24 @@ export const createItem = async (email, {
 
   const sellerId = (await userModel.selectUserByEmail(email)).id;
 
+  if (externalUrl) {
+    await validateExternalUrl({ externalUrl }, ['externalUrl']);
+    const business = await businessModel.getBusinessByUserId(sellerId);
+
+    if (!business || !business.verified) {
+      throw new Error('You do not have a business associated with your account');
+    }
+
+    const externalUrlHostname = new URL(externalUrl).hostname;
+    const businessWebsiteHostname = new URL(business.website).hostname;
+
+    if (externalUrlHostname !== businessWebsiteHostname) {
+      throw new Error('The external URL is not from the same domain as your business website');
+    }
+  }
+
   return itemModel.createItem({
-    name, description, imageName, price, location, sellerId,
+    name, description, imageName, price, location, sellerId, externalUrl,
   });
 };
 
@@ -386,4 +422,25 @@ export const activatePayment = async (paymentId) => {
   }
 
   return itemModel.activatePayment(purchase.item_id, purchase.user_id, purchase.id);
+};
+
+export const countClick = async (itemId, ipAddress) => {
+  await validateId({ id: itemId }, ['id']);
+  await validateIpAddress({ ipAddress }, ['ipAddress']);
+
+  const item = await itemModel.selectItemById(itemId);
+
+  if (!item) {
+    throw new Error('Item does not exist');
+  } if (!item.external_url) {
+    throw new Error('Item does not have an external URL');
+  }
+
+  const business = await businessModel.getBusinessByUserId(item.seller_id);
+
+  if (!business) {
+    throw new Error('Business does not exist');
+  }
+
+  return itemModel.countClick(business.id, ipAddress, itemId);
 };

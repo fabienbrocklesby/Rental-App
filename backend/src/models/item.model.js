@@ -22,8 +22,8 @@ export const selectPurchaseById = async (purchaseId) => (await db.query('SELECT 
 export const selectPurchaseByDate = async (date, itemId) => (await db.query('SELECT * FROM active_purchases WHERE date = $1 AND item_id = $2', [date, itemId])).rows[0];
 
 export const createItem = async (item) => (
-  await db.query('INSERT INTO items (id, name, description, img_dir, price, rating, location,  seller_id, business_listing, business_listing_url, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *', [
-    item.itemId,
+  await db.query('INSERT INTO items (id, name, description, img_dir, price, rating, location,  seller_id, external_url, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *', [
+    uuidv4(),
     item.name,
     item.description,
     item.imageName,
@@ -31,8 +31,7 @@ export const createItem = async (item) => (
     null,
     item.location,
     item.sellerId,
-    false,
-    item.businessUrl,
+    item.externalUrl,
     new Date(),
   ])).rows[0];
 
@@ -110,3 +109,11 @@ export const deleteItem = async (itemId) => (
 
 export const deleteItemsByUserId = async (userId) => (
   await db.query('DELETE FROM items WHERE seller_id = $1', [userId])).rows[0];
+
+export const countClick = async (businessId, ipAddress, itemId) => (
+  await db.query('INSERT INTO click_statistics (id, business_id, ip_address, item_id) VALUES ($1, $2, $3, $4) RETURNING *', [
+    uuidv4(),
+    businessId,
+    ipAddress,
+    itemId,
+  ])).rows[0];
