@@ -39,5 +39,14 @@ export const updateUser = async (user) => (
 export const deleteUser = async (user) => (
   await db.query('DELETE FROM users WHERE username = $1 RETURNING *', [user])).rows[0];
 
-export const setBusinessAccount = async (email, businessWebsite, verificationStatus) => (
-  await db.query('UPDATE users SET business_account = $1, business_website = $2 WHERE email = $3 RETURNING *', [verificationStatus, businessWebsite, email])).rows[0];
+export const setBusiness = async (userId) => (
+  await db.query('UPDATE users SET business = true WHERE id = $1 RETURNING *', [userId])).rows[0];
+
+export const updateUserBusinessStatus = async (userId, businessAccountId) => (
+  await db.query('UPDATE users SET business_account = $1 WHERE id = $2', [
+    businessAccountId,
+    userId,
+  ])).rows[0];
+
+export const removeBusiness = async (userId) => (
+  await db.query('UPDATE users SET business = false WHERE id = $1 RETURNING *', [userId])).rows[0];

@@ -75,17 +75,15 @@ export const createItem = async (email, {
   description,
   price,
   location,
-  businessUrl,
 }, image) => {
   const user = await userModel.selectUserByEmail(email);
-  const itemId = uuidv4();
 
   if (user.seller_verified === false || !user.stripe_account) {
     throw new Error('You are not a verified seller');
-  } else if (!image || Object.keys(image).length === 0) {
+  }
+
+  if (!image || Object.keys(image).length === 0) {
     throw new Error('No images were uploaded.');
-  } else if (businessUrl && user.bussiness_account === false) {
-    throw new Error('Not a verified business');
   }
 
   const imageName = `${uuidv4()}-${image.name}`;
@@ -99,15 +97,8 @@ export const createItem = async (email, {
 
   const sellerId = (await userModel.selectUserByEmail(email)).id;
 
-  if (businessUrl) {
-    await emailHelper({
-      email: 'verifybusinesslisting@ezgear.app',
-      message: `Business has requested to upload this item <br /> Item ID ${itemId} <br />User ID: ${user.id} <br />User Email: ${user.email}`,
-    });
-  }
-
   return itemModel.createItem({
-    itemId, name, description, imageName, price, location, sellerId, businessUrl,
+    name, description, imageName, price, location, sellerId,
   });
 };
 

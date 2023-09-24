@@ -7,6 +7,7 @@ import fileupload from 'express-fileupload';
 // Routes
 import * as userController from './controllers/user.controller.js';
 import * as itemController from './controllers/item.controller.js';
+import * as businessController from './controllers/business.controller.js';
 
 // Middleware
 import authMiddleware from './middleware/auth.middleware.js';
@@ -38,7 +39,6 @@ app.post('/api/users/requpdate', authMiddleware, userController.reqUpdateUser);
 app.post('/api/users/verifyupdate', authMiddleware, userController.verifyUpdateOTP);
 app.delete('/api/users/delete', authMiddleware, userController.reqDeleteUser);
 app.delete('/api/users/verifydelete', authMiddleware, userController.verifyDeleteOTP);
-app.post('/api/users/req/business', authMiddleware, userController.reqBusinessAccount);
 
 // Item Routes
 app.get('/api/items', itemController.indexItems);
@@ -57,6 +57,12 @@ app.post('/api/items/return', authMiddleware, itemController.returnStatus);
 app.post('/api/items/receipt', authMiddleware, itemController.receiptStatus);
 app.delete('/api/items/delete', authMiddleware, itemController.deleteItem);
 app.get('/api/activepayment/:paymentId', itemController.activatePayment);
+
+// Business Routes
+app.get('/api/businesses', businessController.indexBusinesses);
+app.post('/api/businesses/create', authMiddleware, businessController.createBusiness);
+app.put('/api/businesses/update', authMiddleware, businessController.updateBusiness);
+app.delete('/api/businesses/delete', authMiddleware, businessController.deleteBusiness);
 
 // Image Routes
 app.use('/uploads', express.static('uploads'));
