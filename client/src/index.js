@@ -29,6 +29,8 @@ import RentedItems from './pages/RentedItems';
 import Logout from './pages/Logout';
 import TermsAndCondition from './pages/TermsAndConditions';
 import UpdateLogs from './pages/UpdateLogs';
+import RegisterBusiness from './pages/RegisterBusiness';
+import UpdateBusiness from './pages/UpdateBusiness';
 
 import loggedInStatus from './Functions/checkLoggedInStatus.js';
 
@@ -64,6 +66,8 @@ export default function App() {
             <Route path="listings" element={<Listings />} />
             <Route path="profile" element={<Profile />} />
             <Route path="renteditems" element={<RentedItems />} />
+            <Route path="registerbusiness" element={<RegisterBusiness />} />
+            <Route path="updatebusiness" element={<UpdateBusiness />} />
             <Route path="logout" element={<Logout />} />
             </>
           ): null}

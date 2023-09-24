@@ -61,6 +61,7 @@ app.get('/api/items/count/:itemId', itemController.countClick);
 
 // Business Routes
 app.get('/api/businesses', businessController.indexBusinesses);
+app.get('/api/businesses/get', authMiddleware, businessController.getBusiness);
 app.post('/api/businesses/create', authMiddleware, businessController.createBusiness);
 app.put('/api/businesses/update', authMiddleware, businessController.updateBusiness);
 app.delete('/api/businesses/delete', authMiddleware, businessController.deleteBusiness);

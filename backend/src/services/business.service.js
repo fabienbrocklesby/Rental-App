@@ -8,6 +8,31 @@ import { validateWebsite, validateEmail } from '../validators/business.validator
 export const indexBusinesses = async () => (businessModel.indexBusinesses());
 
 /*
+  * Get a business
+  * @param {string} email - Business / user email
+  * @returns {object} - Business object
+*/
+export const getBusiness = async (email) => {
+  await validateEmail({ email }, ['email']);
+
+  const user = await userModel.selectUserByEmail(email);
+
+  if (!user) {
+    throw new Error('User not found');
+  } else if (!user.business) {
+    throw new Error('User does not have a business');
+  }
+
+  const business = await businessModel.getBusinessByUserId(user.id);
+
+  if (!business) {
+    throw new Error('Business not found');
+  }
+
+  return business;
+};
+
+/*
   * Create a business
   * @param {object} data - Business data
   * @param {string} data.website - Business website

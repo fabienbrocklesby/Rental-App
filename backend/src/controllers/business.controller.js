@@ -10,6 +10,18 @@ export const indexBusinesses = async (request, response, next) => {
   }
 };
 
+export const getBusiness = async (request, response, next) => {
+  try {
+    const email = await jwt.verify(
+      request.cookies.access_token,
+      process.env.JWT_SECRET,
+    ).email;
+    response.status(200).json(await businessService.getBusiness(email));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createBusiness = async (request, response, next) => {
   try {
     const email = await jwt.verify(

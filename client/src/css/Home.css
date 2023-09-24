@@ -83,12 +83,11 @@
   background-color: #e4e4e4;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .navbar a:not(.home-link .dropdown-item) {
     padding: 7.5px 5px;
   }
 }
-
 
 .item-image {
   height: 250px; 
