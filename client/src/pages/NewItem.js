@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Modal, Alert } from 'react-bootstrap';
 
 function NewItem() {
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [verifiedBusiness, setVerifiedBusiness] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const [nameError, setNameError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [priceError, setPriceError] = useState("");
+  const [externalUrlError, setExternalUrlError] = useState("");
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   
   const locations = [
     "Auckland", "Wellington", "Christchurch", "Hamilton", "Tauranga", "Dunedin", 
@@ -16,16 +31,33 @@ function NewItem() {
   ];
 
   useEffect(() => {
-    fetch('/api/users/get/email', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(response => response.json())
-      .then(user => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await fetch('/api/users/get/email', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const user = await userResponse.json();
         setUser(user);
-      })
-      .catch(error => console.log(error));
+  
+        if (user.business) {
+          const businessResponse = await fetch('/api/businesses/get', {
+            method: 'GET',
+            credentials: 'include',
+          });
+          const business = await businessResponse.json();
+          setUser(prevUser => ({ ...prevUser, business: business }));
+          setVerifiedBusiness(business.verified === true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    fetchData();
   }, []);
+  
+  console.log(user, verifiedBusiness)
 
   async function postNewItem() {
     setError("");
@@ -34,10 +66,32 @@ function NewItem() {
     const description = document.getElementById("input-description").value;
     const price = document.getElementById("input-price").value;
     const image = document.getElementById("input-image");
+    let externalUrl = document.getElementById("input-external-url").value;
 
     if (!name || !description || !price || !image.files[0] || !selectedLocation) {
       setError("Please fill in all fields.");
       return;
+    }
+
+    if (name.length < 2 || name.length > 70) {
+      setNameError("Name must be between 2 and 70 characters.");
+      return;
+    } else {
+      setNameError("");
+    }
+
+    if (description.length < 3 || description.length > 300) {
+      setDescriptionError("Description must be between 3 and 300 characters.");
+      return;
+    } else {
+      setDescriptionError("");
+    }
+
+    if (isNaN(price) || price < 0 || price > 1000000) {
+      setPriceError("Price must be a number between 0 and 1000000.");
+      return;
+    } else {
+      setPriceError("");
     }
 
     setIsLoading(true);
@@ -47,6 +101,20 @@ function NewItem() {
     formData.append("description", description);
     formData.append("price", price);
     formData.append("location", selectedLocation);
+
+    if (user.business.verified && externalUrl !== "") {
+      if (externalUrl.length === 0) {
+        setExternalUrlError("External URL is required for verified businesses.");
+        return;
+      } else {
+        setExternalUrlError("");
+      }
+
+      if (!externalUrl.startsWith("https://") && !externalUrl.startsWith("http://")) {
+        externalUrl = "https://" + externalUrl;
+      }
+      formData.append("externalUrl", externalUrl);
+    }
 
     const img = new Image();
     img.src = URL.createObjectURL(image.files[0]);
@@ -106,15 +174,18 @@ function NewItem() {
           <Form>
             <Form.Group controlId="input-name">
               <Form.Label>Name:</Form.Label>
-              <Form.Control type="text" name="message" />
+              <Form.Control type="text" name="message" minLength={2}/>
+              {nameError && <Alert variant="danger mt-2">{nameError}</Alert>}
             </Form.Group>
             <Form.Group controlId="input-description" className="mt-1">
               <Form.Label>Description:</Form.Label>
-              <Form.Control type="text" name="message" />
+              <Form.Control type="text" name="message" minlength="3" />
+              {descriptionError && <Alert variant="danger mt-2">{descriptionError}</Alert>}
             </Form.Group>
             <Form.Group controlId="input-price" className="mt-1">
               <Form.Label>Price per day:</Form.Label>
               <Form.Control type="text" name="message" />
+              {priceError && <Alert variant="danger mt-2">{priceError}</Alert>}
             </Form.Group>
             <Form.Group controlId="input-location" className="mt-1">
               <Form.Label>Location:</Form.Label>
@@ -131,6 +202,16 @@ function NewItem() {
                 ))}
               </Form.Control>
             </Form.Group>
+            {verifiedBusiness ? (
+              <Form.Group controlId="input-external-url" className="mt-1">
+                <Form.Label>External Url:</Form.Label>
+                <Button variant="link" className='mb-1 mr-2' onClick={handleOpenModal}>
+                  Find out more
+                </Button>
+                <Form.Control type="text" name="message" />
+                {externalUrlError && <Alert variant="danger mt-2">{externalUrlError}</Alert>}
+              </Form.Group>
+            ): null}
             <Form.Group controlId="input-image" className="mt-1">
               <Form.Label>Image:</Form.Label>
               <Form.Control type="file" name="message" />
@@ -142,6 +223,35 @@ function NewItem() {
             {!user.seller_verified && <p className="text-danger mt-2">Please become a verified seller to post items. <a href="/profile" className="text-danger">Become one here!</a></p>}
             {error && <p className="text-danger mt-2">{error}</p>}
           </Form>
+          <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>External URL Feature</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>
+                The "External URL" feature is available exclusively for business accounts. It allows you to link to an external website or resource. Please note the following:
+              </p>
+              <ul>
+                <li>
+                  Each click on your external link will incur a cost, and you will be sent a bill for these clicks.
+                </li>
+                <li>
+                  This feature also signifies that your business is verified.
+                </li>
+                <li>
+                  Please note that you can only use the domain you provided when registering your business *You Can Update This*
+                </li>
+              </ul>
+              <p>
+                By using the "External URL" feature, you can drive traffic to your external site while maintaining the status of a verified business.
+              </p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseModal}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       </Container>
     </div>

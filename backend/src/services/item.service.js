@@ -95,7 +95,6 @@ export const createItem = async (email, {
   await validatePrice({ price }, ['price']);
   await validateLocation({ location }, ['location']);
   await validateEmail({ email }, ['email']);
-
   const user = await userModel.selectUserByEmail(email);
 
   if (user.seller_verified === false || !user.stripe_account) {

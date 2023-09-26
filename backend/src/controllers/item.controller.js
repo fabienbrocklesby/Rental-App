@@ -56,6 +56,7 @@ export const getItemByHolder = async (request, response, next) => {
 
 export const createItem = async (request, response, next) => {
   try {
+    console.log(request.body);
     const email = await jwt.verify(request.cookies.access_token, process.env.JWT_SECRET).email;
     response
       .status(201)

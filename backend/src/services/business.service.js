@@ -57,7 +57,7 @@ export const createBusiness = async ({ website }, email) => {
     throw new Error('User already has a business');
   }
 
-  const business = businessModel.createBusiness(website, user.id);
+  const business = await businessModel.createBusiness(website, user.id);
 
   if (!business) {
     throw new Error('Something went wrong');
