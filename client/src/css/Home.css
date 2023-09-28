@@ -1,0 +1,205 @@
+.App {
+  overscroll-behavior: none;
+}
+
+#topofpage {
+  transform: translateY(-100vh); /* Move the div above the top of the viewport */
+  visibility: hidden; /* Hide the div, so it doesn't take up space */
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .homepage-landing {
+    background-size: 60% auto;
+  }
+}
+
+@media (min-width: 769px) {
+  .homepage-landing {
+    background-size: 30% auto;
+  }
+}
+
+@media (min-width: 1080px) {
+  .homepage-landing {
+    background-size: 20% auto;
+  }
+}
+
+.navbar a:not(.home-link) {
+  text-decoration: none;
+  color: #656565;
+}
+
+.dropdown-item {
+  padding: 5px 10px !important;
+}
+
+
+.navbar a:not(.home-link .dropdown-item) {
+  padding: 0px 10px;
+  transition: color 0.3s;
+}
+
+.navbar a:not(.home-link):hover {
+  color: #1f1e1e;
+}
+
+.dropdown-item:active {
+  background-color: #e4e4e4;
+}
+
+@media (max-width: 991px) {
+  .navbar a:not(.home-link .dropdown-item) {
+    padding: 7.5px 5px;
+  }
+}
+
+.item-image {
+  height: 250px; 
+  object-fit: cover;
+}
+
+.custom-dropdown-toggle::after {
+  content: none;
+}
+
+.custom-dropdown-toggle::before {
+  content: "";
+  position: absolute;
+  top: 100%; 
+  left: 0; 
+  width: 100%;
+  height: 1px; 
+  background-color: transparent; 
+  z-index: -1; 
+}
+
+.itemsPage {
+  min-height: 90vh;
+  padding-bottom: 3vh;
+}
+
+.rentedItemsPage {
+  min-height: 80vh;
+  padding-bottom: -5vh;
+}
+
+.listingsPage {
+  min-height: 80vh;
+  padding-bottom: -5vh;
+}
+
+.defaultPageLayout {
+  min-height: 70vh;
+  padding-top: 5vh;
+}
+
+.itemList {
+  padding: 20px;
+}
+
+#itemsPage .item-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  background-color: white;
+}
+
+#itemsPage .item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#itemsPage .description-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#itemsPage .description-box {
+  background-color: #f1f5f9;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.stacked-button {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.custom-bottom-margin {
+  margin-top: -1.5rem;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid white;
+  background-color: transparent;
+  border-radius: 4px;
+  outline: none;
+  margin-right: 0.3em;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"]:not(:checked) {
+  background-color: white;
+}
+
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: transparent;
+}
+
+.custom-checkbox .ms-1 {
+  color: white;
+  vertical-align: middle;
+}

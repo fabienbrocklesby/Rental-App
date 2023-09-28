@@ -1,0 +1,36 @@
+{
+  "name": "rental-app-client",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "BUILD_PATH='../backend/src/public' react-scripts build",
+    "watch-build": "nodemon --watch src --watch 'src/css/*.css' --exec \"npm run build\""
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.1",
+    "fuse.js": "^6.6.2",
+    "js-cookie": "^3.0.5",
+    "nodemon": "^3.0.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "^18.2.0",
+    "react-router-scroll-to-top": "^1.2.1",
+    "react-scripts": "5.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 safari version",
+      "last 1 chrome version",
+      "last 1 firefox version"
+    ]
+  },
+  "devDependencies": {
+    "react-router-dom": "^6.14.2"
+  }
+}

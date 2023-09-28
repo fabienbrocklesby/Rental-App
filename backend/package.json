@@ -1,0 +1,41 @@
+{
+  "name": "rental-app-api",
+  "version": "1.0.0",
+  "description": "Rental App",
+  "author": "Fabien Brocklesby",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "DOTENV_CONFIG_PATH=../.env node --watch ./src/index.js",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "cron": "^2.3.1",
+    "dotenv": "^16.3.1",
+    "eslint-config-prettier": "^8.8.0",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "moment-timezone": "^0.5.43",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
+    "ntp-time": "^2.0.2",
+    "otp-generator": "^4.0.1",
+    "pg": "^8.11.0",
+    "postmark": "^3.0.18",
+    "short-unique-id": "^4.4.4",
+    "stripe": "^12.11.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.5",
+    "eslint": "^8.45.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}
