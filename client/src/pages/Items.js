@@ -9,12 +9,12 @@ function Items() {
   const [sortAscending, setSortAscending] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState('');
-  
+
   const locations = [
-    "Auckland", "Wellington", "Christchurch", "Hamilton", "Tauranga", "Dunedin", 
-    "Palmerston North", "Napier", "Hastings", "Nelson", "Rotorua", "New Plymouth", 
-    "Whangārei", "Invercargill", "Whanganui", "Gisborne", "Wanganui", "Taranaki", 
-    "Manawatu-Wanganui", "Bay of Plenty", "Northland", "Waikato", "Wellington", 
+    "Auckland", "Wellington", "Christchurch", "Hamilton", "Tauranga", "Dunedin",
+    "Palmerston North", "Napier", "Hastings", "Nelson", "Rotorua", "New Plymouth",
+    "Whangārei", "Invercargill", "Whanganui", "Gisborne", "Wanganui", "Taranaki",
+    "Manawatu-Wanganui", "Bay of Plenty", "Northland", "Waikato", "Wellington",
     "Canterbury", "Otago", "Southland", "Hawke's Bay", "Marlborough", "West Coast"
   ];
 
@@ -73,6 +73,22 @@ function Items() {
     ? sortedItems.filter(item => item.location === selectedLocation)
     : sortedItems;
 
+
+  function countClick(itemId) {
+    console.log(itemId)
+    fetch(`/api/items/count/${itemId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => console.log(error));
+  };
+
   return (
     <div className="itemsPage mb-5">
       <div className="bg-primary custom-bottom-margin mw-100 text-white py-4">
@@ -109,7 +125,7 @@ function Items() {
             <div className="d-flex flex-wrap flex-column flex-md-row align-items-md-center">
               {showLocationDropdown && (
                 <div className="mt-3">
-                  <select 
+                  <select
                     className="form-select"
                     value={selectedLocation}
                     onChange={handleLocationSelect}
@@ -136,7 +152,14 @@ function Items() {
               locationFilteredItems.map(item => (
                 <div key={item.id} className="col-md-4 mb-4">
                   <div className="card h-100">
-                    <a href={'items/' + item.id}>
+                    <a
+                      href={item.external_url ? item.external_url : `items/${item.id}`}
+                      onClick={(e) => {
+                        if (item.external_url) {
+                          countClick(item.id);
+                        }
+                      }}
+                    >
                       <img
                         src={`/uploads/${item.img_dir}`}
                         className="card-img-top item-image taller-image"
@@ -144,6 +167,11 @@ function Items() {
                       />
                     </a>
                     <div className="card-body">
+                      {item.external_url && (
+                        <span className="badge bg-primary mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="This link goes to another website. Verified by our team.">
+                          Visit Website
+                        </span>
+                      )}
                       <h5 className="card-title">{item.name}</h5>
                       <p className="card-text">${item.price} / day</p>
                     </div>

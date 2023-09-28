@@ -5,7 +5,8 @@ import '../css/Home.css';
 function ProfilePage() {
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showBankConfirmationModal, setShowBankConfirmationModal] = useState(false);
+  const [showBusinessConfirmationModal, setShowBusinessConfirmationModal] = useState(false);
   const [showBusinessInfo, setShowBusinessInfo] = useState(false);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ function ProfilePage() {
       .then(response => response.json())
       .then(user => {
         setUser(user);
-  
+
         if (user.business) {
           fetch('/api/businesses/get', {
             method: 'GET',
@@ -31,24 +32,24 @@ function ProfilePage() {
       })
       .catch(error => console.log(error));
   }, []);
-  
+
 
   async function handleVerifySeller() {
-    setShowConfirmationModal(false);
+    setShowBankConfirmationModal(false);
     setIsLoading(true);
-    
+
     try {
       const response = await fetch('/api/create/stripeaccount', {
         method: 'GET',
         credentials: 'include',
       });
       const data = await response.json();
-      
+
       window.location.href = data.url;
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   }
 
@@ -58,7 +59,7 @@ function ProfilePage() {
         method: 'DELETE',
         credentials: 'include',
       });
-      
+
       const data = await response.json();
 
       console.log(data);
@@ -91,19 +92,19 @@ function ProfilePage() {
                       Verified Seller
                     </Badge>
                     <div className="mt-4">
-                      <Button variant="success" className="mx-1" onClick={() => setShowConfirmationModal(true)} disabled={isLoading}>
+                      <Button variant="success" className="mx-1" onClick={() => setShowBankConfirmationModal(true)} disabled={isLoading}>
                         {isLoading ? "Verifying..." : "Update bank details"}
                       </Button>
                       {isLoading && <p className="text-secondary mt-2">Please wait...</p>}
                     </div>
                   </div>
-                  
-                ): (
+
+                ) : (
                   <>
                     <div className="bg-white mt-5 p-4 rounded border">
                       <h5>Not a Verified Seller</h5>
                       <p>(Bank Account Required)</p>
-                      <Button variant="success" className="mx-1" onClick={() => setShowConfirmationModal(true)} disabled={isLoading}>
+                      <Button variant="success" className="mx-1" onClick={() => setShowBankConfirmationModal(true)} disabled={isLoading}>
                         {isLoading ? "Verifying..." : "Verify Now!"}
                       </Button>
                       {isLoading && <p className="text-secondary mt-2">Please wait...</p>}
@@ -135,7 +136,7 @@ function ProfilePage() {
                           <p style={{ fontSize: '14px', lineHeight: '1' }}>
                             <em>Note: You can only use this domain for listings</em>
                           </p>
-                          <a href={user.business.website} style={{ fontSize: '16px'}}>{user.business.website}</a>
+                          <a href={user.business.website} style={{ fontSize: '16px' }}>{user.business.website}</a>
                         </div>
                         {user.business.updated_website ? (
                           <div className="mt-3 py-2">
@@ -143,29 +144,37 @@ function ProfilePage() {
                             <p style={{ fontSize: '14px', lineHeight: '1' }}>
                               <em>An admin is currently reviewing this domain</em>
                             </p>
-                            <a href={user.business.updated_website} style={{ fontSize: '16px'}}>{user.business.updated_website}</a>
+                            <a href={user.business.updated_website} style={{ fontSize: '16px' }}>{user.business.updated_website}</a>
                           </div>
                         ) : null}
                         <div className="mt-2">
                           <Button variant="primary" className="mx-1 mt-2" onClick={() => window.location.href = `/updatebusiness`}>
                             Update Business
                           </Button>
-                          <Button variant="danger" className="mx-1 mt-2" onClick={deleteBusiness}>
+                          <Button variant="danger" className="mx-1 mt-2" onClick={() => setShowBusinessConfirmationModal(true)}>
                             Delete Business
                           </Button>
                         </div>
-                      </div>                                   
+                      </div>
                     ) : null}
                   </div>
                 ) : (
                   <div className="pt-4">
                     <Button
                       variant="primary"
-                      className="mx-1 mt-4"
-                      onClick = {() => window.location.href = `/registerbusiness`}
+                      className={`mx-1 mt-4 ${!user.seller_verified ? 'disabled' : ''}`}
+                      onClick={() => {
+                        if (user.seller_verified) {
+                          window.location.href = `/registerbusiness`;
+                        }
+                      }}
                     >
                       Register As Business Account
                     </Button>
+                    {!user.seller_verified && (
+                      <p className="mt-2 text-danger">You must be a verified seller to register as a business account</p>
+                    )}
+
                   </div>
                 )}
               </>
@@ -174,19 +183,61 @@ function ProfilePage() {
         </Row>
       </Container>
 
-      <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
+      <Modal show={showBankConfirmationModal} onHide={() => setShowBankConfirmationModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Update Bank Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to update your bank details?
+          Confirm that you want to update your bank details.
+          <ul>
+            <li>
+              By updating your bank details, you may not be able to receive payments or conduct financial transactions.
+            </li>
+            <li>
+              Please be aware that once confirmed, you will no longer be considered a verified seller.
+            </li>
+            <li>
+              You will need to undergo the verification process again to regain verified seller status.
+            </li>
+          </ul>
+          By confirming this action, you understand and accept the consequences mentioned above.
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
+          <Button variant="secondary" onClick={() => setShowBankConfirmationModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleVerifySeller}>
+          <Button variant="danger" onClick={handleVerifySeller}>
             Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+      <Modal show={showBusinessConfirmationModal} onHide={() => setShowBusinessConfirmationModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete Business</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Confirm that you want to delete your business account.
+          <ul>
+            <li>
+              This action will delete all items/listings associated with your business that have external URLs.
+            </li>
+            <li>
+              Any past clicks on your external links will still be charged.
+            </li>
+            <li>
+              If you decide to register as a business again, you will need to go through the verification process again.
+            </li>
+          </ul>
+          By confirming this action, you understand and accept the consequences mentioned above.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowBusinessConfirmationModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={deleteBusiness}>
+            Confirm Delete
           </Button>
         </Modal.Footer>
       </Modal>

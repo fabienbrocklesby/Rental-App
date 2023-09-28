@@ -117,3 +117,6 @@ export const countClick = async (businessId, ipAddress, itemId) => (
     ipAddress,
     itemId,
   ])).rows[0];
+
+export const deleteAllItemsWithExternalUrl = async (userId) => (
+  await db.query('DELETE FROM items WHERE external_url IS NOT NULL AND seller_id = $1', [userId])).rows[0];

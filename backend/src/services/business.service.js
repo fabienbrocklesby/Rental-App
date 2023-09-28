@@ -1,5 +1,6 @@
 import * as businessModel from '../models/business.model.js';
 import * as userModel from '../models/user.model.js';
+import * as itemModel from '../models/item.model.js';
 
 import emailHelper from '../commons/email.common.js';
 
@@ -47,6 +48,8 @@ export const createBusiness = async ({ website }, email) => {
 
   if (!user) {
     throw new Error('User not found');
+  } else if (!user.seller_verified) {
+    throw new Error('User is not a verified seller');
   } else if (user.business) {
     throw new Error('User already has a business');
   }
@@ -151,6 +154,7 @@ export const deleteBusiness = async (email) => {
     throw new Error('Something went wrong');
   }
 
+  await itemModel.deleteAllItemsWithExternalUrl(user.id);
   await userModel.removeBusiness(user.id);
 
   return { user, business };

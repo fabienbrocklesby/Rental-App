@@ -53,6 +53,7 @@ CREATE TABLE items (
   return_status VARCHAR(12) DEFAULT NULL,
   receipt_status VARCHAR(12) DEFAULT NULL,
   location VARCHAR(255),
+  external_url VARCHAR(255),
   created_at TIMESTAMP NOT NULL,
   FOREIGN KEY (seller_id) REFERENCES users(id)
 );
@@ -80,7 +81,7 @@ CREATE TABLE businesses (
   id VARCHAR(255) NOT NULL,
   user_id VARCHAR(255) NOT NULL,
   website VARCHAR(255) NOT NULL,
-  updated_website VARCHAR(255) NOT NULL,
+  updated_website VARCHAR(255),
   verified BOOLEAN NOT NULL DEFAULT false
 );
 
