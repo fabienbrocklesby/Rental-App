@@ -19,7 +19,7 @@ To build for production:
 Custom command to watch for changes and build for production
 ```npm run watch-build```
 
-(This will output the build in the backend public folder) ready to be served by the backend which is ExpressJS)
+(This will be built in the public folder in the backend folder, this is ready to be served by the backend app)
 
 ## Backend & Production Build of Client
 URL: http://localhost:3000
@@ -28,7 +28,8 @@ The backend is an ExpressJS app
 To run in development mode: 
 ```npm run start```
 
-(This requires the .env file)
+(This requires the .env file)  
+
 (This will run the backend application as well as the built client)
 
 ## Setup Postgres DB
