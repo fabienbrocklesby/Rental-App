@@ -16,16 +16,20 @@ To run in development mode:
 To build for production: 
 ```npm run build```
 
+Custom command to watch for changes and build for production
+```npm run watch-build```
+
 (This will output the build in the backend public folder) ready to be served by the backend which is ExpressJS)
 
 ## Backend & Production Build of Client
-URL: http://localhost:3001
-The backend is an ExpressJS app...
+URL: http://localhost:3000
+The backend is an ExpressJS app
 
 To run in development mode: 
-```npm start```
+```npm run start```
 
-(This ejects the the .env file and runs the app in development mode also running the client in via the static public folder).
+(This requires the .env file)
+(This will run the backend application as well as the built client)
 
 ## Setup Postgres DB
 CREATE TABLE users (
