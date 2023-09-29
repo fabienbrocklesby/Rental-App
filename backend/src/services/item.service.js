@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import Jimp from 'jimp';
 
 import * as itemModel from '../models/item.model.js';
 import * as userModel from '../models/user.model.js';
@@ -105,14 +106,14 @@ export const createItem = async (email, {
     throw new Error('No images were uploaded.');
   }
 
-  const imageName = `${uuidv4()}-${image.name}`;
+  const imageName = `${uuidv4()}-${image.name}.webp`;
   const imageDir = `./uploads/${imageName}`;
 
-  image.mv(imageDir, (error) => {
-    if (error) {
-      throw new Error('Error occurred while uploading image');
-    }
-  });
+  const jimpImage = await Jimp.read(image.data);
+  await jimpImage
+    .resize(800, Jimp.AUTO)
+    .quality(75)
+    .write(`${imageDir}`);
 
   const sellerId = (await userModel.selectUserByEmail(email)).id;
 

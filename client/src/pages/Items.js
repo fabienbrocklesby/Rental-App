@@ -154,10 +154,14 @@ function Items() {
                   <div className="card h-100">
                     <a
                       href={item.external_url ? item.external_url : `items/${item.id}`}
-                      onClick={(e) => {
+                      onClick={async (e) => {
+                        e.preventDefault();
+
                         if (item.external_url) {
-                          countClick(item.id);
+                          await countClick(item.id);
                         }
+
+                        window.location.href = item.external_url ? item.external_url : `items/${item.id}`;
                       }}
                     >
                       <img
