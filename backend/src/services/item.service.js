@@ -419,7 +419,7 @@ export const activatePayment = async (paymentId) => {
   } else if (purchase.date.getDate() !== new Date(currentTimeInAuckland).getDate()) {
     throw new Error('Invalid date provided');
   }
-
+  test;
   return itemModel.activatePayment(purchase.item_id, purchase.user_id, purchase.id);
 };
 
