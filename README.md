@@ -1,4 +1,10 @@
-# Rental App
+# EZGear - Peer-to-Peer Rental Marketplace (Rental App)
+
+## Overview
+
+EZGear is a peer-to-peer rental marketplace designed to help users save money by renting items rather than purchasing and or make extra income by renting out items they don't use regularly. Whether you're looking to borrow or lend, EZGear has got you covered.
+
+For more information, visit [ezgear.app](http://ezgear.app).
 
 ## Client in Developement Mode
 URL: http://localhost:3000

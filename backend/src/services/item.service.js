@@ -155,14 +155,14 @@ export const updateItem = async (
   }
 
   if (image) {
-    imageName = `${uuidv4()}-${image.name}`;
+    imageName = `${uuidv4()}-${image.name}.webp`;
     imageDir = `./uploads/${imageName}`;
 
-    image.mv(imageDir, (error) => {
-      if (error) {
-        throw new Error('Error occurred while uploading image');
-      }
-    });
+    const jimpImage = await Jimp.read(image.data);
+    await jimpImage
+      .resize(800, Jimp.AUTO)
+      .quality(75)
+      .write(`${imageDir}`);
   }
 
   const updatedItem = {
