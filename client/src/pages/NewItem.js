@@ -184,7 +184,7 @@ function NewItem() {
   }
 
   return (
-    <div id="newItemPage" className="d-flex flex-column align-items-center container pb-5">
+    <div id="newItemPage" className="d-flex flex-column align-items-center  container pb-5 defaultPageLayout">
       <Container className="bg-white p-0 rounded shadow-sm" style={{ maxWidth: "500px", backgroundColor: "#f0f0f0" }}>
         <div className="text-center bg-primary py-3 rounded-top">
           <h1 className="text-white">New Listing</h1>

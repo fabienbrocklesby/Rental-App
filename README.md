@@ -93,3 +93,19 @@ CREATE TABLE click_statistics (
   item_id VARCHAR(255) NOT NULL,
   timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+CALCULATE COST FOR BUSINESS AT END OF MONTH:
+WITH ClicksWithCost AS (
+  SELECT *,
+         ROW_NUMBER() OVER (PARTITION BY ip_address ORDER BY timestamp) AS click_number
+  FROM click_statistics
+  WHERE business_id = '$$business_id'
+    AND timestamp >= NOW() - INTERVAL '1 month'
+    AND timestamp <= NOW()
+)
+SELECT c.*,
+       (click_number * 5) || 'c' AS total_cost,
+       i.name AS item_name
+FROM ClicksWithCost c
+JOIN items i ON c.item_id = i.id
+ORDER BY c.timestamp DESC;
