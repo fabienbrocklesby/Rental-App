@@ -70,6 +70,11 @@ function ItemByID() {
                 ) : (
                   <Badge variant="danger" className="item-badge">Not Available</Badge>
                 )}
+                {item.external_url && (
+                  <span className="badge bg-primary mb-2 mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="This listing leads to another website">
+                    External Listing
+                  </span>
+                )}
               </div>
               <div className="description-box">
                 <h3>Description</h3>
@@ -81,9 +86,16 @@ function ItemByID() {
                 <h5>{item.location}, New Zealand</h5>
               </div>
               {loggedIn === true ? (
-                  <>
+                <>
                   {loggedInUser === item.seller_id ? (
                     <div>
+                      {item.external_url && (
+                        <div>
+                          <Button href={item.external_url} variant="primary" className="mt-4">
+                            View Listing
+                          </Button>
+                        </div>
+                      )}
                       <Button
                         variant="secondary"
                         className="mb-2 mt-4"
@@ -93,16 +105,16 @@ function ItemByID() {
                       </Button>
                       {showSellerOptions && (
                         <div className="mt-2">
-                          {item.available === true ? (
-                              <div className="mb-2">
-                                <Button
+                          {!item.holder_id ? (
+                            <div className="mb-2">
+                              <Button
                                 onClick={() => (window.location.href = `/deleteitem/${item.id}`)}
                                 variant="danger"
                               >
                                 Delete Item
                               </Button>
                             </div>
-                          ): null}
+                          ) : null}
                           <div className="mb-2">
                             <Button
                               onClick={() => (window.location.href = `/updateitem/${item.id}`)}
@@ -128,11 +140,11 @@ function ItemByID() {
                   ) : (
                     <div>
                       <>
-                      {Array.isArray(cartItems) && cartItems.some(cartItem => cartItem.id === item.id) ? (
-                        <ReqPurchase itemId={item.id} cartId={localStorage.getItem(`${item.id}`)} />
-                      ) : (
-                        <AddToCart itemId={item.id} />
-                      )}
+                        {Array.isArray(cartItems) && cartItems.some(cartItem => cartItem.id === item.id) ? (
+                          <ReqPurchase itemId={item.id} cartId={localStorage.getItem(`${item.id}`)} />
+                        ) : (
+                          <AddToCart itemId={item.id} />
+                        )}
                       </>
                     </div>
                   )}

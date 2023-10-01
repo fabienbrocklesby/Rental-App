@@ -5,7 +5,7 @@ function TermsAndConditions() {
     <div className="defaultPageLayout container">
       <h1>EZGEAR.APP TERMS AND CONDITIONS</h1>
       <div className="mb-4">
-        <p>Last Updated: August 26, 2023</p>
+        <p>Last Updated: September 30, 2023</p>
 
         <p>Welcome to EZGear.app!</p>
         <a href="/updatelogs">EZGear Update Logs</a>
@@ -23,7 +23,7 @@ function TermsAndConditions() {
         <p className="mb-2">2. Rental Marketplace</p>
 
         <p>
-          EZGear.app operates as a peer-to-peer rental marketplace platform that allows users ("Users") to rent and lend various items to and from each other.
+          EZGear.app operates as a peer-to-peer rental marketplace platform that allows users ("Users") to rent and lend various items to and from each other. Additionally, EZGear.app may include external listings that link to third-party websites or services.
         </p>
       </div>
 
@@ -31,11 +31,11 @@ function TermsAndConditions() {
         <p className="mb-2">3. User Responsibilities</p>
 
         <p>
-          3.1 Item Condition: We do not take responsibility for broken, damaged, or lost items. Users are responsible for accurately describing the condition of the items they list on the EZGear.app platform.
+          3.1 Item Condition: We do not take responsibility for broken, damaged, or lost items listed on EZGear.app or external listings. Users are responsible for accurately describing the condition of the items they list on the EZGear.app platform and for any transactions conducted on external sites.
         </p>
 
         <p>
-          3.2 Scam and Fraud: While we make efforts to detect and prevent fraudulent activities, we do not take responsibility for scams, fraud, or misrepresentations carried out by Users. It is your responsibility to exercise caution and verify the legitimacy of transactions.
+          3.2 Scam and Fraud: While we make efforts to detect and prevent fraudulent activities on EZGear.app and external listings, we do not take responsibility for scams, fraud, or misrepresentations carried out by Users or external sites. It is your responsibility to exercise caution and verify the legitimacy of transactions on both EZGear.app and external sites.
         </p>
       </div>
 
@@ -43,11 +43,11 @@ function TermsAndConditions() {
         <p className="mb-2">4. Safety and Security</p>
 
         <p>
-          4.1 Identity Verification: We encourage Users to verify the identity of their transaction partners, but we do not guarantee the accuracy of such information.
+          4.1 Identity Verification: We encourage Users to verify the identity of their transaction partners, both on EZGear.app and external sites, but we do not guarantee the accuracy of such information.
         </p>
 
         <p>
-          4.2 Meetings and Transactions: Users are advised to meet in safe and public locations for item exchange facilitated through EZGear.app. We do not take responsibility for any incidents that occur during the course of a transaction.
+          4.2 Meetings and Transactions: Users are advised to meet in safe and public locations for item exchange facilitated through EZGear.app and external listings. We do not take responsibility for any incidents that occur during the course of a transaction on either platform.
         </p>
       </div>
 
@@ -55,7 +55,7 @@ function TermsAndConditions() {
         <p className="mb-2">5. User Disputes</p>
 
         <p>
-          5.1 Dispute Resolution: In case of disputes between Users, we provide a platform for communication and negotiation but do not guarantee resolution. Users agree to release EZGear.app from any claims or demands arising from disputes.
+          5.1 Dispute Resolution: In case of disputes between Users, both on EZGear.app and external sites, we provide a platform for communication and negotiation but do not guarantee resolution. Users agree to release EZGear.app from any claims or demands arising from disputes on either platform.
         </p>
       </div>
 
@@ -63,7 +63,7 @@ function TermsAndConditions() {
         <p className="mb-2">6. Liability</p>
 
         <p>
-          6.1 Use at Your Own Risk: Use of EZGear.app is at your own risk. We disclaim any liability for any direct, indirect, incidental, special, consequential, or exemplary damages resulting from the use of our platform.
+          6.1 Use at Your Own Risk: Use of EZGear.app and engagement with external listings is at your own risk. We disclaim any liability for any direct, indirect, incidental, special, consequential, or exemplary damages resulting from the use of our platform or interactions with external sites.
         </p>
       </div>
 
@@ -71,7 +71,7 @@ function TermsAndConditions() {
         <p className="mb-2">7. Service Availability</p>
 
         <p>
-          7.1 Platform Availability: While we strive to provide uninterrupted access to the EZGear.app platform, we do not guarantee that the platform will always be available without disruptions.
+          7.1 Platform Availability: While we strive to provide uninterrupted access to the EZGear.app platform and external listings, we do not guarantee that the platform or external sites will always be available without disruptions.
         </p>
       </div>
 

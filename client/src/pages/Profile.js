@@ -7,6 +7,7 @@ function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showBankConfirmationModal, setShowBankConfirmationModal] = useState(false);
   const [showBusinessConfirmationModal, setShowBusinessConfirmationModal] = useState(false);
+  const [showBusinessDetailsModal, setShowBusinessDetailsModal] = useState(false);
   const [showBusinessInfo, setShowBusinessInfo] = useState(false);
 
   useEffect(() => {
@@ -88,6 +89,7 @@ function ProfilePage() {
                 </div>
                 {user.seller_verified === true && user.stripe_account ? (
                   <div className="bg-white mt-5 p-4 rounded border">
+                    <h2 className='pb-3'>Seller Verification</h2>
                     <Badge variant="info" className="bg-success p-2">
                       Verified Seller
                     </Badge>
@@ -102,81 +104,99 @@ function ProfilePage() {
                 ) : (
                   <>
                     <div className="bg-white mt-5 p-4 rounded border">
+                      <h2 className='pb-3'>Seller Verification</h2>
                       <h5>Not a Verified Seller</h5>
                       <p>(Bank Account Required)</p>
                       <Button variant="success" className="mx-1" onClick={() => setShowBankConfirmationModal(true)} disabled={isLoading}>
-                        {isLoading ? "Verifying..." : "Verify Now!"}
+                        {isLoading ? "Verifying..." : "Verify Now"}
                       </Button>
                       {isLoading && <p className="text-secondary mt-2">Please wait...</p>}
                     </div>
                   </>
                 )}
-                {user.business ? (
-                  <div className="pt-4">
-                    <Button
-                      variant="primary"
-                      className="mx-1 mt-4"
-                      onClick={() => setShowBusinessInfo(!showBusinessInfo)}
-                    >
-                      {showBusinessInfo ? 'Hide Business Info' : 'Show Business Info'}
-                    </Button>
-                    {showBusinessInfo && user.business ? (
-                      <div className="bg-white mt-5 p-4 rounded border">
-                        <h2>Business Information:</h2>
-                        {!user.business.verified ? (
-                          <>
-                            <Badge variant="info" className="bg-danger p-2">
-                              Unverified Business
-                            </Badge>
-                            <p className="mt-2">Please wait for our admin to verify your business</p>
-                          </>
-                        ) : null}
-                        <div className="mt-3 py-2">
-                          <h5>Business Website:</h5>
-                          <p style={{ fontSize: '14px', lineHeight: '1' }}>
-                            <em>Note: You can only use this domain for listings</em>
-                          </p>
-                          <a href={user.business.website} style={{ fontSize: '16px' }}>{user.business.website}</a>
-                        </div>
-                        {user.business.updated_website ? (
-                          <div className="mt-3 py-2">
-                            <h5>Requested Business Website:</h5>
-                            <p style={{ fontSize: '14px', lineHeight: '1' }}>
-                              <em>An admin is currently reviewing this domain</em>
-                            </p>
-                            <a href={user.business.updated_website} style={{ fontSize: '16px' }}>{user.business.updated_website}</a>
+                <div className="bg-white mt-5 p-4 rounded border">
+                  {user.business ? (
+                    <>
+                      <h2 className='pt-1'>Business Account Options</h2>
+                      <div>
+                        <Button
+                          variant="primary"
+                          className="mx-1 mt-4"
+                          onClick={() => setShowBusinessInfo(!showBusinessInfo)}
+                        >
+                          {showBusinessInfo ? 'Hide Business Details' : 'Show Business Details'}
+                        </Button>
+                        {showBusinessInfo && user.business ? (
+                          <div className="bg-white mt-5 p-4 rounded border">
+                            <h2>Business Information:</h2>
+                            {!user.business.verified ? (
+                              <>
+                                <Badge variant="info" className="bg-danger p-2">
+                                  Unverified Business
+                                </Badge>
+                                <p className="mt-2">Please wait for our admin to verify your business</p>
+                              </>
+                            ) : null}
+                            <div className="mt-3 py-2">
+                              <h5>Business Website:</h5>
+                              <p style={{ fontSize: '14px', lineHeight: '1' }}>
+                                <em>Note: You can only use this domain for listings</em>
+                              </p>
+                              <a href={user.business.website} style={{ fontSize: '16px' }}>{user.business.website}</a>
+                            </div>
+                            {user.business.updated_website ? (
+                              <div className="mt-3 py-2">
+                                <h5>Requested Business Website:</h5>
+                                <p style={{ fontSize: '14px', lineHeight: '1' }}>
+                                  <em>An admin is currently reviewing this domain</em>
+                                </p>
+                                <a href={user.business.updated_website} style={{ fontSize: '16px' }}>{user.business.updated_website}</a>
+                              </div>
+                            ) : null}
+                            <div className="mt-2">
+                              <Button variant="primary" className="mx-1 mt-2" onClick={() => window.location.href = `/updatebusiness`}>
+                                Update Business
+                              </Button>
+                              <Button variant="danger" className="mx-1 mt-2" onClick={() => setShowBusinessConfirmationModal(true)}>
+                                Delete Business
+                              </Button>
+                            </div>
                           </div>
                         ) : null}
-                        <div className="mt-2">
-                          <Button variant="primary" className="mx-1 mt-2" onClick={() => window.location.href = `/updatebusiness`}>
-                            Update Business
-                          </Button>
-                          <Button variant="danger" className="mx-1 mt-2" onClick={() => setShowBusinessConfirmationModal(true)}>
-                            Delete Business
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className='pt-1'>Register as a business</h2>
+                      {!user.seller_verified && (
+                        <p className="mt-2 text-danger">You must be a verified seller to register as a business account</p>
+                      )}
+                      <div className="pt-3">
+                        <div>
+                          <Button
+                            variant="primary"
+                            className='mt-2'
+                            onClick={() => setShowBusinessDetailsModal(true)}
+                          >
+                            Find Out More
                           </Button>
                         </div>
-                      </div>
-                    ) : null}
-                  </div>
-                ) : (
-                  <div className="pt-4">
-                    <Button
-                      variant="primary"
-                      className={`mx-1 mt-4 ${!user.seller_verified ? 'disabled' : ''}`}
-                      onClick={() => {
-                        if (user.seller_verified) {
-                          window.location.href = `/registerbusiness`;
-                        }
-                      }}
-                    >
-                      Register As Business Account
-                    </Button>
-                    {!user.seller_verified && (
-                      <p className="mt-2 text-danger">You must be a verified seller to register as a business account</p>
-                    )}
 
-                  </div>
-                )}
+                        <Button
+                          variant="primary"
+                          className={`mx-1 mt-4 ${!user.seller_verified ? 'disabled' : ''}`}
+                          onClick={() => {
+                            if (user.seller_verified) {
+                              window.location.href = `/registerbusiness`;
+                            }
+                          }}
+                        >
+                          Register Business
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </>
             ) : null}
           </Col>
@@ -212,6 +232,33 @@ function ProfilePage() {
         </Modal.Footer>
       </Modal>
 
+      <Modal show={showBusinessDetailsModal} onHide={() => setShowBusinessDetailsModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Register as a Business</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Registering as a business allows you to list items with external links.
+          </p>
+          <p>
+            You will need to provide a valid business website domain.
+          </p>
+          <p>
+            Once registered, you will need to wait for an admin to verify your business.
+          </p>
+          <p>
+            Every click costs $0.10 NZD, and you will be charged at the end of each month.
+          </p>
+          <p>
+            <em>Note: You can only use this domain for listings</em>
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowBusinessDetailsModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Modal show={showBusinessConfirmationModal} onHide={() => setShowBusinessConfirmationModal(false)}>
         <Modal.Header closeButton>

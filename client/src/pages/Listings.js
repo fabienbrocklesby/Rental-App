@@ -43,6 +43,11 @@ function Items() {
                     />
                     <div className="card-body">
                       <h5 className="card-title">{item.name}</h5>
+                      {item.external_url && (
+                        <span className="badge bg-primary mb-2" data-bs-toggle="tooltip" data-bs-placement="top" title="This listing leads to another website">
+                          External Listing
+                        </span>
+                      )}
                       {item.holder_id && (<h6 className="text-success">This item is currently rented</h6>)}
                     </div>
                   </div>

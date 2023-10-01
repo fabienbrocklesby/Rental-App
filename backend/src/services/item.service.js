@@ -178,7 +178,7 @@ export const updateItem = async (
   return itemModel.updateItem(updatedItem);
 };
 
-export const addItemToCart = async (email, { itemId, date }) => {
+export const addItemToCart = async (email, { itemId, startDate, endDate }) => {
   const userId = (await userModel.selectUserByEmail(email)).id;
   const item = await itemModel.selectItemById(itemId);
 
@@ -187,7 +187,8 @@ export const addItemToCart = async (email, { itemId, date }) => {
   const futureTime = new Date(currentTimeInAuckland);
   futureTime.setMinutes(futureTime.getMinutes() + 10);
 
-  Date(date);
+  const start = new Date(startDate);
+  const end = new Date(endDate);
 
   if (!item) {
     throw new Error('Item does not exist');
@@ -195,15 +196,55 @@ export const addItemToCart = async (email, { itemId, date }) => {
     throw new Error('User does not exist');
   } else if (userId === item.seller_id) {
     throw new Error('You cannot add your own item to cart');
-  } else if (
-    await itemModel.selectCartByDate(date, item.id)
-    || await itemModel.selectPurchaseByDate(date, item.id)) {
-    throw new Error('Item unavailable on this date');
+  } else if (start > end) {
+    throw new Error('Start date must be before end date');
+  } else {
+    const overlappingCart = await itemModel.selectCartByDate({ start, end }, itemId);
+    const overlappingPurchase = await itemModel.selectPurchaseByDate({ start, end }, itemId);
+    if (overlappingCart || overlappingPurchase) {
+      throw new Error('Item unavailable on selected dates');
+    } else if ((end - start) / (1000 * 60 * 60 * 24) > 7) {
+      throw new Error('Booking cannot be longer than 7 days');
+    }
   }
 
+  const dates = { start: startDate, end: endDate };
   const cronId = await scheduleCronJob(`/api/items/reset/cart/${cartId}`, futureTime);
 
-  return (await itemModel.addItemToCart(cartId, itemId, date, userId, cronId)).id;
+  return (await itemModel.addItemToCart(cartId, itemId, dates, userId, cronId)).id;
+};
+
+export const getUnavailableDates = async (itemId) => {
+  const carts = await itemModel.selectCartsByItemId(itemId);
+  const purchases = await itemModel.selectPurchasesByItemId(itemId);
+
+  const unavailableDates = [];
+
+  carts.forEach((cart) => {
+    if (cart.date && cart.date.start && cart.date.end) {
+      const start = new Date(cart.date.start);
+      const end = new Date(cart.date.end);
+
+      while (start <= end) {
+        unavailableDates.push({ date: start.toISOString().split('T')[0] });
+        start.setDate(start.getDate() + 1);
+      }
+    }
+  });
+
+  purchases.forEach((purchase) => {
+    if (purchase.date && purchase.date.start && purchase.date.end) {
+      const start = new Date(purchase.date.start);
+      const end = new Date(purchase.date.end);
+
+      while (start <= end) {
+        unavailableDates.push({ date: start.toISOString().split('T')[0] });
+        start.setDate(start.getDate() + 1);
+      }
+    }
+  });
+
+  return JSON.stringify(unavailableDates);
 };
 
 export const purchaseItem = async (email, { itemId, cartId }) => {
@@ -230,8 +271,14 @@ export const purchaseItem = async (email, { itemId, cartId }) => {
 
   const sellerStripeAccount = (await userModel.selectUserById(item.seller_id)).stripe_account;
 
+  const start = new Date(cart.date.start);
+  const end = new Date(cart.date.end);
+  const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+  console.log(days);
+
   const payment = await paymentCommon.createPaymentSession(
-    item.price,
+    item.price * days,
     item.name,
     transactionId,
     sellerStripeAccount,

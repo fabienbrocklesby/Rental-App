@@ -57,6 +57,7 @@ app.post('/api/items/return', authMiddleware, itemController.returnStatus);
 app.post('/api/items/receipt', authMiddleware, itemController.receiptStatus);
 app.delete('/api/items/delete', authMiddleware, itemController.deleteItem);
 app.get('/api/activepayment/:paymentId', itemController.activatePayment);
+app.get('/api/items/getunavailabledates/:itemId', itemController.getUnavailableDates);
 app.get('/api/items/count/:itemId', itemController.countClick);
 
 // Business Routes

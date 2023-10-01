@@ -91,6 +91,16 @@ export const addItemToCart = async (request, response, next) => {
   }
 };
 
+export const getUnavailableDates = async (request, response, next) => {
+  try {
+    response
+      .status(200)
+      .json(await itemService.getUnavailableDates(request.params.itemId));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const purchaseItem = async (request, response, next) => {
   try {
     const email = await jwt.verify(request.cookies.access_token, process.env.JWT_SECRET).email;

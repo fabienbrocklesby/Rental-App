@@ -33,6 +33,8 @@ export default async (data) => {
     },
   };
 
+  console.log(data.message);
+
   const url = 'https://api.elasticemail.com/v4/emails/transactional';
 
   const headers = {

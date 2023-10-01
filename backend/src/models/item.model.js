@@ -13,13 +13,23 @@ export const selectCartByTransactionId = async (transactionId) => (await db.quer
 
 export const selectItemsByHolderId = async (holderId) => (await db.query('SELECT * FROM items WHERE holder_id = $1', [holderId])).rows;
 
-export const selectCartByDate = async (date, itemId) => (await db.query('SELECT * FROM active_carts WHERE date = $1 AND item_id = $2', [date, itemId])).rows[0];
-
 export const selectCartByCartId = async (cartId) => (await db.query('SELECT * FROM active_carts WHERE id = $1', [cartId])).rows[0];
 
 export const selectPurchaseById = async (purchaseId) => (await db.query('SELECT * FROM active_purchases WHERE id = $1', [purchaseId])).rows[0];
 
-export const selectPurchaseByDate = async (date, itemId) => (await db.query('SELECT * FROM active_purchases WHERE date = $1 AND item_id = $2', [date, itemId])).rows[0];
+export const selectCartByDate = async (dates, itemId) => {
+  const { start, end } = dates;
+  return (await db.query('SELECT * FROM active_carts WHERE (date->>\'start\')::DATE <= $1 AND (date->>\'end\')::DATE >= $2 AND item_id = $3', [end, start, itemId])).rows[0];
+};
+
+export const selectPurchaseByDate = async (dates, itemId) => {
+  const { start, end } = dates;
+  return (await db.query('SELECT * FROM active_purchases WHERE (date->>\'start\')::DATE <= $1 AND (date->>\'end\')::DATE >= $2 AND item_id = $3', [end, start, itemId])).rows[0];
+};
+
+export const selectCartsByItemId = async (itemId) => (await db.query('SELECT * FROM active_carts WHERE item_id = $1', [itemId])).rows;
+
+export const selectPurchasesByItemId = async (itemId) => (await db.query('SELECT * FROM active_purchases WHERE item_id = $1', [itemId])).rows;
 
 export const createItem = async (item) => (
   await db.query('INSERT INTO items (id, name, description, img_dir, price, rating, location,  seller_id, external_url, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *', [
