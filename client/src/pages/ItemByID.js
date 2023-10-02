@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Container, Row, Col, Card, Badge } from 'react-bootstrap';
 import '../css/Home.css';
+
 import AddToCart from '../components/AddToCart.js';
 import ReqPurchase from '../components/RequestPurchase.js';
+import AvailabilityCalendar from '../components/AvailabilityCalendar.js';
 
 import loggedInStatus from '../Functions/checkLoggedInStatus.js';
 
@@ -51,13 +53,11 @@ function ItemByID() {
     <div className="itemsPage" id="itemsPage">
       <Container>
         <Row>
-          <Col md={6} className="mb-4">
-            <Card className="h-100">
-              <div className="item-image-container">
-                <Card.Img variant="top" src={`/uploads/${item.img_dir}`} className="item-image" />
-              </div>
-            </Card>
-          </Col>
+          <div className="col-md-6 mb-4">
+            <div className="item-image-container">
+              <Card.Img variant="top" src={`/uploads/${item.img_dir}`} className="item-image" />
+            </div>
+          </div>
           <Col md={6} className="mb-4">
             <div className="description-container">
               <div className="description-box">
@@ -141,9 +141,9 @@ function ItemByID() {
                     <div>
                       <>
                         {Array.isArray(cartItems) && cartItems.some(cartItem => cartItem.id === item.id) ? (
-                          <ReqPurchase itemId={item.id} cartId={localStorage.getItem(`${item.id}`)} />
+                          <ReqPurchase item={item} />
                         ) : (
-                          <AddToCart itemId={item.id} />
+                          <AvailabilityCalendar itemId={item.id} />
                         )}
                       </>
                     </div>

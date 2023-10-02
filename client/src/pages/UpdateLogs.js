@@ -5,9 +5,26 @@ function UpdateLogs() {
     <div className="defaultPageLayout container">
       <h1>EZGEAR.APP UPDATE LOGS</h1>
       <div className="mb-4">
-        <p className="last-updated">Last Updated: October, 2023</p>
+        <p className="last-updated">Last Updated: October 4, 2023</p>
 
         <p>Welcome to EZGear Update Logs!</p>
+      </div>
+
+      <div className="mb-4">
+        <p className="log-date font-weight-bold fs-5 text-decoration-underline">October 4, 2023</p>
+
+        <p>
+          <span>
+            **Exciting New Feature**: We are thrilled to introduce a significant update to EZGear! Users can now schedule for multiple days at once, making planning even more convenient. With this new feature, we've also implemented a slightly updated booking system to accommodate this change.
+          </span><br /><br />
+          <span>
+            **UI Improvements**: Our latest update includes some user interface enhancements that will make your experience even better. We've made various UI updates and introduced features that make navigating the app easier and more intuitive.
+          </span><br /><br />
+
+          <span>
+            We believe these changes will greatly enhance your experience with EZGear. Thank you for your continued support, and stay tuned for more exciting updates in the future!
+          </span>
+        </p>
       </div>
 
       <div className="mb-4">

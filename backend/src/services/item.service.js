@@ -41,6 +41,7 @@ export const getCart = async (email) => {
     return {
       id: cartItem.item_id,
       name: itemDetails.name,
+      cartId: cartItem.id,
     };
   });
 
@@ -244,7 +245,7 @@ export const getUnavailableDates = async (itemId) => {
     }
   });
 
-  return JSON.stringify(unavailableDates);
+  return unavailableDates;
 };
 
 export const purchaseItem = async (email, { itemId, cartId }) => {
@@ -274,8 +275,6 @@ export const purchaseItem = async (email, { itemId, cartId }) => {
   const start = new Date(cart.date.start);
   const end = new Date(cart.date.end);
   const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
-
-  console.log(days);
 
   const payment = await paymentCommon.createPaymentSession(
     item.price * days,
