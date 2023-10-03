@@ -65,11 +65,6 @@ function ItemByID() {
                   {item.name}
                 </h1>
                 <h4>Price: ${item.price} / day</h4>
-                {item.available ? (
-                  <Badge variant="success" className="item-badge">Available</Badge>
-                ) : (
-                  <Badge variant="danger" className="item-badge">Not Available</Badge>
-                )}
                 {item.external_url && (
                   <span className="badge bg-primary mb-2 mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="This listing leads to another website">
                     External Listing

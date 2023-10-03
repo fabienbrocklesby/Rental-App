@@ -160,27 +160,79 @@ function NewItem() {
       thumbnailCtx.drawImage(canvas, cropX, cropY, cropSize, cropSize, 0, 0, cropSize, cropSize);
 
       thumbnailCanvas.toBlob(async (blob) => {
-        formData.append("image", blob, image.files[0].name);
+        const webpBlob = await createWebPBlob(blob);
 
-        try {
-          const response = await fetch('/api/items/create', {
-            method: 'POST',
-            body: formData,
-            credentials: 'include',
-          });
+        if (webpBlob.size > 1000000) {
+          const scaleFactor = Math.sqrt(1000000 / webpBlob.size);
+          const newWidth = Math.floor(img.width * scaleFactor);
+          const newHeight = Math.floor(img.height * scaleFactor);
 
-          if (response.ok) {
-            window.location.href = '/listings';
-          } else {
-            setError("Something went wrong. Please try again.");
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+          thumbnailCanvas.width = cropSize * scaleFactor;
+          thumbnailCanvas.height = cropSize * scaleFactor;
+
+          thumbnailCtx.drawImage(canvas, cropX * scaleFactor, cropY * scaleFactor, cropSize * scaleFactor, cropSize * scaleFactor, 0, 0, cropSize * scaleFactor, cropSize * scaleFactor);
+
+          thumbnailCanvas.toBlob(async (blob) => {
+            const webpBlob = await createWebPBlob(blob);
+            formData.append("image", webpBlob, image.files[0].name + ".webp");
+
+            try {
+              const response = await fetch('/api/items/create', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include',
+              });
+
+              if (response.ok) {
+                window.location.href = '/listings';
+              } else {
+                setError("Something went wrong. Please try again.");
+              }
+            } catch (error) {
+              setError("An error occurred. Please try again.");
+            } finally {
+              setIsLoading(false);
+            }
+          }, 'image/jpeg');
+        } else {
+          formData.append("image", webpBlob, image.files[0].name + ".webp");
+
+          try {
+            const response = await fetch('/api/items/create', {
+              method: 'POST',
+              body: formData,
+              credentials: 'include',
+            });
+
+            if (response.ok) {
+              window.location.href = '/listings';
+            } else {
+              setError("Something went wrong. Please try again.");
+            }
+          } catch (error) {
+            setError("An error occurred. Please try again.");
+          } finally {
+            setIsLoading(false);
           }
-        } catch (error) {
-          setError("An error occurred. Please try again.");
-        } finally {
-          setIsLoading(false);
         }
       }, 'image/jpeg');
     };
+  }
+
+  async function createWebPBlob(blob) {
+    const bitmap = await createImageBitmap(blob);
+    const canvas = document.createElement("canvas");
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(bitmap, 0, 0);
+    const webpBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', 0.8));
+    return webpBlob;
   }
 
   return (

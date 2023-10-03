@@ -107,6 +107,9 @@ export const createItem = async (email, {
     throw new Error('No images were uploaded.');
   }
 
+  console.log(image.name);
+  console.log(image);
+
   const imageName = `${uuidv4()}-${image.name}.webp`;
   const imageDir = `./uploads/${imageName}`;
 
