@@ -128,6 +128,19 @@ function AddToCart({ itemId }) {
           />
         </div>
       </div>
+
+      {showWarning ? (
+        <>
+          <small className='font-weight-bold'>
+            <span className="font-weight-bold">NOTE: </span>
+            The selected date range cannot be longer than two weeks
+          </small><br />
+        </>
+      ) : (
+        <>
+          <small className='font-weight-bold'>NOTE: one day bookings are available</small><br />
+        </>
+      )}
       {!isDateSelected && (
         <><small className="text-danger">Please select a date range</small><br /></>
       )}
@@ -136,13 +149,6 @@ function AddToCart({ itemId }) {
       )}
       {isDateError && (
         <><small className="text-danger">The selected dates cannot be in the past</small><br /></>
-      )}
-
-      {showWarning && (
-        <small className='font-weight-bold'>
-          <span className="font-weight-bold">NOTE: </span>
-          The selected date range cannot be longer than two weeks
-        </small>
       )}
       <div className="mt-2">
         <Button onClick={addToCart} variant="primary" disabled={isLoading}>
